@@ -1,0 +1,205 @@
+{
+  "nav": {
+    "features": "Recursos",
+    "docs": "Documentação",
+    "support": "Suporte",
+    "terms": "Termos",
+    "login": "Entrar",
+    "register": "Criar Conta"
+  },
+  "hero": {
+    "badge": "Plataforma de Pagamentos PIX",
+    "title": "Receba pagamentos instantâneos",
+    "subtitle": "",
+    "description": "",
+    "cta_primary": "Começar Agora",
+    "cta_secondary": "Ver Documentação",
+    "stat_transactions": "Transações/mês",
+    "stat_uptime": "Uptime",
+    "stat_fee": "Taxa de transações"
+  },
+  "features": {
+    "title": "Tudo que você precisa para",
+    "title_highlight": "crescer mais rápido",
+    "instant": {
+      "title": "Processamento Instantâneo",
+      "description": "Confirmação de pagamentos PIX em menos de 10 segundos. Webhook automático para seu sistema."
+    },
+    "secure": {
+      "title": "Segurança de Nível Bancário",
+      "description": "Criptografia AES-256, autenticação JWT e compliance com BACEN. Seus dados estão protegidos."
+    },
+    "api": {
+      "title": "API REST Completa",
+      "description": "Documentação interativa, SDKs para principais linguagens e ambiente sandbox para testes."
+    },
+    "dashboard": {
+      "title": "Dashboard em Tempo Real",
+      "description": "Monitore transações, gerencie usuários e acesse relatórios detalhados em um só lugar."
+    }
+  },
+  "stats": {
+    "transactions": "Transações Processadas",
+    "merchants": "Comerciantes Ativos",
+    "uptime": "Disponibilidade",
+    "support": "Suporte"
+  },
+  "how_it_works": {
+    "title": "Como funciona",
+    "step1_title": "Integre a API",
+    "step1_desc": "Adicione nossa API REST ao seu sistema com apenas algumas linhas de código.",
+    "step2_title": "Gere cobranças PIX",
+    "step2_desc": "Crie QR Codes dinâmicos instantaneamente para seus clientes pagarem.",
+    "step3_title": "Receba Automaticamente",
+    "step3_desc": "Pagamentos confirmados em tempo real com notificação automática via webhook."
+  },
+  "cta": {
+    "title": "Comece a receber e enviar pagamentos de forma automatizada hoje mesmo !",
+    "subtitle": "",
+    "description": "Crie sua conta gratuitamente e comece a usar em minutos.",
+    "button": "Crie sua conta Gratuitamente"
+  },
+  "footer": {
+    "description": "É uma plataforma de pagamentos para desenvolvedores e empresas.",
+    "product": "Produto",
+    "company": "Empresa",
+    "legal": "Legal",
+    "privacy": "Privacidade",
+    "cookies": "Cookies",
+    "rights": "Todos os direitos reservados."
+  },
+  "auth": {
+    "login_title": "Entre na sua conta",
+    "register_title": "Crie sua conta",
+    "email": "E-mail",
+    "password": "Senha",
+    "name": "Nome completo",
+    "phone": "Telefone",
+    "phone_optional": "Telefone (opcional)",
+    "login_button": "Entrar",
+    "register_button": "Criar Conta",
+    "logging_in": "Entrando...",
+    "creating": "Criando conta...",
+    "no_account": "Não tem uma conta?",
+    "has_account": "Já tem uma conta?",
+    "sign_up": "Cadastre-se",
+    "sign_in": "Entrar",
+    "welcome": "Bem-vindo",
+    "account_created": "Conta criada com sucesso!",
+    "admin_label": "Admin",
+    "password_hint": "Mínimo 8 caracteres",
+    "name_placeholder": "João Silva",
+    "email_placeholder": "voce@exemplo.com",
+    "phone_placeholder": "(11) 99999-9999"
+  },
+  "dashboard": {
+    "nav": {
+      "dashboard": "Dashboard",
+      "transactions": "Transações",
+      "pix": "Cobrar PIX",
+      "transfer": "Transferir",
+      "withdraw": "Sacar",
+      "api_keys": "API Keys",
+      "webhooks": "Webhooks",
+      "logout": "Sair"
+    },
+    "balance": "Saldo disponível",
+    "pending": "Pendente",
+    "deposited": "Depositado",
+    "withdrawn": "Sacado",
+    "pix_key": "Chave PIX",
+    "recent_transactions": "Transações recentes",
+    "no_transactions": "Nenhuma transação ainda",
+    "view_all": "Ver todas",
+    "quick_actions": "Ações rápidas",
+    "receive_pix": "Receber PIX",
+    "send_pix": "Enviar PIX",
+    "withdraw_funds": "Sacar fundos"
+  },
+  "transactions": {
+    "title": "Transações",
+    "filter_all": "Todas",
+    "filter_deposit": "Depósitos",
+    "filter_withdraw": "Saques",
+    "filter_transfer": "Transferências",
+    "status_paid": "Pago",
+    "status_pending": "Pendente",
+    "status_failed": "Falhou",
+    "status_cancelled": "Cancelado",
+    "status_processing": "Processando",
+    "type_deposit": "Depósito",
+    "type_withdraw": "Saque",
+    "type_transfer": "Transferência",
+    "type_adjustment": "Ajuste",
+    "amount": "Valor",
+    "fee": "Taxa de transações",
+    "net": "Líquido",
+    "date": "Data",
+    "description": "Descrição",
+    "no_results": "Nenhuma transação encontrada"
+  },
+  "pix": {
+    "title": "Gerar Cobrança PIX",
+    "amount_label": "Valor (R$)",
+    "description_label": "Descrição",
+    "description_placeholder": "Ex: Produto #123",
+    "generate_button": "Gerar QR Code",
+    "generating": "Gerando...",
+    "fee_label": "Taxa de transações (3% + R$1,00)",
+    "you_receive": "Você recebe",
+    "scan_title": "QR Code gerado",
+    "scan_instruction": "Escaneie com seu app bancário",
+    "copy_code": "Copiar código PIX",
+    "copied": "Copiado!",
+    "expires": "Expira em",
+    "new_charge": "Nova cobrança"
+  },
+  "admin": {
+    "nav": {
+      "overview": "Visão Geral",
+      "raze_control": "Raze Control",
+      "users": "Usuários",
+      "transactions": "Transações",
+      "withdrawals": "Saques",
+      "webhooks": "Webhooks",
+      "audit_logs": "Logs de Auditoria",
+      "config": "Configurações",
+      "user_panel": "Painel do Usuário",
+      "logout": "Sair"
+    },
+    "admin_panel": "Admin Panel",
+    "total_users": "Total de Usuários",
+    "total_volume": "Volume Total",
+    "total_fees": "Taxa de transações Coletadas",
+    "transactions_today": "Transações Hoje",
+    "frozen_users": "Usuários Bloqueados",
+    "search_users": "Buscar usuários...",
+    "freeze": "Bloquear",
+    "unfreeze": "Desbloquear",
+    "adjust_balance": "Ajustar Saldo",
+    "adjust_button": "Ajustar",
+    "recent_transactions": "Transações Recentes",
+    "admin_badge": "Admin"
+  },
+  "common": {
+    "loading": "Carregando...",
+    "error": "Erro",
+    "success": "Sucesso",
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "delete": "Excluir",
+    "edit": "Editar",
+    "back": "Voltar",
+    "next": "Próximo",
+    "confirm": "Confirmar",
+    "close": "Fechar",
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "export": "Exportar",
+    "refresh": "Atualizar",
+    "copy": "Copiar",
+    "dark_mode": "Modo escuro",
+    "light_mode": "Modo claro",
+    "language": "Idioma"
+  }
+}

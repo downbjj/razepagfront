@@ -1,0 +1,205 @@
+{
+  "nav": {
+    "features": "Features",
+    "docs": "Documentation",
+    "support": "Support",
+    "terms": "Terms",
+    "login": "Login",
+    "register": "Get Started"
+  },
+  "hero": {
+    "badge": "PIX Payment Platform",
+    "title": "Receive instant payments",
+    "subtitle": "",
+    "description": "",
+    "cta_primary": "Get Started",
+    "cta_secondary": "View Documentation",
+    "stat_transactions": "Transactions/month",
+    "stat_uptime": "Uptime",
+    "stat_fee": "Transaction fee"
+  },
+  "features": {
+    "title": "Everything you need to",
+    "title_highlight": "grow faster",
+    "instant": {
+      "title": "Instant Processing",
+      "description": "PIX payment confirmation in less than 10 seconds. Automatic webhook to your system."
+    },
+    "secure": {
+      "title": "Bank-Level Security",
+      "description": "AES-256 encryption, JWT authentication and BACEN compliance. Your data is protected."
+    },
+    "api": {
+      "title": "Complete REST API",
+      "description": "Interactive documentation, SDKs for major languages and sandbox environment for testing."
+    },
+    "dashboard": {
+      "title": "Real-Time Dashboard",
+      "description": "Monitor transactions, manage users and access detailed reports in one place."
+    }
+  },
+  "stats": {
+    "transactions": "Processed Transactions",
+    "merchants": "Active Merchants",
+    "uptime": "Availability",
+    "support": "Support"
+  },
+  "how_it_works": {
+    "title": "How it works",
+    "step1_title": "Integrate the API",
+    "step1_desc": "Add our REST API to your system with just a few lines of code.",
+    "step2_title": "Generate PIX charges",
+    "step2_desc": "Create dynamic QR Codes instantly for your customers to pay.",
+    "step3_title": "Receive Automatically",
+    "step3_desc": "Payments confirmed in real time with automatic webhook notification."
+  },
+  "cta": {
+    "title": "Start receiving and sending payments automatically today !",
+    "subtitle": "",
+    "description": "Create your free account and start using in minutes.",
+    "button": "Create your Free Account"
+  },
+  "footer": {
+    "description": "A payment platform for developers and businesses.",
+    "product": "Product",
+    "company": "Company",
+    "legal": "Legal",
+    "privacy": "Privacy",
+    "cookies": "Cookies",
+    "rights": "All rights reserved."
+  },
+  "auth": {
+    "login_title": "Sign in to your account",
+    "register_title": "Create your account",
+    "email": "Email",
+    "password": "Password",
+    "name": "Full name",
+    "phone": "Phone",
+    "phone_optional": "Phone (optional)",
+    "login_button": "Sign In",
+    "register_button": "Create Account",
+    "logging_in": "Signing in...",
+    "creating": "Creating account...",
+    "no_account": "Don't have an account?",
+    "has_account": "Already have an account?",
+    "sign_up": "Sign up",
+    "sign_in": "Sign in",
+    "welcome": "Welcome",
+    "account_created": "Account created successfully!",
+    "admin_label": "Admin",
+    "password_hint": "Minimum 8 characters",
+    "name_placeholder": "John Smith",
+    "email_placeholder": "you@example.com",
+    "phone_placeholder": "+1 (555) 000-0000"
+  },
+  "dashboard": {
+    "nav": {
+      "dashboard": "Dashboard",
+      "transactions": "Transactions",
+      "pix": "Charge PIX",
+      "transfer": "Transfer",
+      "withdraw": "Withdraw",
+      "api_keys": "API Keys",
+      "webhooks": "Webhooks",
+      "logout": "Sign Out"
+    },
+    "balance": "Available balance",
+    "pending": "Pending",
+    "deposited": "Deposited",
+    "withdrawn": "Withdrawn",
+    "pix_key": "PIX Key",
+    "recent_transactions": "Recent transactions",
+    "no_transactions": "No transactions yet",
+    "view_all": "View all",
+    "quick_actions": "Quick actions",
+    "receive_pix": "Receive PIX",
+    "send_pix": "Send PIX",
+    "withdraw_funds": "Withdraw funds"
+  },
+  "transactions": {
+    "title": "Transactions",
+    "filter_all": "All",
+    "filter_deposit": "Deposits",
+    "filter_withdraw": "Withdrawals",
+    "filter_transfer": "Transfers",
+    "status_paid": "Paid",
+    "status_pending": "Pending",
+    "status_failed": "Failed",
+    "status_cancelled": "Cancelled",
+    "status_processing": "Processing",
+    "type_deposit": "Deposit",
+    "type_withdraw": "Withdrawal",
+    "type_transfer": "Transfer",
+    "type_adjustment": "Adjustment",
+    "amount": "Amount",
+    "fee": "Transaction fee",
+    "net": "Net",
+    "date": "Date",
+    "description": "Description",
+    "no_results": "No transactions found"
+  },
+  "pix": {
+    "title": "Generate PIX Charge",
+    "amount_label": "Amount (R$)",
+    "description_label": "Description",
+    "description_placeholder": "e.g. Product #123",
+    "generate_button": "Generate QR Code",
+    "generating": "Generating...",
+    "fee_label": "Transaction fee (3% + R$1.00)",
+    "you_receive": "You receive",
+    "scan_title": "QR Code generated",
+    "scan_instruction": "Scan with your banking app",
+    "copy_code": "Copy PIX code",
+    "copied": "Copied!",
+    "expires": "Expires in",
+    "new_charge": "New charge"
+  },
+  "admin": {
+    "nav": {
+      "overview": "Overview",
+      "raze_control": "Raze Control",
+      "users": "Users",
+      "transactions": "Transactions",
+      "withdrawals": "Withdrawals",
+      "webhooks": "Webhooks",
+      "audit_logs": "Audit Logs",
+      "config": "Settings",
+      "user_panel": "User Panel",
+      "logout": "Sign Out"
+    },
+    "admin_panel": "Admin Panel",
+    "total_users": "Total Users",
+    "total_volume": "Total Volume",
+    "total_fees": "Transaction Fees Collected",
+    "transactions_today": "Transactions Today",
+    "frozen_users": "Blocked Users",
+    "search_users": "Search users...",
+    "freeze": "Block",
+    "unfreeze": "Unblock",
+    "adjust_balance": "Adjust Balance",
+    "adjust_button": "Adjust",
+    "recent_transactions": "Recent Transactions",
+    "admin_badge": "Admin"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "back": "Back",
+    "next": "Next",
+    "confirm": "Confirm",
+    "close": "Close",
+    "search": "Search",
+    "filter": "Filter",
+    "export": "Export",
+    "refresh": "Refresh",
+    "copy": "Copy",
+    "dark_mode": "Dark mode",
+    "light_mode": "Light mode",
+    "language": "Language"
+  }
+}

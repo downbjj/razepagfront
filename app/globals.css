@@ -1,0 +1,171 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Dark theme (default) ─────────────────────────────────── */
+:root,
+.dark {
+  --background: #000000;
+  --foreground: #f0f0f0;
+  --surface: #0d0d0d;
+  --surface-2: #141414;
+  --surface-3: #1a1a1a;
+  --border: #1f1f1f;
+  --border-bright: #2d2d2d;
+  --text-muted: #6b7280;
+  --text-secondary: #9ca3af;
+
+  --toast-bg: #1a1a1a;
+  --toast-fg: #f0f0f0;
+  --toast-border: #2a2a2a;
+}
+
+/* ── Light theme ──────────────────────────────────────────── */
+.light {
+  --background: #f4f4f8;
+  --foreground: #111111;
+  --surface: #ffffff;
+  --surface-2: #f0f0f5;
+  --surface-3: #e8e8f0;
+  --border: #e0e0e8;
+  --border-bright: #ccccdd;
+  --text-muted: #6b7280;
+  --text-secondary: #4b5563;
+
+  --toast-bg: #ffffff;
+  --toast-fg: #111111;
+  --toast-border: #e0e0e8;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--surface);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-bright);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #8A2BE2;
+}
+
+/* Selection */
+::selection {
+  background: rgba(138, 43, 226, 0.3);
+  color: var(--foreground);
+}
+
+/* Glow text */
+.text-glow {
+  text-shadow: 0 0 10px rgba(138, 43, 226, 0.8), 0 0 20px rgba(138, 43, 226, 0.4);
+}
+
+/* Grid background */
+.bg-grid {
+  background-image:
+    linear-gradient(rgba(138, 43, 226, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(138, 43, 226, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* Card hover glow */
+.card-hover {
+  transition: all 0.2s ease;
+}
+.card-hover:hover {
+  border-color: rgba(138, 43, 226, 0.3);
+  box-shadow: 0 0 20px rgba(138, 43, 226, 0.1);
+}
+
+/* Neon border animation */
+@keyframes neon-border {
+  0%, 100% { border-color: rgba(138, 43, 226, 0.3); }
+  50%       { border-color: rgba(138, 43, 226, 0.8); }
+}
+
+.neon-border {
+  animation: neon-border 2s ease-in-out infinite;
+}
+
+/* Loading spinner */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+/* Status badges */
+.badge-pending    { @apply bg-yellow-500/10 text-yellow-400 border border-yellow-500/20; }
+.badge-completed  { @apply bg-green-500/10  text-green-400  border border-green-500/20; }
+.badge-failed     { @apply bg-red-500/10    text-red-400    border border-red-500/20; }
+.badge-processing { @apply bg-blue-500/10   text-blue-400   border border-blue-500/20; }
+.badge-cancelled  { @apply bg-gray-500/10   text-gray-400   border border-gray-500/20; }
+
+/* Input focus */
+input:focus, textarea:focus, select:focus {
+  outline: none;
+}
+
+/* Table */
+.table-row-hover:hover {
+  background: rgba(138, 43, 226, 0.05);
+}
+
+/* Transition */
+.transition-all-fast {
+  transition: all 0.15s ease;
+}
+
+/* Modal inputs */
+.modal-input {
+  width: 100%;
+  background: #0d0d14;
+  border: 1px solid rgba(138, 43, 226, 0.2);
+  color: #f0f0f0;
+  padding: 0.625rem 0.875rem;
+  border-radius: 0.75rem;
+  font-size: 0.875rem;
+  transition: border-color 0.15s ease;
+}
+.modal-input:focus {
+  border-color: rgba(138, 43, 226, 0.6);
+  box-shadow: 0 0 0 3px rgba(138, 43, 226, 0.1);
+}
+.modal-input::placeholder {
+  color: #4b5563;
+}
+
+/* Light mode overrides for themed components */
+.light .bg-black          { background-color: var(--background) !important; }
+.light .bg-surface        { background-color: var(--surface) !important; }
+.light .bg-surface-2      { background-color: var(--surface-2) !important; }
+.light .border-border      { border-color: var(--border) !important; }
+.light .text-white         { color: var(--foreground) !important; }
+.light .text-gray-400      { color: var(--text-secondary) !important; }
+.light .text-gray-500      { color: var(--text-muted) !important; }
+.light .text-gray-600      { color: var(--text-muted) !important; }

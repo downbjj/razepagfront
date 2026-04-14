@@ -5,7 +5,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import {
   Wallet, TrendingUp, BarChart2, Hash,
   ArrowDownLeft, ArrowUpRight, RefreshCw, QrCode, Send,
-  X, Copy, Check, AlertTriangle
+  X, Copy, Check, AlertTriangle, CreditCard, ExternalLink
 } from 'lucide-react'
 import {
   AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer,
@@ -198,6 +198,89 @@ function WithdrawModal({ onClose }: { onClose: () => void }) {
   )
 }
 
+// ─── Checkout Pro modal ───────────────────────────────────────────────────────
+function CheckoutModal({ onClose }: { onClose: () => void }) {
+  const [form, setForm] = useState({ title: '', amount: '' })
+  const [link, setLink] = useState<string | null>(null)
+
+  const createPreference = useMutation({
+    mutationFn: (data: any) => api.post('/checkout/preference', data).then(r => r.data.data),
+    onSuccess: (data: any) => {
+      // sandboxUrl para testes, initPoint para produção
+      setLink(data.sandboxUrl || data.initPoint)
+    },
+    onError: (err: any) => toast.error(err.response?.data?.message || 'Erro ao criar preferência'),
+  })
+
+  const amt = parseFloat(form.amount) || 0
+
+  return (
+    <ModalWrap title="Checkout Pro — Mercado Pago" onClose={onClose}>
+      {!link ? (
+        <form onSubmit={e => {
+          e.preventDefault()
+          if (amt > 0 && form.title.trim()) {
+            createPreference.mutate({ title: form.title.trim(), amount: amt })
+          }
+        }} className="space-y-4">
+          <Field label="Descrição do produto / serviço">
+            <input
+              required maxLength={100}
+              value={form.title} onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
+              className="modal-input" placeholder="Ex: Plano Premium, Consultoria..."
+            />
+          </Field>
+          <Field label="Valor (R$)">
+            <input
+              type="number" min="0.01" step="0.01" required
+              value={form.amount} onChange={e => setForm(f => ({ ...f, amount: e.target.value }))}
+              className="modal-input" placeholder="0,00"
+            />
+          </Field>
+          {amt > 0 && (
+            <div className="text-xs rounded-xl px-4 py-3" style={{ background: 'rgba(138,43,226,0.06)', border: '1px solid rgba(138,43,226,0.15)' }}>
+              <Row label="Valor a cobrar" val={formatCurrency(amt)} />
+              <p className="text-gray-600 mt-1.5">O cliente paga pelo checkout do Mercado Pago (cartão, PIX, boleto)</p>
+            </div>
+          )}
+          <PurpleBtn disabled={createPreference.isPending || amt <= 0 || !form.title.trim()} loading={createPreference.isPending}>
+            <CreditCard className="w-4 h-4" /> Gerar link de pagamento
+          </PurpleBtn>
+        </form>
+      ) : (
+        <div className="space-y-4 text-center">
+          <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto" style={{ background: 'rgba(34,197,94,0.1)', border: '1px solid rgba(34,197,94,0.3)' }}>
+            <Check className="w-7 h-7 text-green-400" />
+          </div>
+          <p className="text-white font-semibold">Link gerado com sucesso!</p>
+          <p className="text-xs text-gray-500">Compartilhe o link abaixo com seu cliente</p>
+          <a
+            href={link} target="_blank" rel="noopener noreferrer"
+            className="flex items-center justify-center gap-2 w-full py-3 rounded-xl text-sm font-semibold text-white transition-all"
+            style={{ background: 'linear-gradient(135deg, #009ee3, #007bb5)', boxShadow: '0 0 18px rgba(0,158,227,0.3)' }}
+          >
+            <ExternalLink className="w-4 h-4" /> Abrir checkout
+          </a>
+          <button
+            onClick={() => {
+              navigator.clipboard.writeText(link)
+              toast.success('Link copiado!')
+            }}
+            className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-medium transition-all"
+            style={{ background: 'rgba(138,43,226,0.08)', border: '1px solid rgba(138,43,226,0.2)', color: '#c084fc' }}
+          >
+            <Copy className="w-3.5 h-3.5" /> Copiar link
+          </button>
+          <button onClick={() => { setLink(null); setForm({ title: '', amount: '' }) }}
+            className="text-xs text-gray-500 hover:text-white transition-colors">
+            Novo link
+          </button>
+        </div>
+      )}
+    </ModalWrap>
+  )
+}
+
 // ─── Shared modal chrome ──────────────────────────────────────────────────────
 function ModalWrap({ title, children, onClose }: { title: string; children: React.ReactNode; onClose: () => void }) {
   return (
@@ -262,6 +345,7 @@ function ChartTooltip({ active, payload, label }: any) {
 export default function DashboardPage() {
   const [showPix, setShowPix] = useState(false)
   const [showWithdraw, setShowWithdraw] = useState(false)
+  const [showCheckout, setShowCheckout] = useState(false)
   const [chartTab, setChartTab] = useState<'deposits' | 'withdrawals'>('deposits')
 
   const { data: dashboardData, isLoading, refetch } = useQuery({
@@ -289,6 +373,7 @@ export default function DashboardPage() {
       {/* Modals */}
       {showPix && <PixModal onClose={() => setShowPix(false)} />}
       {showWithdraw && <WithdrawModal onClose={() => setShowWithdraw(false)} />}
+      {showCheckout && <CheckoutModal onClose={() => setShowCheckout(false)} />}
 
       {/* ── Header ── */}
       <div className="flex items-center justify-between">
@@ -440,6 +525,13 @@ export default function DashboardPage() {
               <Send className="w-3.5 h-3.5" /> Sacar
             </button>
           </div>
+          <button
+            onClick={() => setShowCheckout(true)}
+            className="w-full flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-semibold text-white transition-all"
+            style={{ background: 'linear-gradient(135deg, #009ee3, #007bb5)', boxShadow: '0 0 12px rgba(0,158,227,0.25)' }}
+          >
+            <CreditCard className="w-3.5 h-3.5" /> Checkout Pro
+          </button>
         </div>
       </div>
 

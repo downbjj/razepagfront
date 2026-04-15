@@ -236,10 +236,18 @@ export default function PixChargePage() {
           </div>
 
           {/* QR Code */}
-          {charge.pix?.qrCode && (
+          {(charge.pix?.copyPaste || charge.pix?.qrCode) && (
             <div className="flex justify-center">
               <div className="bg-white p-4 rounded-2xl shadow-lg">
-                <img src={charge.pix.qrCode} alt="PIX QR Code" className="w-52 h-52" />
+                <img
+                  src={
+                    charge.pix?.copyPaste
+                      ? `https://api.qrserver.com/v1/create-qr-code/?size=208x208&data=${encodeURIComponent(charge.pix.copyPaste)}`
+                      : charge.pix.qrCode
+                  }
+                  alt="PIX QR Code"
+                  className="w-52 h-52"
+                />
               </div>
             </div>
           )}

@@ -19,7 +19,7 @@ export default function TransferPage() {
   const balance = parseFloat(walletData?.wallet?.balance || '0')
 
   const transfer = useMutation({
-    mutationFn: (data: any) => api.post('/pix/transfer', data).then(r => r.data.data),
+    mutationFn: (data: any) => api.post('/pix/send', data).then(r => r.data.data),
     onSuccess: (data) => {
       setResult(data)
       toast.success('Transferência concluída!')

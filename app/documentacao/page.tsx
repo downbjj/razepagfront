@@ -102,6 +102,92 @@ export default function DocumentacaoPage() {
             <p className="text-xs text-gray-600">A assinatura HMAC-SHA256 é enviada no header <code className="text-purple-400">X-Webhook-Signature</code></p>
           </section>
 
+          {/* API v1 — EcomPag-compatible */}
+          <section className="rounded-2xl p-8" style={{background:'#0d0d0d',border:'1px solid #1f1f1f'}}>
+            <div className="flex items-center gap-3 mb-2">
+              <h2 className="text-xl font-bold text-white">API Gateway (v1/v2)</h2>
+              <span className="text-xs px-2 py-0.5 rounded-full" style={{background:'rgba(138,43,226,0.15)',color:'#c084fc',border:'1px solid rgba(138,43,226,0.3)'}}>client_id + client_secret</span>
+            </div>
+            <p className="text-gray-500 text-sm mb-4">
+              Endpoints para integração direta — use <code className="text-purple-400 bg-black/40 px-1 rounded text-xs">client_id</code> e <code className="text-purple-400 bg-black/40 px-1 rounded text-xs">client_secret</code> como parâmetros (query ou body).
+            </p>
+
+            <div className="space-y-4">
+              {/* QR Code */}
+              <div className="rounded-xl p-4 font-mono text-sm overflow-x-auto" style={{background:'#050505',border:'1px solid #2a2a2a'}}>
+                <p className="text-gray-500 mb-1"># Gerar QR Code PIX</p>
+                <p className="text-green-400">POST /api/v1/c1/qrcode.php</p>
+                <p className="text-gray-300 mt-2">{'{'}</p>
+                <p className="text-gray-300 ml-4">"client_id": "...",</p>
+                <p className="text-gray-300 ml-4">"client_secret": "...",</p>
+                <p className="text-gray-300 ml-4">"valor": 100.00,</p>
+                <p className="text-gray-300 ml-4">"nome": "João Silva",</p>
+                <p className="text-gray-300 ml-4">"cpf": "123.456.789-00",</p>
+                <p className="text-gray-300 ml-4">"descricao": "Pedido #1234",</p>
+                <p className="text-gray-300 ml-4">"url_callback": "https://seusite.com/webhook" <span className="text-gray-600">// opcional</span></p>
+                <p className="text-gray-300">{'}'}</p>
+                <p className="text-gray-500 mt-3 mb-1"># Resposta</p>
+                <p className="text-gray-300">{'{ "gateway": "razepag", "transactionId": "...", "status": "PENDING", "type": "RECEIVEPIX",\n  "amount": 100.00, "tax": 4.00, "total": 96.00, "qrcode": "base64...", "qrcode_text": "00020..." }'}</p>
+              </div>
+
+              {/* Payment */}
+              <div className="rounded-xl p-4 font-mono text-sm overflow-x-auto" style={{background:'#050505',border:'1px solid #2a2a2a'}}>
+                <p className="text-gray-500 mb-1"># Enviar PIX (saída)</p>
+                <p className="text-green-400">POST /api/v1/c1/payment.php</p>
+                <p className="text-gray-300 mt-2">{'{ "client_id": "...", "client_secret": "...", "chave_pix": "...", "valor": 50.00 }'}</p>
+              </div>
+
+              {/* Status */}
+              <div className="rounded-xl p-4 font-mono text-sm overflow-x-auto" style={{background:'#050505',border:'1px solid #2a2a2a'}}>
+                <p className="text-gray-500 mb-1"># Consultar status</p>
+                <p className="text-blue-400">GET /api/v1/c1/status.php?client_id=...&client_secret=...&transaction_id=...</p>
+              </div>
+
+              {/* Balance */}
+              <div className="rounded-xl p-4 font-mono text-sm overflow-x-auto" style={{background:'#050505',border:'1px solid #2a2a2a'}}>
+                <p className="text-gray-500 mb-1"># Consultar saldo</p>
+                <p className="text-blue-400">GET /api/v2/account/balance.php?client_id=...&client_secret=...</p>
+                <p className="text-gray-300 mt-2">{'{ "gateway": "razepag", "balance": 250.00, "pending_balance": 0.00 }'}</p>
+              </div>
+            </div>
+          </section>
+
+          {/* Webhook format */}
+          <section className="rounded-2xl p-8" style={{background:'#0d0d0d',border:'1px solid #1f1f1f'}}>
+            <h2 className="text-xl font-bold text-white mb-2">Formato do Webhook</h2>
+            <p className="text-gray-500 text-sm mb-4">Payload enviado para sua URL de callback quando um pagamento é confirmado.</p>
+            <div className="rounded-xl p-4 font-mono text-sm overflow-x-auto" style={{background:'#050505',border:'1px solid #2a2a2a'}}>
+              <p className="text-gray-300">{'{'}</p>
+              <p className="text-gray-300 ml-4">"gateway": "razepag",</p>
+              <p className="text-gray-300 ml-4">"transactionId": "uuid",</p>
+              <p className="text-gray-300 ml-4">"external_id": "sua-referencia",</p>
+              <p className="text-gray-300 ml-4">"status": "PAID",</p>
+              <p className="text-gray-300 ml-4">"type": "RECEIVEPIX", <span className="text-gray-600">// ou PAYMENT / TRANSFER</span></p>
+              <p className="text-gray-300 ml-4">"amount": 100.00,</p>
+              <p className="text-gray-300 ml-4">"tax": 4.00,</p>
+              <p className="text-gray-300 ml-4">"total": 96.00,</p>
+              <p className="text-gray-300 ml-4">"created_at": "2025-01-01T00:00:00Z",</p>
+              <p className="text-gray-300 ml-4">"updated_at": "2025-01-01T00:00:00Z"</p>
+              <p className="text-gray-300">{'}'}</p>
+            </div>
+            <p className="text-xs text-gray-600 mt-3">Assinatura HMAC-SHA256 no header <code className="text-purple-400">X-Webhook-Signature</code></p>
+          </section>
+
+          {/* Transferência interna */}
+          <section className="rounded-2xl p-8" style={{background:'#0d0d0d',border:'1px solid #1f1f1f'}}>
+            <div className="flex items-center gap-3 mb-2">
+              <h2 className="text-xl font-bold text-white">Transferência Interna</h2>
+              <span className="text-xs px-2 py-0.5 rounded-full" style={{background:'rgba(34,197,94,0.1)',color:'#4ade80',border:'1px solid rgba(34,197,94,0.2)'}}>Grátis</span>
+            </div>
+            <p className="text-gray-500 text-sm mb-4">
+              Transferências entre contas RazePag por <code className="text-purple-400 bg-black/40 px-1 rounded text-xs">@username</code> são completamente gratuitas — sem taxa alguma.
+            </p>
+            <div className="rounded-xl p-4 font-mono text-sm overflow-x-auto" style={{background:'#050505',border:'1px solid #2a2a2a'}}>
+              <p className="text-green-400">POST /api/v1/transfer</p>
+              <p className="text-gray-300 mt-2">{'{ "client_id": "...", "client_secret": "...", "username": "joaosilva", "valor": 50.00 }'}</p>
+            </div>
+          </section>
+
           {/* Taxas */}
           <section className="rounded-2xl p-8" style={{background:'#0d0d0d',border:'1px solid #1f1f1f'}}>
             <h2 className="text-xl font-bold text-white mb-2">Sistema de Taxas</h2>

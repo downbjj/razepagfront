@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import {
-  User, Mail, Phone, Key, Lock, Eye, EyeOff, Save, RefreshCw
+  User, Mail, Phone, Key, Lock, Eye, EyeOff, Save, RefreshCw, AtSign, CreditCard, CheckCircle, XCircle
 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import api, { getUser, setUser } from '@/lib/api'
@@ -17,7 +17,7 @@ export default function ProfilePage() {
     queryFn: () => api.get('/users/me').then(r => r.data.data),
   })
 
-  const [profileForm, setProfileForm] = useState({ name: '', phone: '' })
+  const [profileForm, setProfileForm] = useState({ name: '', phone: '', username: '', cpf: '' })
   const [pwForm, setPwForm] = useState({ currentPassword: '', newPassword: '', confirmPassword: '' })
   const [showCurrent, setShowCurrent] = useState(false)
   const [showNew, setShowNew]         = useState(false)
@@ -25,7 +25,12 @@ export default function ProfilePage() {
 
   useEffect(() => {
     if (profile) {
-      setProfileForm({ name: profile.name || '', phone: profile.phone || '' })
+      setProfileForm({
+        name:     profile.name     || '',
+        phone:    profile.phone    || '',
+        username: profile.username || '',
+        cpf:      profile.cpf      || '',
+      })
     }
   }, [profile])
 
@@ -53,7 +58,10 @@ export default function ProfilePage() {
   const handleProfileSave = (e: React.FormEvent) => {
     e.preventDefault()
     if (!profileForm.name.trim()) return toast.error('Nome não pode ser vazio')
-    updateProfileMutation.mutate(profileForm)
+    const payload: any = { name: profileForm.name, phone: profileForm.phone || undefined }
+    if (profileForm.username) payload.username = profileForm.username
+    if (profileForm.cpf)      payload.cpf      = profileForm.cpf
+    updateProfileMutation.mutate(payload)
   }
 
   const handlePasswordChange = (e: React.FormEvent) => {
@@ -90,14 +98,47 @@ export default function ProfilePage() {
           style={{ background: 'linear-gradient(135deg, #8A2BE2, #5e18a0)', boxShadow: '0 0 24px rgba(138,43,226,0.3)' }}>
           {profile?.name?.[0]?.toUpperCase() || 'U'}
         </div>
-        <div>
+        <div className="flex-1 min-w-0">
           <p className="text-base font-semibold text-white">{profile?.name}</p>
+          {profile?.username && (
+            <p className="text-sm text-purple-400">@{profile.username}</p>
+          )}
           <p className="text-sm text-gray-500">{profile?.email}</p>
-          <span className="mt-1 inline-flex items-center text-xs px-2 py-0.5 rounded-full"
-            style={{ background: 'rgba(138,43,226,0.12)', border: '1px solid rgba(138,43,226,0.25)', color: '#c084fc' }}>
-            {profile?.role === 'ADMIN' ? 'Administrador' : 'Usuário'}
-          </span>
+          <div className="flex flex-wrap gap-1.5 mt-1.5">
+            <span className="inline-flex items-center text-xs px-2 py-0.5 rounded-full"
+              style={{ background: 'rgba(138,43,226,0.12)', border: '1px solid rgba(138,43,226,0.25)', color: '#c084fc' }}>
+              {profile?.role === 'ADMIN' ? 'Administrador' : 'Usuário'}
+            </span>
+            {profile?.accountActivated
+              ? <span className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full text-green-400"
+                  style={{ background: 'rgba(34,197,94,0.1)', border: '1px solid rgba(34,197,94,0.2)' }}>
+                  <CheckCircle className="w-2.5 h-2.5" /> Verificada
+                </span>
+              : <span className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full text-yellow-400"
+                  style={{ background: 'rgba(234,179,8,0.08)', border: '1px solid rgba(234,179,8,0.2)' }}>
+                  <XCircle className="w-2.5 h-2.5" /> Pendente
+                </span>
+            }
+          </div>
         </div>
+      </div>
+
+      {/* Services status */}
+      <div className="grid grid-cols-3 gap-2">
+        {[
+          { label: 'Cash-in',  active: profile?.cashInEnabled  },
+          { label: 'Cash-out', active: profile?.cashOutEnabled },
+          { label: 'API',      active: profile?.apiEnabled     },
+        ].map(s => (
+          <div key={s.label} className="flex flex-col items-center gap-1.5 py-3 rounded-xl"
+            style={{ background: '#111118', border: '1px solid rgba(138,43,226,0.1)' }}>
+            <div className={`w-2 h-2 rounded-full ${s.active ? 'bg-green-400' : 'bg-gray-600'}`} />
+            <span className="text-xs text-gray-400">{s.label}</span>
+            <span className={`text-xs font-medium ${s.active ? 'text-green-400' : 'text-gray-600'}`}>
+              {s.active ? 'Ativo' : 'Inativo'}
+            </span>
+          </div>
+        ))}
       </div>
 
       {/* Profile form */}
@@ -153,6 +194,41 @@ export default function ProfilePage() {
                 className="w-full pl-9 pr-4 py-2.5 rounded-xl text-sm text-white focus:outline-none transition-all"
                 style={{ background: '#0d0d14', border: '1px solid rgba(138,43,226,0.2)' }}
                 placeholder="+55 (11) 99999-9999"
+              />
+            </div>
+          </div>
+
+          {/* Username */}
+          <div>
+            <label className="block text-xs font-medium text-gray-400 mb-1.5">@Username</label>
+            <div className="relative">
+              <AtSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600" />
+              <input
+                type="text"
+                value={profileForm.username}
+                onChange={e => setProfileForm(f => ({ ...f, username: e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, '') }))}
+                className="w-full pl-9 pr-4 py-2.5 rounded-xl text-sm text-white focus:outline-none transition-all"
+                style={{ background: '#0d0d14', border: '1px solid rgba(138,43,226,0.2)' }}
+                placeholder="seuusuario"
+                maxLength={30}
+              />
+            </div>
+            <p className="text-xs text-gray-600 mt-1">Usado para receber transferências internas gratuitas</p>
+          </div>
+
+          {/* CPF */}
+          <div>
+            <label className="block text-xs font-medium text-gray-400 mb-1.5">CPF</label>
+            <div className="relative">
+              <CreditCard className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600" />
+              <input
+                type="text"
+                value={profileForm.cpf}
+                onChange={e => setProfileForm(f => ({ ...f, cpf: e.target.value }))}
+                className="w-full pl-9 pr-4 py-2.5 rounded-xl text-sm text-white focus:outline-none transition-all"
+                style={{ background: '#0d0d14', border: '1px solid rgba(138,43,226,0.2)' }}
+                placeholder="000.000.000-00"
+                maxLength={14}
               />
             </div>
           </div>

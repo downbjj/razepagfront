@@ -8,7 +8,7 @@ import {
   LayoutDashboard, ArrowUpDown, ChevronDown, ChevronRight,
   QrCode, Send, Key, LogOut, Menu, X,
   Bell, MessageSquare, TrendingUp,
-  Wallet, CheckCheck, Info, AlertTriangle, CheckCircle
+  Wallet, CheckCheck, Info, AlertTriangle, CheckCircle, Shield, User
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { clearAuthTokens, getUser } from '@/lib/api'
@@ -199,6 +199,24 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             icon={Key}
             label="API"
             active={isActive('/dashboard/api-keys')}
+            onClick={() => setSidebarOpen(false)}
+          />
+
+          {/* Segurança */}
+          <NavItem
+            href="/dashboard/security"
+            icon={Shield}
+            label="Segurança"
+            active={isActive('/dashboard/security')}
+            onClick={() => setSidebarOpen(false)}
+          />
+
+          {/* Perfil */}
+          <NavItem
+            href="/dashboard/profile"
+            icon={User}
+            label="Meu Perfil"
+            active={isActive('/dashboard/profile')}
             onClick={() => setSidebarOpen(false)}
           />
         </nav>

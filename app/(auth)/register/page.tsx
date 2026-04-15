@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
-import { Eye, EyeOff, Lock, Mail, User, Phone, Zap, Moon, Sun } from 'lucide-react'
+import { Eye, EyeOff, Lock, Mail, User, Phone, Zap, Moon, Sun, AtSign } from 'lucide-react'
 import api, { setAuthTokens, setUser } from '@/lib/api'
 import { useLanguage } from '@/lib/i18n'
 import { useTheme } from '@/lib/theme'
@@ -15,7 +15,7 @@ export default function RegisterPage() {
   const { theme, toggleTheme } = useTheme()
   const [loading, setLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
-  const [form, setForm] = useState({ name: '', email: '', password: '', phone: '' })
+  const [form, setForm] = useState({ name: '', email: '', password: '', phone: '', username: '' })
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -23,7 +23,8 @@ export default function RegisterPage() {
 
     try {
       const payload: any = { ...form }
-      if (!payload.phone) delete payload.phone
+      if (!payload.phone)    delete payload.phone
+      if (!payload.username) delete payload.username
 
       const { data } = await api.post('/auth/register', payload)
       const { user, accessToken, refreshToken } = data.data
@@ -129,6 +130,22 @@ export default function RegisterPage() {
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
+            </div>
+
+            {/* Username */}
+            <div>
+              <label className="block text-sm font-medium mb-2" style={{color: labelColor}}>@Username (opcional)</label>
+              <div className="relative">
+                <AtSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{color: mutedColor}} />
+                <input
+                  type="text" value={form.username} onChange={e => setForm(f => ({ ...f, username: e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, '') }))}
+                  className="w-full border pl-10 pr-4 py-3 rounded-xl transition-all focus:border-purple-500 focus:ring-1 focus:ring-purple-500/30"
+                  style={{background: inputBg, borderColor, color: textColor}}
+                  placeholder="seuusuario"
+                  maxLength={30}
+                />
+              </div>
+              <p className="text-xs mt-1" style={{color: mutedColor}}>Para receber transferências internas gratuitas</p>
             </div>
 
             {/* Phone */}

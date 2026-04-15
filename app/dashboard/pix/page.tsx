@@ -1,42 +1,49 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useRouter } from 'next/navigation'
 import { QrCode, Copy, Check, RefreshCw, DollarSign, FileText, Clock, CheckCircle2 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import api from '@/lib/api'
 import { formatCurrency, calculateFee, calculateNet } from '@/lib/utils'
 
 export default function PixChargePage() {
-  const qc = useQueryClient()
-  const [form, setForm]   = useState({ amount: '', description: '' })
+  const qc     = useQueryClient()
+  const router = useRouter()
+  const [form, setForm]     = useState({ amount: '', description: '' })
   const [charge, setCharge] = useState<any>(null)
   const [copied, setCopied] = useState(false)
+  const [paid, setPaid]     = useState(false)
 
   // Poll the transaction status while it's PENDING
   const { data: statusData } = useQuery({
-    queryKey: ['pix-status', charge?.id],
-    queryFn:  () => api.get(`/pix/transactions/${charge.id}`).then(r => r.data.data),
-    enabled:  !!charge?.id && charge?.status === 'PENDING',
-    refetchInterval: 5000,
-    onSuccess: (data: any) => {
-      if (data.status === 'PAID') {
-        toast.success('Pagamento confirmado! Saldo creditado.')
-        qc.invalidateQueries({ queryKey: ['dashboard'] })
-        setCharge((prev: any) => ({ ...prev, status: 'PAID' }))
-      } else if (data.status === 'CANCELLED' || data.status === 'FAILED') {
-        setCharge((prev: any) => ({ ...prev, status: data.status }))
-      }
-    },
-  } as any)
+    queryKey:       ['pix-status', charge?.id],
+    queryFn:        () => api.get(`/pix/transactions/${charge.id}`).then(r => r.data.data),
+    enabled:        !!charge?.id && !paid,
+    refetchInterval: 4000,
+  })
+
+  // Detect confirmation via useEffect (React Query v5 removed onSuccess)
+  useEffect(() => {
+    if (!statusData) return
+    if (statusData.status === 'PAID' && !paid) {
+      setPaid(true)
+      qc.invalidateQueries({ queryKey: ['dashboard'] })
+      // Redirect after 3s
+      setTimeout(() => router.push('/dashboard'), 3000)
+    } else if (statusData.status === 'CANCELLED' || statusData.status === 'FAILED') {
+      setCharge((prev: any) => ({ ...prev, status: statusData.status }))
+    }
+  }, [statusData, paid, qc, router])
 
   const txStatus = statusData?.status || charge?.status
 
   const createCharge = useMutation({
     mutationFn: (data: any) => api.post('/pix/charge', data).then(r => r.data.data),
     onSuccess: (data: any) => {
-      // API returns: { id, amount, fee, netAmount, status, pix: { qrCode, copyPaste, expiresAt } }
       setCharge(data)
+      setPaid(false)
       toast.success('QR Code gerado! Aguardando pagamento...')
     },
     onError: (err: any) => {
@@ -68,12 +75,79 @@ export default function PixChargePage() {
     setCharge(null)
     setForm({ amount: '', description: '' })
     setCopied(false)
+    setPaid(false)
   }
 
   const amt = parseFloat(form.amount) || 0
   const fee = amt > 0 ? calculateFee(amt) : 0
   const net = amt > 0 ? calculateNet(amt) : 0
 
+  // ── Tela de sucesso ────────────────────────────────────────────────────────
+  if (paid) {
+    return (
+      <div className="max-w-lg mx-auto flex flex-col items-center justify-center min-h-[60vh] space-y-6 text-center animate-fade-in">
+        {/* Ícone animado */}
+        <div
+          className="w-24 h-24 rounded-full flex items-center justify-center"
+          style={{
+            background: 'rgba(34,197,94,0.12)',
+            border: '2px solid rgba(34,197,94,0.4)',
+            boxShadow: '0 0 40px rgba(34,197,94,0.25)',
+            animation: 'pulse 1.5s ease-in-out infinite',
+          }}
+        >
+          <CheckCircle2 className="w-12 h-12 text-green-400" />
+        </div>
+
+        <div>
+          <h2 className="text-2xl font-bold text-white">Pagamento Confirmado!</h2>
+          <p className="text-gray-400 mt-2 text-sm">
+            <span className="text-green-400 font-semibold">{formatCurrency(charge?.netAmount || 0)}</span> creditado no seu saldo
+          </p>
+        </div>
+
+        {/* Resumo */}
+        <div
+          className="w-full rounded-2xl px-5 py-4 text-sm space-y-2.5"
+          style={{ background: '#111118', border: '1px solid rgba(34,197,94,0.2)' }}
+        >
+          <div className="flex justify-between">
+            <span className="text-gray-500">Valor pago</span>
+            <span className="text-white font-medium">{formatCurrency(charge?.amount || 0)}</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-gray-500">Taxa</span>
+            <span className="text-red-400">- {formatCurrency(charge?.fee || 0)}</span>
+          </div>
+          <div className="flex justify-between border-t pt-2" style={{ borderColor: 'rgba(255,255,255,0.07)' }}>
+            <span className="text-gray-400 font-semibold">Você recebeu</span>
+            <span className="text-green-400 font-bold">{formatCurrency(charge?.netAmount || 0)}</span>
+          </div>
+        </div>
+
+        <p className="text-xs text-gray-600">Redirecionando para o painel em instantes...</p>
+
+        <div className="flex gap-3 w-full">
+          <button
+            onClick={reset}
+            className="flex-1 py-3 rounded-xl text-sm font-medium text-gray-400 hover:text-white transition-all"
+            style={{ border: '1px solid rgba(255,255,255,0.1)' }}
+          >
+            Nova Cobrança
+          </button>
+          <button
+            onClick={() => router.push('/dashboard')}
+            className="flex-1 py-3 rounded-xl text-sm font-semibold text-white transition-all"
+            style={{ background: 'linear-gradient(135deg, #8A2BE2, #6a0dad)', boxShadow: '0 0 18px rgba(138,43,226,0.35)' }}
+          >
+            Ir ao Painel
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  // ── Formulário + QR ────────────────────────────────────────────────────────
   return (
     <div className="max-w-lg mx-auto space-y-6 animate-fade-in">
       <div>
@@ -84,7 +158,6 @@ export default function PixChargePage() {
       {!charge ? (
         <div className="bg-surface border border-border rounded-2xl p-6">
           <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Amount */}
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">Valor (R$) *</label>
               <div className="relative">
@@ -97,10 +170,8 @@ export default function PixChargePage() {
                   placeholder="0,00"
                 />
               </div>
-
-              {/* Fee breakdown */}
               {amt > 0 && (
-                <div className="mt-2 text-xs rounded-lg px-3 py-2.5 space-y-1" style={{background:'rgba(138,43,226,0.06)',border:'1px solid rgba(138,43,226,0.15)'}}>
+                <div className="mt-2 text-xs rounded-lg px-3 py-2.5 space-y-1" style={{ background: 'rgba(138,43,226,0.06)', border: '1px solid rgba(138,43,226,0.15)' }}>
                   <div className="flex justify-between">
                     <span className="text-gray-500">Valor da cobrança</span>
                     <span className="text-white">{formatCurrency(amt)}</span>
@@ -117,7 +188,6 @@ export default function PixChargePage() {
               )}
             </div>
 
-            {/* Description */}
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">Descrição <span className="text-gray-600">(opcional)</span></label>
               <div className="relative">
@@ -137,24 +207,18 @@ export default function PixChargePage() {
               disabled={createCharge.isPending || !form.amount || amt <= 0}
               className="w-full bg-gradient-purple text-white py-3 rounded-xl font-semibold shadow-neon-purple-sm hover:shadow-neon-purple transition-all disabled:opacity-50 flex items-center justify-center gap-2"
             >
-              {createCharge.isPending ? (
-                <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full spinner" />Gerando...</>
-              ) : (
-                <><QrCode className="w-4 h-4" />Gerar QR Code</>
-              )}
+              {createCharge.isPending
+                ? <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full spinner" />Gerando...</>
+                : <><QrCode className="w-4 h-4" />Gerar QR Code</>
+              }
             </button>
           </form>
         </div>
       ) : (
         <div className="bg-surface border border-border rounded-2xl p-6 space-y-5 animate-fade-in">
-          {/* Status header */}
+          {/* Status */}
           <div className="text-center">
-            {txStatus === 'PAID' ? (
-              <div className="inline-flex items-center gap-2 bg-green-500/10 border border-green-500/20 rounded-full px-4 py-2 mb-4">
-                <CheckCircle2 className="w-4 h-4 text-green-400" />
-                <span className="text-green-400 text-sm font-medium">Pagamento Confirmado!</span>
-              </div>
-            ) : txStatus === 'CANCELLED' || txStatus === 'FAILED' ? (
+            {txStatus === 'CANCELLED' || txStatus === 'FAILED' ? (
               <div className="inline-flex items-center gap-2 bg-red-500/10 border border-red-500/20 rounded-full px-4 py-2 mb-4">
                 <span className="text-red-400 text-sm font-medium">Cobrança cancelada</span>
               </div>
@@ -164,7 +228,6 @@ export default function PixChargePage() {
                 <span className="text-yellow-400 text-sm font-medium">Aguardando Pagamento</span>
               </div>
             )}
-
             <p className="text-3xl font-bold text-white">{formatCurrency(charge.amount)}</p>
             <p className="text-xs text-gray-500 mt-1">
               Você recebe: <span className="text-green-400 font-semibold">{formatCurrency(charge.netAmount)}</span>
@@ -172,21 +235,17 @@ export default function PixChargePage() {
             {charge.description && <p className="text-gray-400 text-sm mt-1">{charge.description}</p>}
           </div>
 
-          {/* QR Code — shown while pending */}
-          {txStatus !== 'PAID' && charge.pix?.qrCode && (
+          {/* QR Code */}
+          {charge.pix?.qrCode && (
             <div className="flex justify-center">
               <div className="bg-white p-4 rounded-2xl shadow-lg">
-                <img
-                  src={charge.pix.qrCode}
-                  alt="PIX QR Code"
-                  className="w-52 h-52"
-                />
+                <img src={charge.pix.qrCode} alt="PIX QR Code" className="w-52 h-52" />
               </div>
             </div>
           )}
 
-          {/* Copy & Paste — shown while pending */}
-          {txStatus !== 'PAID' && charge.pix?.copyPaste && (
+          {/* Copy & Paste */}
+          {charge.pix?.copyPaste && (
             <div>
               <p className="text-xs text-gray-500 mb-2 text-center">Ou use o código Copia e Cola:</p>
               <div className="bg-surface-2 border border-border rounded-xl p-3 flex items-center gap-3">
@@ -197,17 +256,14 @@ export default function PixChargePage() {
                   onClick={copyToClipboard}
                   className="flex-shrink-0 flex items-center gap-1.5 text-xs bg-purple-500/10 border border-purple-500/20 text-purple-400 px-3 py-1.5 rounded-lg hover:bg-purple-500/20 transition-all"
                 >
-                  {copied
-                    ? <><Check className="w-3 h-3" />Copiado!</>
-                    : <><Copy className="w-3 h-3" />Copiar</>
-                  }
+                  {copied ? <><Check className="w-3 h-3" />Copiado!</> : <><Copy className="w-3 h-3" />Copiar</>}
                 </button>
               </div>
             </div>
           )}
 
           {/* Expiry */}
-          {txStatus !== 'PAID' && charge.pix?.expiresAt && (
+          {charge.pix?.expiresAt && (
             <p className="text-xs text-gray-600 text-center">
               Expira em: {new Date(charge.pix.expiresAt).toLocaleString('pt-BR')}
             </p>

@@ -10,8 +10,9 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="pt-BR" className="dark">
+    <html lang="pt-BR" className="dark" translate="no">
       <head>
+        <meta name="google" content="notranslate" />
         {/* Prevent theme flash on load */}
         <script dangerouslySetInnerHTML={{ __html: `
           try {

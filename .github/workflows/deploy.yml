@@ -54,4 +54,13 @@ jobs:
             rm -rf "$APP_PATH/public"
             cp -r public "$APP_PATH/public"
 
+            echo "Reiniciando processo..."
+            APP_PID=$(pgrep -f "razepag.com/nodejs/server.js" | head -1)
+            if [ -n "$APP_PID" ]; then
+              kill -USR2 "$APP_PID"
+              echo "Processo $APP_PID reiniciado"
+            else
+              echo "PID não encontrado — reinicie via hPanel se necessário"
+            fi
+
             echo "Deploy concluído!"

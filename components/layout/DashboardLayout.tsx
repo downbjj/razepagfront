@@ -36,6 +36,20 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     enabled: !!user,
   })
 
+  const { data: meData } = useQuery({
+    queryKey: ['me'],
+    queryFn: () => api.get('/users/me').then(r => r.data.data),
+    enabled: !!user,
+  })
+
+  // Lock non-activated accounts to profile page
+  useEffect(() => {
+    if (!meData) return
+    if (!meData.accountActivated && !pathname.startsWith('/dashboard/profile')) {
+      router.replace('/dashboard/profile')
+    }
+  }, [meData, pathname])
+
   const { data: notifications = [] } = useQuery<any[]>({
     queryKey: ['notifications'],
     queryFn: () => api.get('/users/notifications').then(r => r.data.data),

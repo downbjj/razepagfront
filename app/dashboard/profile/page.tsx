@@ -3,7 +3,8 @@
 import { useState, useEffect } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import {
-  User, Mail, Phone, Key, Lock, Eye, EyeOff, Save, RefreshCw, AtSign, CreditCard, CheckCircle, XCircle
+  User, Mail, Phone, Key, Lock, Eye, EyeOff, Save, RefreshCw, AtSign, CreditCard, CheckCircle, XCircle,
+  AlertTriangle, QrCode, Copy, Check, MapPin, Calendar, Building2, Hash
 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import api, { getUser, setUser } from '@/lib/api'
@@ -12,9 +13,19 @@ export default function ProfilePage() {
   const qc = useQueryClient()
   const localUser = getUser()
 
+  const [activationPolling, setActivationPolling] = useState(false)
+  const [activationTab, setActivationTab] = useState<'normal' | 'anonymous'>('normal')
+  const [normalForm, setNormalForm] = useState({
+    cpf: '', dateOfBirth: '', addressStreet: '', addressNumber: '',
+    addressCity: '', addressState: '', addressZipCode: '',
+  })
+  const [anonymousCharge, setAnonymousCharge] = useState<any>(null)
+  const [copiedQr, setCopiedQr] = useState(false)
+
   const { data: profile, isLoading } = useQuery({
     queryKey: ['profile'],
     queryFn: () => api.get('/users/me').then(r => r.data.data),
+    refetchInterval: activationPolling ? 4000 : false,
   })
 
   const [profileForm, setProfileForm] = useState({ name: '', phone: '', username: '', cpf: '' })
@@ -31,14 +42,23 @@ export default function ProfilePage() {
         username: profile.username || '',
         cpf:      profile.cpf      || '',
       })
+      if (profile.cpf) setNormalForm(f => ({ ...f, cpf: profile.cpf }))
     }
   }, [profile])
+
+  // Detect activation completion while polling
+  useEffect(() => {
+    if (activationPolling && profile?.accountActivated) {
+      setActivationPolling(false)
+      toast.success('Conta habilitada com sucesso!')
+      qc.invalidateQueries({ queryKey: ['me'] })
+    }
+  }, [profile?.accountActivated, activationPolling])
 
   const updateProfileMutation = useMutation({
     mutationFn: (data: any) => api.patch('/users/me', data).then(r => r.data.data),
     onSuccess: (data) => {
       qc.invalidateQueries({ queryKey: ['profile'] })
-      // Update local storage user info
       const current = getUser()
       if (current) setUser({ ...current, name: data.name, phone: data.phone })
       toast.success('Perfil atualizado!')
@@ -53,6 +73,25 @@ export default function ProfilePage() {
       toast.success('Senha alterada com sucesso!')
     },
     onError: (err: any) => toast.error(err.response?.data?.message || 'Erro ao alterar senha'),
+  })
+
+  const activateNormalMutation = useMutation({
+    mutationFn: (data: any) => api.post('/users/activate/normal', data).then(r => r.data.data),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['profile'] })
+      qc.invalidateQueries({ queryKey: ['me'] })
+      toast.success('Conta habilitada com sucesso!')
+    },
+    onError: (err: any) => toast.error(err.response?.data?.message || 'Erro ao ativar conta'),
+  })
+
+  const anonymousActivationMutation = useMutation({
+    mutationFn: () => api.post('/users/activate/anonymous').then(r => r.data.data),
+    onSuccess: (data) => {
+      setAnonymousCharge(data)
+      setActivationPolling(true)
+    },
+    onError: (err: any) => toast.error(err.response?.data?.message || 'Erro ao gerar QR Code'),
   })
 
   const handleProfileSave = (e: React.FormEvent) => {
@@ -75,6 +114,25 @@ export default function ProfilePage() {
     })
   }
 
+  const handleActivateNormal = (e: React.FormEvent) => {
+    e.preventDefault()
+    const { cpf, dateOfBirth, addressStreet, addressNumber, addressCity, addressState, addressZipCode } = normalForm
+    if (!cpf || !dateOfBirth || !addressStreet || !addressNumber || !addressCity || !addressState || !addressZipCode) {
+      return toast.error('Preencha todos os campos obrigatórios')
+    }
+    activateNormalMutation.mutate(normalForm)
+  }
+
+  const handleCopyPaste = () => {
+    const copyPaste = anonymousCharge?.pix?.copyPaste
+    if (copyPaste) {
+      navigator.clipboard.writeText(copyPaste)
+      setCopiedQr(true)
+      setTimeout(() => setCopiedQr(false), 2000)
+      toast.success('Código copiado!')
+    }
+  }
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-20">
@@ -83,12 +141,30 @@ export default function ProfilePage() {
     )
   }
 
+  const isActivated = profile?.accountActivated
+
   return (
     <div className="max-w-2xl space-y-6">
       {/* Header */}
-      <div>
-        <h1 className="text-xl font-bold text-white">Meu Perfil</h1>
-        <p className="text-xs text-gray-500 mt-0.5">Gerencie seus dados cadastrais e senha</p>
+      <div className="flex items-center gap-3 flex-wrap">
+        <div>
+          <h1 className="text-xl font-bold text-white">Meu Perfil</h1>
+          <p className="text-xs text-gray-500 mt-0.5">Gerencie seus dados cadastrais e senha</p>
+        </div>
+        {!isActivated && (
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-semibold text-red-400"
+            style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)' }}>
+            <AlertTriangle className="w-3.5 h-3.5" />
+            Conta não Habilitada
+          </span>
+        )}
+        {isActivated && (
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-semibold text-green-400"
+            style={{ background: 'rgba(34,197,94,0.1)', border: '1px solid rgba(34,197,94,0.25)' }}>
+            <CheckCircle className="w-3.5 h-3.5" />
+            Conta Habilitada
+          </span>
+        )}
       </div>
 
       {/* Avatar block */}
@@ -109,7 +185,7 @@ export default function ProfilePage() {
               style={{ background: 'rgba(138,43,226,0.12)', border: '1px solid rgba(138,43,226,0.25)', color: '#c084fc' }}>
               {profile?.role === 'ADMIN' ? 'Administrador' : 'Usuário'}
             </span>
-            {profile?.accountActivated
+            {isActivated
               ? <span className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full text-green-400"
                   style={{ background: 'rgba(34,197,94,0.1)', border: '1px solid rgba(34,197,94,0.2)' }}>
                   <CheckCircle className="w-2.5 h-2.5" /> Verificada
@@ -119,9 +195,251 @@ export default function ProfilePage() {
                   <XCircle className="w-2.5 h-2.5" /> Pendente
                 </span>
             }
+            {isActivated && profile?.accountType && (
+              <span className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full text-blue-400"
+                style={{ background: 'rgba(59,130,246,0.1)', border: '1px solid rgba(59,130,246,0.2)' }}>
+                {profile.accountType === 'ANONYMOUS' ? 'Anônima' : 'Normal'}
+              </span>
+            )}
           </div>
         </div>
       </div>
+
+      {/* ── ACTIVATION SECTION (only when not activated) ── */}
+      {!isActivated && (
+        <div className="rounded-2xl overflow-hidden"
+          style={{ border: '1px solid rgba(239,68,68,0.25)' }}>
+          <div className="px-5 py-4"
+            style={{ background: 'rgba(239,68,68,0.06)', borderBottom: '1px solid rgba(239,68,68,0.15)' }}>
+            <p className="text-sm font-semibold text-red-400 flex items-center gap-2">
+              <AlertTriangle className="w-4 h-4" />
+              Habilite sua conta para acessar o dashboard completo
+            </p>
+            <p className="text-xs text-gray-500 mt-1">Escolha uma das opções abaixo para continuar</p>
+          </div>
+
+          {/* Tabs */}
+          <div className="flex" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+            <button
+              onClick={() => setActivationTab('normal')}
+              className={`flex-1 py-3 text-sm font-medium transition-all ${
+                activationTab === 'normal'
+                  ? 'text-purple-300 border-b-2 border-purple-500'
+                  : 'text-gray-500 hover:text-gray-300'
+              }`}
+              style={{ background: activationTab === 'normal' ? 'rgba(138,43,226,0.06)' : '#111118' }}
+            >
+              Conta Normal — Grátis
+            </button>
+            <button
+              onClick={() => setActivationTab('anonymous')}
+              className={`flex-1 py-3 text-sm font-medium transition-all ${
+                activationTab === 'anonymous'
+                  ? 'text-purple-300 border-b-2 border-purple-500'
+                  : 'text-gray-500 hover:text-gray-300'
+              }`}
+              style={{ background: activationTab === 'anonymous' ? 'rgba(138,43,226,0.06)' : '#111118' }}
+            >
+              Conta Anônima — R$20
+            </button>
+          </div>
+
+          <div className="p-5" style={{ background: '#111118' }}>
+            {/* Normal activation form */}
+            {activationTab === 'normal' && (
+              <form onSubmit={handleActivateNormal} className="space-y-4">
+                <p className="text-xs text-gray-500">Preencha seus dados pessoais para ativar a conta gratuitamente.</p>
+
+                <div className="grid grid-cols-2 gap-3">
+                  {/* CPF */}
+                  <div className="col-span-2">
+                    <label className="block text-xs font-medium text-gray-400 mb-1.5">CPF *</label>
+                    <div className="relative">
+                      <Hash className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600" />
+                      <input
+                        type="text" required value={normalForm.cpf}
+                        onChange={e => setNormalForm(f => ({ ...f, cpf: e.target.value }))}
+                        className="w-full pl-9 pr-4 py-2.5 rounded-xl text-sm text-white focus:outline-none transition-all"
+                        style={{ background: '#0d0d14', border: '1px solid rgba(138,43,226,0.2)' }}
+                        placeholder="000.000.000-00"
+                        maxLength={14}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Date of birth */}
+                  <div className="col-span-2">
+                    <label className="block text-xs font-medium text-gray-400 mb-1.5">Data de Nascimento *</label>
+                    <div className="relative">
+                      <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600" />
+                      <input
+                        type="date" required value={normalForm.dateOfBirth}
+                        onChange={e => setNormalForm(f => ({ ...f, dateOfBirth: e.target.value }))}
+                        className="w-full pl-9 pr-4 py-2.5 rounded-xl text-sm text-white focus:outline-none transition-all"
+                        style={{ background: '#0d0d14', border: '1px solid rgba(138,43,226,0.2)', colorScheme: 'dark' }}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Street */}
+                  <div className="col-span-2">
+                    <label className="block text-xs font-medium text-gray-400 mb-1.5">Rua / Logradouro *</label>
+                    <div className="relative">
+                      <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600" />
+                      <input
+                        type="text" required value={normalForm.addressStreet}
+                        onChange={e => setNormalForm(f => ({ ...f, addressStreet: e.target.value }))}
+                        className="w-full pl-9 pr-4 py-2.5 rounded-xl text-sm text-white focus:outline-none transition-all"
+                        style={{ background: '#0d0d14', border: '1px solid rgba(138,43,226,0.2)' }}
+                        placeholder="Rua das Flores"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Number */}
+                  <div>
+                    <label className="block text-xs font-medium text-gray-400 mb-1.5">Número *</label>
+                    <input
+                      type="text" required value={normalForm.addressNumber}
+                      onChange={e => setNormalForm(f => ({ ...f, addressNumber: e.target.value }))}
+                      className="w-full px-4 py-2.5 rounded-xl text-sm text-white focus:outline-none transition-all"
+                      style={{ background: '#0d0d14', border: '1px solid rgba(138,43,226,0.2)' }}
+                      placeholder="123"
+                    />
+                  </div>
+
+                  {/* ZIP */}
+                  <div>
+                    <label className="block text-xs font-medium text-gray-400 mb-1.5">CEP *</label>
+                    <input
+                      type="text" required value={normalForm.addressZipCode}
+                      onChange={e => setNormalForm(f => ({ ...f, addressZipCode: e.target.value }))}
+                      className="w-full px-4 py-2.5 rounded-xl text-sm text-white focus:outline-none transition-all"
+                      style={{ background: '#0d0d14', border: '1px solid rgba(138,43,226,0.2)' }}
+                      placeholder="00000-000"
+                      maxLength={9}
+                    />
+                  </div>
+
+                  {/* City */}
+                  <div>
+                    <label className="block text-xs font-medium text-gray-400 mb-1.5">Cidade *</label>
+                    <div className="relative">
+                      <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600" />
+                      <input
+                        type="text" required value={normalForm.addressCity}
+                        onChange={e => setNormalForm(f => ({ ...f, addressCity: e.target.value }))}
+                        className="w-full pl-9 pr-4 py-2.5 rounded-xl text-sm text-white focus:outline-none transition-all"
+                        style={{ background: '#0d0d14', border: '1px solid rgba(138,43,226,0.2)' }}
+                        placeholder="São Paulo"
+                      />
+                    </div>
+                  </div>
+
+                  {/* State */}
+                  <div>
+                    <label className="block text-xs font-medium text-gray-400 mb-1.5">Estado *</label>
+                    <select
+                      required value={normalForm.addressState}
+                      onChange={e => setNormalForm(f => ({ ...f, addressState: e.target.value }))}
+                      className="w-full px-4 py-2.5 rounded-xl text-sm text-white focus:outline-none transition-all"
+                      style={{ background: '#0d0d14', border: '1px solid rgba(138,43,226,0.2)' }}
+                    >
+                      <option value="">UF</option>
+                      {['AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','PA','PB','PR','PE','PI','RJ','RN','RS','RO','RR','SC','SP','SE','TO'].map(uf => (
+                        <option key={uf} value={uf}>{uf}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={activateNormalMutation.isPending}
+                  className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold text-white disabled:opacity-50 transition-all"
+                  style={{ background: 'linear-gradient(135deg, #8A2BE2, #6a0dad)', boxShadow: '0 0 14px rgba(138,43,226,0.25)' }}
+                >
+                  {activateNormalMutation.isPending
+                    ? <><RefreshCw className="w-4 h-4 animate-spin" />Ativando...</>
+                    : <><CheckCircle className="w-4 h-4" />Ativar Conta Normal</>
+                  }
+                </button>
+              </form>
+            )}
+
+            {/* Anonymous activation */}
+            {activationTab === 'anonymous' && (
+              <div className="space-y-4">
+                <div className="rounded-xl p-4 text-sm"
+                  style={{ background: 'rgba(138,43,226,0.06)', border: '1px solid rgba(138,43,226,0.15)' }}>
+                  <p className="text-gray-300 font-medium mb-2">Conta Anônima — R$20,00</p>
+                  <ul className="space-y-1 text-xs text-gray-500">
+                    <li>• Nenhum dado pessoal adicional necessário</li>
+                    <li>• Pagamento único via PIX</li>
+                    <li>• Ativação automática após confirmação do pagamento</li>
+                    <li>• Acesso completo ao dashboard</li>
+                  </ul>
+                </div>
+
+                {!anonymousCharge ? (
+                  <button
+                    onClick={() => anonymousActivationMutation.mutate()}
+                    disabled={anonymousActivationMutation.isPending}
+                    className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold text-white disabled:opacity-50 transition-all"
+                    style={{ background: 'linear-gradient(135deg, #8A2BE2, #6a0dad)', boxShadow: '0 0 14px rgba(138,43,226,0.25)' }}
+                  >
+                    {anonymousActivationMutation.isPending
+                      ? <><RefreshCw className="w-4 h-4 animate-spin" />Gerando QR Code...</>
+                      : <><QrCode className="w-4 h-4" />Gerar QR Code — R$20</>
+                    }
+                  </button>
+                ) : (
+                  <div className="space-y-4">
+                    <div className="flex flex-col items-center gap-3">
+                      {anonymousCharge.pix?.qrCode && (
+                        <div className="rounded-xl overflow-hidden p-3"
+                          style={{ background: '#fff', width: 200, height: 200 }}>
+                          <img
+                            src={`data:image/png;base64,${anonymousCharge.pix.qrCode}`}
+                            alt="QR Code PIX"
+                            className="w-full h-full object-contain"
+                          />
+                        </div>
+                      )}
+                      <p className="text-sm font-semibold text-white">Pague R$20,00 via PIX</p>
+                      <p className="text-xs text-gray-500 text-center">
+                        Escaneie o QR Code ou copie o código Pix abaixo.
+                        A ativação é automática após o pagamento.
+                      </p>
+                    </div>
+
+                    {anonymousCharge.pix?.copyPaste && (
+                      <div className="rounded-xl p-3 flex items-center gap-2"
+                        style={{ background: '#0d0d14', border: '1px solid rgba(138,43,226,0.2)' }}>
+                        <p className="flex-1 text-xs text-gray-400 font-mono truncate">
+                          {anonymousCharge.pix.copyPaste}
+                        </p>
+                        <button onClick={handleCopyPaste}
+                          className="flex-shrink-0 p-1.5 rounded-lg transition-all hover:bg-white/10">
+                          {copiedQr
+                            ? <Check className="w-4 h-4 text-green-400" />
+                            : <Copy className="w-4 h-4 text-gray-400" />
+                          }
+                        </button>
+                      </div>
+                    )}
+
+                    <div className="flex items-center gap-2 text-xs text-gray-500">
+                      <div className="w-4 h-4 border border-purple-500/50 border-t-purple-500 rounded-full animate-spin flex-shrink-0" />
+                      Aguardando confirmação do pagamento...
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Services status */}
       <div className="grid grid-cols-3 gap-2">

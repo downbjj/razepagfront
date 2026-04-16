@@ -7,49 +7,61 @@ on:
       - master
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@v1.0.3
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
         with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          port: ${{ secrets.SSH_PORT }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          command_timeout: 20m
-          script: |
-            export PATH="/opt/alt/alt-nodejs22/root/usr/bin:$PATH"
+          node-version: '20'
 
+      - name: Instalar dependências
+        run: npm install
+
+      - name: Build Next.js
+        run: npm run build
+
+      - name: Configurar SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts 2>/dev/null
+
+      - name: Enviar build via SSH
+        run: |
+          tar czf - .next/ public/ server.js | \
+            ssh -i ~/.ssh/deploy_key \
+                -p ${{ secrets.SSH_PORT }} \
+                -o StrictHostKeyChecking=no \
+                ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
+                "cat > /tmp/razepag-build.tar.gz"
+
+      - name: Aplicar build e reiniciar
+        run: |
+          ssh -i ~/.ssh/deploy_key \
+              -p ${{ secrets.SSH_PORT }} \
+              -o StrictHostKeyChecking=no \
+              ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'ENDSSH'
             APP_PATH="/home/u118244849/domains/razepag.com/nodejs"
-            REPO_PATH="/home/u118244849/razepagfront"
 
-            echo "==> Atualizando código..."
-            cd "$REPO_PATH"
-            git fetch origin
-            git reset --hard origin/main
-
-            echo "==> Instalando dependências..."
-            npm install --production=false
-
-            echo "==> Fazendo build..."
-            npm run build
-
-            echo "==> Copiando arquivos para app..."
-            cp server.js "$APP_PATH/server.js"
-            rm -rf "$APP_PATH/.next"
-            cp -r .next "$APP_PATH/.next"
-            rm -rf "$APP_PATH/public"
-            cp -r public "$APP_PATH/public"
+            echo "==> Extraindo build..."
+            cd "$APP_PATH"
+            tar xzf /tmp/razepag-build.tar.gz
+            rm -f /tmp/razepag-build.tar.gz
 
             echo "==> Reiniciando aplicação..."
             APP_PID=$(pgrep -f "razepag.com/nodejs/server.js" | head -1)
             if [ -n "$APP_PID" ]; then
               kill -USR2 "$APP_PID"
-              echo "Processo $APP_PID reiniciado com USR2"
+              echo "Processo $APP_PID reiniciado"
             else
-              echo "PID não encontrado — app pode reiniciar sozinha"
+              echo "PID não encontrado"
             fi
 
             echo "Deploy concluído!"
+          ENDSSH

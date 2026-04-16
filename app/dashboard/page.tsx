@@ -125,10 +125,15 @@ function PixModal({ onClose }: { onClose: () => void }) {
         <div className="space-y-4 text-center">
           <p className="text-2xl font-bold text-white">{formatCurrency(charge.amount)}</p>
           <p className="text-xs text-gray-500">Você recebe: <span className="text-green-400 font-semibold">{formatCurrency(charge.netAmount)}</span></p>
-          {charge.pix?.qrCode && (
+          {(charge.pix?.copyPaste || charge.pix?.qrCode) && (
             <div className="flex justify-center">
               <div className="bg-white p-3 rounded-2xl shadow">
-                <img src={charge.pix.qrCode} alt="QR Code PIX" className="w-48 h-48" />
+                <img
+                  src={charge.pix?.copyPaste
+                    ? `https://api.qrserver.com/v1/create-qr-code/?size=192x192&data=${encodeURIComponent(charge.pix.copyPaste)}`
+                    : charge.pix.qrCode}
+                  alt="QR Code PIX" className="w-48 h-48"
+                />
               </div>
             </div>
           )}

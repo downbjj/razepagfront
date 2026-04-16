@@ -13,6 +13,8 @@ jobs:
     steps:
       - name: Checkout código
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Configurar Node.js
         uses: actions/setup-node@v4
@@ -25,43 +27,38 @@ jobs:
       - name: Build Next.js
         run: npm run build
 
-      - name: Configurar SSH
+      - name: Commitar build no repositório
         run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
-          chmod 600 ~/.ssh/deploy_key
-          ssh-keyscan -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts 2>/dev/null
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          rm -rf .next/cache
+          git add -f .next/ server.js public/
+          git diff --staged --quiet || git commit -m "build: atualizar [skip ci]"
+          git push origin main
 
-      - name: Remover cache antes de enviar
-        run: rm -rf .next/cache
-
-      - name: Enviar build via SSH
-        run: |
-          tar czf - --exclude='.next/cache' .next/ public/ server.js package.json package-lock.json | \
-            ssh -i ~/.ssh/deploy_key \
-                -p ${{ secrets.SSH_PORT }} \
-                -o StrictHostKeyChecking=no \
-                ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
-                "cat > /tmp/razepag-build.tar.gz"
-
-      - name: Aplicar build e reiniciar
-        run: |
-          ssh -i ~/.ssh/deploy_key \
-              -p ${{ secrets.SSH_PORT }} \
-              -o StrictHostKeyChecking=no \
-              ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'ENDSSH'
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          port: ${{ secrets.SSH_PORT }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          command_timeout: 10m
+          script: |
             export PATH="/opt/alt/alt-nodejs22/root/usr/bin:$PATH"
             APP_PATH="/home/u118244849/domains/razepag.com/nodejs"
+            REPO_PATH="/home/u118244849/razepagfront"
 
-            echo "==> Extraindo build..."
-            cd "$APP_PATH"
-            tar xzf /tmp/razepag-build.tar.gz
-            rm -f /tmp/razepag-build.tar.gz
+            cd "$REPO_PATH"
+            git fetch origin
+            git reset --hard origin/main
 
-            echo "==> Instalando dependências de produção..."
-            npm install --omit=dev
+            cp server.js "$APP_PATH/server.js"
+            rm -rf "$APP_PATH/.next"
+            cp -r .next "$APP_PATH/.next"
+            rm -rf "$APP_PATH/public"
+            cp -r public "$APP_PATH/public"
 
-            echo "==> Reiniciando aplicação..."
             APP_PID=$(pgrep -f "razepag.com/nodejs/server.js" | head -1)
             if [ -n "$APP_PID" ]; then
               kill -USR2 "$APP_PID"
@@ -69,6 +66,4 @@ jobs:
             else
               echo "PID não encontrado"
             fi
-
             echo "Deploy concluído!"
-          ENDSSH

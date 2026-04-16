@@ -25,22 +25,13 @@ jobs:
       - name: Build Next.js
         run: npm run build
 
-      - name: Preparar arquivos para deploy
-        run: |
-          mkdir -p deploy/.next
-          cp .next/standalone/server.js deploy/server.js
-          cp -r .next/standalone/node_modules deploy/node_modules
-          cp -r .next/standalone/.next/. deploy/.next/
-          cp -r .next/static deploy/.next/static
-          cp -r public deploy/public
-
-      - name: Upload para servidor via FTP
+      - name: Upload build para servidor via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
           server: ${{ secrets.FTP_HOST }}
           username: ${{ secrets.FTP_USER }}
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./deploy/
-          server-dir: domains/razepag.com/nodejs/
+          local-dir: ./.next/
+          server-dir: domains/razepag.com/nodejs/.next/
           dangerous-clean-slate: true
           timeout: 600000

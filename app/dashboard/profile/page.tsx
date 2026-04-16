@@ -401,7 +401,7 @@ export default function ProfilePage() {
                         <div className="rounded-xl overflow-hidden p-3"
                           style={{ background: '#fff', width: 200, height: 200 }}>
                           <img
-                            src={`data:image/png;base64,${anonymousCharge.pix.qrCode}`}
+                            src={anonymousCharge.pix.qrCode.startsWith('data:') ? anonymousCharge.pix.qrCode : `data:image/png;base64,${anonymousCharge.pix.qrCode}`}
                             alt="QR Code PIX"
                             className="w-full h-full object-contain"
                           />

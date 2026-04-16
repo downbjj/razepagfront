@@ -17,30 +17,30 @@ export default function WithdrawPage() {
   const balance = parseFloat(userData?.wallet?.balance || '0')
 
   const withdraw = useMutation({
-    mutationFn: (data: any) => api.post('/transactions/withdraw', data).then(r => r.data.data),
+    mutationFn: (data: any) => api.post('/pix/send', data).then(r => r.data.data),
     onSuccess: () => {
-      toast.success('Withdrawal request submitted! Pending admin approval.')
+      toast.success('Saque solicitado! Processando via PIX...')
       setForm({ amount: '', pixKey: '', pixKeyType: 'EMAIL', bankName: '' })
     },
     onError: (err: any) => {
-      toast.error(err.response?.data?.message || 'Withdrawal failed')
+      toast.error(err.response?.data?.message || 'Falha no saque')
     },
   })
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     const amount = parseFloat(form.amount)
-    const fee = amount * 0.02
+    const fee = amount * 0.03 + 1.00
     if (amount + fee > balance) {
-      toast.error('Insufficient balance (including fee)')
+      toast.error('Saldo insuficiente (incluindo taxa)')
       return
     }
-    withdraw.mutate({ amount, pixKey: form.pixKey, pixKeyType: form.pixKeyType, bankName: form.bankName || undefined })
+    withdraw.mutate({ amount, pixKey: form.pixKey, description: form.bankName ? `Saque - ${form.bankName}` : undefined })
   }
 
   const amount = parseFloat(form.amount) || 0
-  const fee = amount * 0.02
-  const youReceive = amount - fee
+  const fee = parseFloat((amount * 0.03 + 1.00).toFixed(2))
+  const youReceive = amount
 
   return (
     <div className="max-w-lg mx-auto space-y-6 animate-fade-in">
@@ -59,11 +59,11 @@ export default function WithdrawPage() {
       <div className="bg-yellow-500/5 border border-yellow-500/20 rounded-xl p-4 flex gap-3">
         <AlertCircle className="w-5 h-5 text-yellow-400 flex-shrink-0 mt-0.5" />
         <div className="text-sm text-gray-400">
-          <p className="font-medium text-yellow-400 mb-1">Withdrawal Policy</p>
+          <p className="font-medium text-yellow-400 mb-1">Política de Saque</p>
           <ul className="space-y-1 text-xs">
-            <li>• Fee: 2% of withdrawal amount</li>
-            <li>• Minimum: R$10.00</li>
-            <li>• Processing: up to 24h after admin approval</li>
+            <li>• Taxa: 3% + R$1,00 por saque</li>
+            <li>• Mínimo: R$10,00</li>
+            <li>• Processamento automático via PIX</li>
           </ul>
         </div>
       </div>
@@ -129,11 +129,15 @@ export default function WithdrawPage() {
                 <span className="text-white">{formatCurrency(amount)}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-400">Fee (2%)</span>
+                <span className="text-gray-400">Taxa (3% + R$1,00)</span>
                 <span className="text-red-400">-{formatCurrency(fee)}</span>
               </div>
+              <div className="flex justify-between">
+                <span className="text-gray-400">Total debitado</span>
+                <span className="text-white">{formatCurrency(amount + fee)}</span>
+              </div>
               <div className="flex justify-between border-t border-border pt-2 font-medium">
-                <span className="text-gray-300">You receive</span>
+                <span className="text-gray-300">Destinatário recebe</span>
                 <span className="text-green-400">{formatCurrency(youReceive)}</span>
               </div>
             </div>
@@ -144,9 +148,9 @@ export default function WithdrawPage() {
             className="w-full bg-gradient-purple text-white py-3 rounded-xl font-semibold shadow-neon-purple-sm hover:shadow-neon-purple transition-all disabled:opacity-50 flex items-center justify-center gap-2"
           >
             {withdraw.isPending ? (
-              <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full spinner" />Processing...</>
+              <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full spinner" />Processando...</>
             ) : (
-              <><Download className="w-4 h-4" />Request Withdrawal</>
+              <><Download className="w-4 h-4" />Solicitar Saque</>
             )}
           </button>
         </form>

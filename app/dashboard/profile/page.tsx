@@ -20,7 +20,6 @@ export default function ProfilePage() {
     addressCity: '', addressState: '', addressZipCode: '',
   })
   const [anonymousCharge, setAnonymousCharge] = useState<any>(null)
-  const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string>('')
   const [copiedQr, setCopiedQr] = useState(false)
   const profileInitialized = useRef(false)
 
@@ -48,17 +47,6 @@ export default function ProfilePage() {
       if (profile.cpf) setNormalForm(f => ({ ...f, cpf: profile.cpf }))
     }
   }, [profile])
-
-  // Generate QR code from copyPaste string whenever charge changes
-  useEffect(() => {
-    const copyPaste = anonymousCharge?.pix?.copyPaste
-    if (!copyPaste) { setQrCodeDataUrl(''); return }
-    import('qrcode').then(QRCode => {
-      QRCode.toDataURL(copyPaste, { width: 200, margin: 1 })
-        .then(url => setQrCodeDataUrl(url))
-        .catch(() => setQrCodeDataUrl(''))
-    }).catch(() => setQrCodeDataUrl(''))
-  }, [anonymousCharge])
 
   // Detect activation completion while polling
   useEffect(() => {
@@ -411,15 +399,16 @@ export default function ProfilePage() {
                 ) : (
                   <div className="space-y-4">
                     <div className="flex flex-col items-center gap-3">
-                      <div className="rounded-xl overflow-hidden p-3"
-                        style={{ background: '#fff', width: 216, height: 216, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        {qrCodeDataUrl
-                          ? <img src={qrCodeDataUrl} alt="QR Code PIX" style={{ width: 192, height: 192 }} />
-                          : <div style={{ width: 192, height: 192, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                              <div className="w-6 h-6 border-2 border-purple-500/30 border-t-purple-500 rounded-full animate-spin" />
-                            </div>
-                        }
-                      </div>
+                      {anonymousCharge.pix?.copyPaste && (
+                        <div className="rounded-xl overflow-hidden p-3"
+                          style={{ background: '#fff', width: 216, height: 216 }}>
+                          <img
+                            src={`https://api.qrserver.com/v1/create-qr-code/?size=192x192&data=${encodeURIComponent(anonymousCharge.pix.copyPaste)}`}
+                            alt="QR Code PIX"
+                            style={{ width: 192, height: 192 }}
+                          />
+                        </div>
+                      )}
                       <p className="text-sm font-semibold text-white">Pague R$49,90 via PIX</p>
                       <p className="text-xs text-gray-500 text-center">
                         Escaneie o QR Code ou copie o código Pix abaixo.

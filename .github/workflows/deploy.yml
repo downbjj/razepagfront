@@ -27,18 +27,20 @@ jobs:
 
       - name: Preparar arquivos para deploy
         run: |
-          mkdir -p deploy_server/.next
-          cp .next/standalone/server.js deploy_server/server.js
-          cp -r .next/standalone/.next/. deploy_server/.next/
-          cp -r .next/static deploy_server/.next/static
-          cp -r public deploy_server/public
+          mkdir -p deploy/.next
+          cp .next/standalone/server.js deploy/server.js
+          cp -r .next/standalone/node_modules deploy/node_modules
+          cp -r .next/standalone/.next/. deploy/.next/
+          cp -r .next/static deploy/.next/static
+          cp -r public deploy/public
 
-      - name: Upload para nodejs via FTP
+      - name: Upload para servidor via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
           server: ${{ secrets.FTP_HOST }}
           username: ${{ secrets.FTP_USER }}
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./deploy_server/
+          local-dir: ./deploy/
           server-dir: domains/razepag.com/nodejs/
-          dangerous-clean-slate: false
+          dangerous-clean-slate: true
+          timeout: 600000

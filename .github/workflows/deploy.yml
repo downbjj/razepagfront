@@ -45,6 +45,10 @@ jobs:
             git fetch origin
             git reset --hard origin/main
 
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            export PATH="$HOME/.nvm/versions/node/$(ls $HOME/.nvm/versions/node | tail -1)/bin:$PATH"
+
             npm install
             npm run build
 

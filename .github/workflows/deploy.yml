@@ -40,5 +40,5 @@ jobs:
           username: ${{ secrets.FTP_USER }}
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./deploy_ftp/
-          server-dir: /domains/razepag.com/nodejs/
-          dangerous-clean-slate: false
+          server-dir: domains/razepag.com/nodejs/
+          dangerous-clean-slate: true

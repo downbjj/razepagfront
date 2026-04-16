@@ -13,6 +13,8 @@ jobs:
     steps:
       - name: Checkout código
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Configurar Node.js
         uses: actions/setup-node@v4
@@ -25,13 +27,22 @@ jobs:
       - name: Build Next.js
         run: npm run build
 
-      - name: Upload build para servidor via FTP
+      - name: Preparar pasta de deploy
+        run: |
+          mkdir -p deploy_app
+          cp server.js deploy_app/server.js
+          cp package.json deploy_app/package.json
+          cp -r public deploy_app/public
+          cp -r .next deploy_app/.next
+          rm -rf deploy_app/.next/cache
+
+      - name: Upload para nodejs via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
           server: ${{ secrets.FTP_HOST }}
           username: ${{ secrets.FTP_USER }}
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./.next/
-          server-dir: domains/razepag.com/nodejs/.next/
-          dangerous-clean-slate: true
+          local-dir: ./deploy_app/
+          server-dir: domains/razepag.com/nodejs/
+          dangerous-clean-slate: false
           timeout: 600000

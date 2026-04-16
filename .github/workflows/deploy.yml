@@ -50,7 +50,14 @@ jobs:
             REPO_PATH="/home/u118244849/razepagfront"
 
             cd "$REPO_PATH"
-            git fetch origin
+
+            # Fetch shallow para usar menos memória/threads
+            for attempt in 1 2 3; do
+              git -c pack.threads=1 fetch --depth=1 origin main && break
+              echo "Tentativa $attempt falhou, aguardando 10s..."
+              sleep 10
+            done
+
             git reset --hard origin/main
 
             cp server.js "$APP_PATH/server.js"

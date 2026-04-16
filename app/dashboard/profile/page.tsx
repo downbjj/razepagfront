@@ -142,6 +142,7 @@ export default function ProfilePage() {
   }
 
   const isActivated = profile?.accountActivated
+  const isAdmin = profile?.role === 'ADMIN' || profile?.role === 'OWNER'
 
   return (
     <div className="max-w-2xl space-y-6">
@@ -151,7 +152,7 @@ export default function ProfilePage() {
           <h1 className="text-xl font-bold text-white">Meu Perfil</h1>
           <p className="text-xs text-gray-500 mt-0.5">Gerencie seus dados cadastrais e senha</p>
         </div>
-        {!isActivated && (
+        {!isActivated && !isAdmin && (
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-semibold text-red-400"
             style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)' }}>
             <AlertTriangle className="w-3.5 h-3.5" />
@@ -205,8 +206,8 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      {/* ── ACTIVATION SECTION (only when not activated) ── */}
-      {!isActivated && (
+      {/* ── ACTIVATION SECTION (only for regular non-activated users) ── */}
+      {!isActivated && !isAdmin && (
         <div className="rounded-2xl overflow-hidden"
           style={{ border: '1px solid rgba(239,68,68,0.25)' }}>
           <div className="px-5 py-4"

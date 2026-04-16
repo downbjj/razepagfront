@@ -32,9 +32,12 @@ jobs:
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts 2>/dev/null
 
+      - name: Remover cache antes de enviar
+        run: rm -rf .next/cache
+
       - name: Enviar build via SSH
         run: |
-          tar czf - .next/ public/ server.js package.json package-lock.json | \
+          tar czf - --exclude='.next/cache' .next/ public/ server.js package.json package-lock.json | \
             ssh -i ~/.ssh/deploy_key \
                 -p ${{ secrets.SSH_PORT }} \
                 -o StrictHostKeyChecking=no \

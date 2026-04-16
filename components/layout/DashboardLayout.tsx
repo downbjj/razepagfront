@@ -42,15 +42,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     enabled: !!user,
   })
 
-  // Lock non-activated USER accounts to profile page (admins/owners bypass)
-  useEffect(() => {
-    if (!meData) return
-    if (meData.role === 'ADMIN' || meData.role === 'OWNER') return
-    if (meData.accountActivated === false && !pathname.startsWith('/dashboard/profile')) {
-      router.replace('/dashboard/profile')
-    }
-  }, [meData, pathname])
-
   const { data: notifications = [] } = useQuery<any[]>({
     queryKey: ['notifications'],
     queryFn: () => api.get('/users/notifications').then(r => r.data.data),

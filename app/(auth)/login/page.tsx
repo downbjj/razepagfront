@@ -31,8 +31,10 @@ export default function LoginPage() {
 
       toast.success(`${t('auth.welcome')}, ${user.name}!`)
 
-      if (user.role === 'ADMIN') {
+      if (user.role === 'ADMIN' || user.role === 'OWNER') {
         router.push('/admin')
+      } else if (!user.accountActivated) {
+        router.push('/dashboard/profile')
       } else {
         router.push('/dashboard')
       }

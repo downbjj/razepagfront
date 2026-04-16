@@ -34,6 +34,18 @@ export default function AdminUsersPage() {
     onSuccess: () => { qc.invalidateQueries({ queryKey: ['admin-users'] }); toast.success('User unfrozen') },
   })
 
+  const activateUser = useMutation({
+    mutationFn: (id: string) => api.patch(`/admin/users/${id}/activate`),
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ['admin-users'] }); toast.success('Conta ativada!') },
+    onError: (e: any) => toast.error(e.response?.data?.message),
+  })
+
+  const deactivateUser = useMutation({
+    mutationFn: (id: string) => api.patch(`/admin/users/${id}/deactivate`),
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ['admin-users'] }); toast.success('Conta desativada') },
+    onError: (e: any) => toast.error(e.response?.data?.message),
+  })
+
   const adjustBalance = useMutation({
     mutationFn: ({ id, ...data }: any) => api.post(`/admin/users/${id}/adjust-balance`, data),
     onSuccess: () => { qc.invalidateQueries({ queryKey: ['admin-users'] }); setAdjustModal(null); toast.success('Balance adjusted') },
@@ -81,7 +93,7 @@ export default function AdminUsersPage() {
             <table className="w-full">
               <thead>
                 <tr className="border-b border-border">
-                  {['User', 'Balance', 'Status', 'Joined', 'Actions'].map(h => (
+                  {['User', 'Balance', 'Status', 'Conta', 'Joined', 'Actions'].map(h => (
                     <th key={h} className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">{h}</th>
                   ))}
                 </tr>
@@ -110,14 +122,33 @@ export default function AdminUsersPage() {
                       }`}>{u.status}</span>
                     </td>
                     <td className="px-5 py-3.5">
+                      {u.accountActivated
+                        ? <span className="text-xs px-2 py-1 rounded-full bg-green-500/10 text-green-400 border border-green-500/20">
+                            Habilitada {u.accountType === 'ANONYMOUS' ? '(Anônima)' : u.accountType === 'NORMAL' ? '(Normal)' : ''}
+                          </span>
+                        : <span className="text-xs px-2 py-1 rounded-full bg-red-500/10 text-red-400 border border-red-500/20">
+                            Não Habilitada
+                          </span>
+                      }
+                    </td>
+                    <td className="px-5 py-3.5">
                       <span className="text-xs text-gray-500">{formatDate(u.createdAt)}</span>
                     </td>
                     <td className="px-5 py-3.5">
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        {u.accountActivated
+                          ? <button onClick={() => deactivateUser.mutate(u.id)}
+                              className="text-xs px-2 py-1 bg-orange-500/10 border border-orange-500/20 text-orange-400 rounded-lg hover:bg-orange-500/20 transition-all">
+                              Desativar
+                            </button>
+                          : <button onClick={() => activateUser.mutate(u.id)}
+                              className="text-xs px-2 py-1 bg-purple-500/10 border border-purple-500/20 text-purple-400 rounded-lg hover:bg-purple-500/20 transition-all">
+                              Ativar
+                            </button>
+                        }
                         {u.status === 'ACTIVE' ? (
                           <button onClick={() => { setFreezeModal({ userId: u.id, name: u.name }); setFreezeReason('') }}
-                            className="text-xs px-2 py-1 bg-blue-500/10 border border-blue-500/20 text-blue-400 rounded-lg hover:bg-blue-500/20 transition-all"
-                            title="Freeze">
+                            className="text-xs px-2 py-1 bg-blue-500/10 border border-blue-500/20 text-blue-400 rounded-lg hover:bg-blue-500/20 transition-all">
                             Freeze
                           </button>
                         ) : (

@@ -1,0 +1,92 @@
+name: Deploy Frontend para Hostinger
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Build Next.js
+        run: npm run build
+        env:
+          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
+
+      - name: Preparar arquivos para deploy
+        run: |
+          mkdir -p deploy/.next
+          # server.js principal (standalone)
+          cp .next/standalone/server.js deploy/server.js
+          # pasta .next do standalone (arquivos do servidor)
+          cp -r .next/standalone/.next/. deploy/.next/
+          # assets estáticos (CSS, JS do cliente)
+          cp -r .next/static deploy/.next/static
+          # arquivos públicos
+          cp -r public deploy/public
+
+      - name: Enviar arquivos para o servidor
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          port: ${{ secrets.SSH_PORT }}
+          source: "deploy/"
+          target: "/tmp/razepag_deploy"
+          strip_components: 0
+
+      - name: Mover arquivos e reiniciar aplicação
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            APP_PATH="/home/u118244849/domains/razepag.com/nodejs"
+            DEPLOY_SRC="/tmp/razepag_deploy/deploy"
+
+            echo "Copiando server.js..."
+            cp "$DEPLOY_SRC/server.js" "$APP_PATH/server.js"
+
+            echo "Copiando .next/..."
+            rm -rf "$APP_PATH/.next"
+            cp -r "$DEPLOY_SRC/.next" "$APP_PATH/.next"
+
+            echo "Copiando public/..."
+            rm -rf "$APP_PATH/public"
+            cp -r "$DEPLOY_SRC/public" "$APP_PATH/public"
+
+            echo "Limpando arquivos temporários..."
+            rm -rf /tmp/razepag_deploy
+
+            echo "Reiniciando aplicação..."
+            if command -v pm2 &> /dev/null; then
+              pm2 restart all
+            else
+              APP_PID=$(pgrep -f "razepag.com/nodejs/server.js" | head -1)
+              if [ -n "$APP_PID" ]; then
+                kill -USR2 "$APP_PID"
+                echo "Sinal USR2 enviado para PID $APP_PID"
+              else
+                echo "Processo não encontrado via pgrep, reinício manual necessário via hPanel"
+              fi
+            fi
+
+            echo "Deploy concluído!"

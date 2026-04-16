@@ -34,7 +34,7 @@ jobs:
 
       - name: Enviar build via SSH
         run: |
-          tar czf - .next/ public/ server.js | \
+          tar czf - .next/ public/ server.js package.json package-lock.json | \
             ssh -i ~/.ssh/deploy_key \
                 -p ${{ secrets.SSH_PORT }} \
                 -o StrictHostKeyChecking=no \
@@ -47,12 +47,16 @@ jobs:
               -p ${{ secrets.SSH_PORT }} \
               -o StrictHostKeyChecking=no \
               ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'ENDSSH'
+            export PATH="/opt/alt/alt-nodejs22/root/usr/bin:$PATH"
             APP_PATH="/home/u118244849/domains/razepag.com/nodejs"
 
             echo "==> Extraindo build..."
             cd "$APP_PATH"
             tar xzf /tmp/razepag-build.tar.gz
             rm -f /tmp/razepag-build.tar.gz
+
+            echo "==> Instalando dependências de produção..."
+            npm install --omit=dev
 
             echo "==> Reiniciando aplicação..."
             APP_PID=$(pgrep -f "razepag.com/nodejs/server.js" | head -1)

@@ -13,8 +13,6 @@ jobs:
     steps:
       - name: Checkout código
         uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Configurar Node.js
         uses: actions/setup-node@v4
@@ -27,22 +25,33 @@ jobs:
       - name: Build Next.js
         run: npm run build
 
-      - name: Preparar pasta de deploy
-        run: |
-          mkdir -p deploy_app
-          cp server.js deploy_app/server.js
-          cp package.json deploy_app/package.json
-          cp -r public deploy_app/public
-          cp -r .next deploy_app/.next
-          rm -rf deploy_app/.next/cache
-
-      - name: Upload para nodejs via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
         with:
-          server: ${{ secrets.FTP_HOST }}
-          username: ${{ secrets.FTP_USER }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./deploy_app/
-          server-dir: domains/razepag.com/nodejs/
-          dangerous-clean-slate: false
-          timeout: 600000
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          port: ${{ secrets.SSH_PORT }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          command_timeout: 30m
+          script: |
+            APP_PATH="/home/u118244849/domains/razepag.com/nodejs"
+            REPO_PATH="/home/u118244849/razepagfront"
+
+            if [ ! -d "$REPO_PATH/.git" ]; then
+              git clone https://github.com/downbjj/razepagfront.git "$REPO_PATH"
+            fi
+
+            cd "$REPO_PATH"
+            git fetch origin
+            git reset --hard origin/main
+
+            npm install
+            npm run build
+
+            cp server.js "$APP_PATH/server.js"
+            rm -rf "$APP_PATH/.next"
+            cp -r .next "$APP_PATH/.next"
+            rm -rf "$APP_PATH/public"
+            cp -r public "$APP_PATH/public"
+
+            echo "Deploy concluído!"

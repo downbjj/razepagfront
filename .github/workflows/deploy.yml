@@ -7,35 +7,10 @@ on:
       - master
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout código
-        uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Configurar Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Instalar dependências
-        run: npm install
-
-      - name: Build Next.js
-        run: npm run build
-
-      - name: Commitar build no repositório
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          rm -rf .next/cache
-          git add -f .next/ server.js public/
-          git diff --staged --quiet || git commit -m "build: atualizar [skip ci]"
-          git push origin main
-
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -43,26 +18,38 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           port: ${{ secrets.SSH_PORT }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          command_timeout: 10m
+          command_timeout: 20m
           script: |
+            export PATH="/opt/alt/alt-nodejs22/root/usr/bin:$PATH"
+
             APP_PATH="/home/u118244849/domains/razepag.com/nodejs"
             REPO_PATH="/home/u118244849/razepagfront"
 
+            echo "==> Atualizando código..."
             cd "$REPO_PATH"
             git fetch origin
             git reset --hard origin/main
 
+            echo "==> Instalando dependências..."
+            npm install --production=false
+
+            echo "==> Fazendo build..."
+            npm run build
+
+            echo "==> Copiando arquivos para app..."
             cp server.js "$APP_PATH/server.js"
             rm -rf "$APP_PATH/.next"
             cp -r .next "$APP_PATH/.next"
             rm -rf "$APP_PATH/public"
             cp -r public "$APP_PATH/public"
 
+            echo "==> Reiniciando aplicação..."
             APP_PID=$(pgrep -f "razepag.com/nodejs/server.js" | head -1)
             if [ -n "$APP_PID" ]; then
               kill -USR2 "$APP_PID"
-              echo "Processo $APP_PID reiniciado"
+              echo "Processo $APP_PID reiniciado com USR2"
             else
-              echo "PID não encontrado"
+              echo "PID não encontrado — app pode reiniciar sozinha"
             fi
+
             echo "Deploy concluído!"

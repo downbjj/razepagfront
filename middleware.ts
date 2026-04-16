@@ -36,7 +36,7 @@ export function middleware(request: NextRequest) {
     // Redirect non-activated USER accounts to profile (server-side = no black flash)
     if (!pathname.startsWith('/dashboard/profile')) {
       const payload = decodeJwt(token)
-      if (payload && payload.role === 'USER' && payload.accountActivated === false) {
+      if (payload && payload.role === 'USER' && !payload.accountActivated) {
         return NextResponse.redirect(new URL('/dashboard/profile', request.url))
       }
     }

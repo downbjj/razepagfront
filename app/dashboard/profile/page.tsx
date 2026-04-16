@@ -241,7 +241,7 @@ export default function ProfilePage() {
               }`}
               style={{ background: activationTab === 'anonymous' ? 'rgba(138,43,226,0.06)' : '#111118' }}
             >
-              Conta Anônima — R$20
+              Conta Anônima — R$49,90
             </button>
           </div>
 
@@ -373,7 +373,7 @@ export default function ProfilePage() {
               <div className="space-y-4">
                 <div className="rounded-xl p-4 text-sm"
                   style={{ background: 'rgba(138,43,226,0.06)', border: '1px solid rgba(138,43,226,0.15)' }}>
-                  <p className="text-gray-300 font-medium mb-2">Conta Anônima — R$20,00</p>
+                  <p className="text-gray-300 font-medium mb-2">Conta Anônima — R$49,90</p>
                   <ul className="space-y-1 text-xs text-gray-500">
                     <li>• Nenhum dado pessoal adicional necessário</li>
                     <li>• Pagamento único via PIX</li>
@@ -391,7 +391,7 @@ export default function ProfilePage() {
                   >
                     {anonymousActivationMutation.isPending
                       ? <><RefreshCw className="w-4 h-4 animate-spin" />Gerando QR Code...</>
-                      : <><QrCode className="w-4 h-4" />Gerar QR Code — R$20</>
+                      : <><QrCode className="w-4 h-4" />Gerar QR Code — R$49,90</>
                     }
                   </button>
                 ) : (
@@ -407,7 +407,7 @@ export default function ProfilePage() {
                           />
                         </div>
                       )}
-                      <p className="text-sm font-semibold text-white">Pague R$20,00 via PIX</p>
+                      <p className="text-sm font-semibold text-white">Pague R$49,90 via PIX</p>
                       <p className="text-xs text-gray-500 text-center">
                         Escaneie o QR Code ou copie o código Pix abaixo.
                         A ativação é automática após o pagamento.

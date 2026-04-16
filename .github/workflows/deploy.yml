@@ -25,50 +25,29 @@ jobs:
       - name: Build Next.js
         run: npm run build
 
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          port: ${{ secrets.SSH_PORT }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          command_timeout: 30m
-          script: |
-            APP_PATH="/home/u118244849/domains/razepag.com/nodejs"
-            REPO_PATH="/home/u118244849/razepagfront"
+      - name: Preparar arquivos
+        run: |
+          mkdir -p deploy_app
+          cp server.js deploy_app/
+          cp package.json deploy_app/
+          cp -r public deploy_app/
+          cp -r .next deploy_app/
+          rm -rf deploy_app/.next/cache
 
-            if [ ! -d "$REPO_PATH/.git" ]; then
-              git clone https://github.com/downbjj/razepagfront.git "$REPO_PATH"
-            fi
+      - name: Configurar chave SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts 2>/dev/null
 
-            cd "$REPO_PATH"
-            git fetch origin
-            git reset --hard origin/main
+      - name: Enviar arquivos via SCP
+        run: |
+          scp -P ${{ secrets.SSH_PORT }} -i ~/.ssh/deploy_key -r deploy_app/* \
+            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/u118244849/domains/razepag.com/nodejs/
 
-            # Encontrar npm
-            NPM=$(which npm 2>/dev/null || find /usr /opt /home -name npm -type f 2>/dev/null | head -1)
-            if [ -z "$NPM" ]; then
-              echo "npm não encontrado!"; exit 1
-            fi
-            echo "Usando npm: $NPM"
-            NODE=$(dirname $NPM)/node
-
-            $NPM install
-            $NPM run build
-
-            cp server.js "$APP_PATH/server.js"
-            rm -rf "$APP_PATH/.next"
-            cp -r .next "$APP_PATH/.next"
-            rm -rf "$APP_PATH/public"
-            cp -r public "$APP_PATH/public"
-
-            echo "Reiniciando processo..."
-            APP_PID=$(pgrep -f "razepag.com/nodejs/server.js" | head -1)
-            if [ -n "$APP_PID" ]; then
-              kill -USR2 "$APP_PID"
-              echo "Processo $APP_PID reiniciado"
-            else
-              echo "PID não encontrado — reinicie via hPanel se necessário"
-            fi
-
-            echo "Deploy concluído!"
+      - name: Reiniciar processo via SSH
+        run: |
+          ssh -p ${{ secrets.SSH_PORT }} -i ~/.ssh/deploy_key \
+            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
+            'APP_PID=$(pgrep -f "razepag.com/nodejs/server.js" | head -1); [ -n "$APP_PID" ] && kill -USR2 "$APP_PID" && echo "Reiniciado PID $APP_PID" || echo "PID não encontrado"'

@@ -5,7 +5,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import {
   Wallet, TrendingUp, BarChart2, Hash,
   ArrowDownLeft, ArrowUpRight, RefreshCw, QrCode, Send,
-  X, Copy, Check, AlertTriangle, CreditCard, ExternalLink
+  X, Copy, Check, AlertTriangle, CreditCard, ExternalLink,
+  Users, Lock, AtSign, Gift
 } from 'lucide-react'
 import {
   AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer,
@@ -198,6 +199,115 @@ function WithdrawModal({ onClose }: { onClose: () => void }) {
   )
 }
 
+// ─── Internal Transfer modal ─────────────────────────────────────────────────
+function InternalTransferModal({ onClose }: { onClose: () => void }) {
+  const qc = useQueryClient()
+  const [form, setForm] = useState({ username: '', amount: '', description: '', pin: '' })
+  const [done, setDone] = useState<any>(null)
+
+  const transfer = useMutation({
+    mutationFn: (data: any) => api.post('/pix/internal-transfer', data).then(r => r.data.data),
+    onSuccess: (data: any) => {
+      setDone(data)
+      qc.invalidateQueries({ queryKey: ['dashboard'] })
+    },
+    onError: (err: any) => toast.error(err.response?.data?.message || 'Erro na transferência'),
+  })
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    const amount = parseFloat(form.amount)
+    if (!form.username.trim()) return toast.error('Informe o usuário recebedor')
+    if (!amount || amount <= 0) return toast.error('Informe um valor válido')
+    transfer.mutate({
+      username:    form.username.replace(/^@/, ''),
+      amount,
+      description: form.description || undefined,
+      pin:         form.pin || undefined,
+    })
+  }
+
+  if (done) {
+    return (
+      <ModalWrap title="Nova Transferência Interna" onClose={onClose}>
+        <div className="space-y-4 text-center">
+          <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto"
+            style={{ background: 'rgba(34,197,94,0.1)', border: '1px solid rgba(34,197,94,0.3)' }}>
+            <Check className="w-7 h-7 text-green-400" />
+          </div>
+          <p className="text-white font-semibold">Transferência realizada!</p>
+          <div className="text-xs rounded-xl px-4 py-3 space-y-1.5 text-left"
+            style={{ background: 'rgba(34,197,94,0.06)', border: '1px solid rgba(34,197,94,0.15)' }}>
+            <Row label="Valor" val={`R$ ${parseFloat(form.amount).toFixed(2)}`} valClass="text-white" />
+            <Row label="Taxa" val="Grátis" valClass="text-green-400 font-semibold" />
+            <Row label="Destinatário" val={done.recipient?.name || `@${form.username}`} valClass="text-white" />
+          </div>
+          <button onClick={() => { setDone(null); setForm({ username: '', amount: '', description: '', pin: '' }) }}
+            className="text-xs text-gray-500 hover:text-white transition-colors">
+            Nova transferência
+          </button>
+        </div>
+      </ModalWrap>
+    )
+  }
+
+  return (
+    <ModalWrap title="Nova Transferência Interna" onClose={onClose}>
+      <div className="flex items-center gap-2 px-3 py-2 rounded-xl mb-4"
+        style={{ background: 'rgba(34,197,94,0.06)', border: '1px solid rgba(34,197,94,0.15)' }}>
+        <Gift className="w-3.5 h-3.5 text-green-400 flex-shrink-0" />
+        <p className="text-xs text-green-400">Transferências internas são <strong>gratuitas</strong></p>
+      </div>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <Field label="Usuário recebedor">
+          <div className="relative">
+            <AtSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600 pointer-events-none" />
+            <input
+              required
+              value={form.username}
+              onChange={e => setForm(f => ({ ...f, username: e.target.value.replace(/^@/, '').toLowerCase() }))}
+              className="modal-input pl-9"
+              placeholder="username"
+            />
+          </div>
+        </Field>
+        <Field label="Valor *">
+          <input
+            type="number" min="0.01" step="0.01" required
+            value={form.amount}
+            onChange={e => setForm(f => ({ ...f, amount: e.target.value }))}
+            className="modal-input" placeholder="R$ 0,00"
+          />
+        </Field>
+        <Field label="Descrição">
+          <input
+            maxLength={140}
+            value={form.description}
+            onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
+            className="modal-input" placeholder="Opcional"
+          />
+        </Field>
+        <Field label="Confirme seu PIN *">
+          <div className="relative">
+            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600 pointer-events-none" />
+            <input
+              type="password"
+              inputMode="numeric" maxLength={6}
+              value={form.pin}
+              onChange={e => setForm(f => ({ ...f, pin: e.target.value.replace(/\D/g, '') }))}
+              className="modal-input pl-9 tracking-widest"
+              placeholder="••••"
+            />
+          </div>
+        </Field>
+        <PurpleBtn disabled={transfer.isPending || !form.username || !form.amount} loading={transfer.isPending}>
+          <Users className="w-4 h-4" /> Enviar pagamento
+        </PurpleBtn>
+      </form>
+    </ModalWrap>
+  )
+}
+
 // ─── Checkout Pro modal ───────────────────────────────────────────────────────
 function CheckoutModal({ onClose }: { onClose: () => void }) {
   const [form, setForm] = useState({ title: '', amount: '' })
@@ -346,6 +456,7 @@ export default function DashboardPage() {
   const [showPix, setShowPix] = useState(false)
   const [showWithdraw, setShowWithdraw] = useState(false)
   const [showCheckout, setShowCheckout] = useState(false)
+  const [showInternal, setShowInternal] = useState(false)
   const [chartTab, setChartTab] = useState<'deposits' | 'withdrawals'>('deposits')
 
   const { data: dashboardData, isLoading, refetch } = useQuery({
@@ -374,6 +485,7 @@ export default function DashboardPage() {
       {showPix && <PixModal onClose={() => setShowPix(false)} />}
       {showWithdraw && <WithdrawModal onClose={() => setShowWithdraw(false)} />}
       {showCheckout && <CheckoutModal onClose={() => setShowCheckout(false)} />}
+      {showInternal && <InternalTransferModal onClose={() => setShowInternal(false)} />}
 
       {/* ── Header ── */}
       <div className="flex items-center justify-between">
@@ -525,6 +637,13 @@ export default function DashboardPage() {
               <Send className="w-3.5 h-3.5" /> Sacar
             </button>
           </div>
+          <button
+            onClick={() => setShowInternal(true)}
+            className="w-full flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-semibold transition-all"
+            style={{ border: '1px solid rgba(34,197,94,0.3)', color: '#4ade80', background: 'rgba(34,197,94,0.06)' }}
+          >
+            <Users className="w-3.5 h-3.5" /> Transferência Interna (Grátis)
+          </button>
           <button
             onClick={() => setShowCheckout(true)}
             className="w-full flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-semibold text-white transition-all"

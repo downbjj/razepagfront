@@ -45,12 +45,16 @@ jobs:
             git fetch origin
             git reset --hard origin/main
 
-            export NVM_DIR="$HOME/.nvm"
-            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-            export PATH="$HOME/.nvm/versions/node/$(ls $HOME/.nvm/versions/node | tail -1)/bin:$PATH"
+            # Encontrar npm
+            NPM=$(which npm 2>/dev/null || find /usr /opt /home -name npm -type f 2>/dev/null | head -1)
+            if [ -z "$NPM" ]; then
+              echo "npm não encontrado!"; exit 1
+            fi
+            echo "Usando npm: $NPM"
+            NODE=$(dirname $NPM)/node
 
-            npm install
-            npm run build
+            $NPM install
+            $NPM run build
 
             cp server.js "$APP_PATH/server.js"
             rm -rf "$APP_PATH/.next"

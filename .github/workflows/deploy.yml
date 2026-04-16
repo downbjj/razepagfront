@@ -43,11 +43,14 @@ jobs:
 
       - name: Enviar arquivos via SCP
         run: |
-          scp -P ${{ secrets.SSH_PORT }} -i ~/.ssh/deploy_key -r deploy_app/* \
+          scp -P ${{ secrets.SSH_PORT }} -i ~/.ssh/deploy_key \
+            -o StrictHostKeyChecking=no \
+            -r deploy_app/* \
             ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/u118244849/domains/razepag.com/nodejs/
 
       - name: Reiniciar processo via SSH
         run: |
           ssh -p ${{ secrets.SSH_PORT }} -i ~/.ssh/deploy_key \
+            -o StrictHostKeyChecking=no \
             ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
             'APP_PID=$(pgrep -f "razepag.com/nodejs/server.js" | head -1); [ -n "$APP_PID" ] && kill -USR2 "$APP_PID" && echo "Reiniciado PID $APP_PID" || echo "PID não encontrado"'

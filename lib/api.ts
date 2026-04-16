@@ -1,8 +1,8 @@
 import axios from 'axios'
 import Cookies from 'js-cookie'
 
-// Usa URL relativa — o browser chama /api/* e o Next.js proxy encaminha para o backend
-const API_URL = typeof window !== 'undefined' ? '' : (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001')
+// Browser chama a API diretamente (sem proxy Next.js)
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.razepag.com'
 
 export const api = axios.create({
   baseURL: `${API_URL}/api`,

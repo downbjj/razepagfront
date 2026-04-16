@@ -25,20 +25,34 @@ jobs:
       - name: Build Next.js
         run: npm run build
 
-      - name: Preparar arquivos para deploy
+      - name: Preparar arquivos do servidor (nodejs)
         run: |
-          mkdir -p deploy_ftp/.next
-          cp .next/standalone/server.js deploy_ftp/server.js
-          cp -r .next/standalone/.next/. deploy_ftp/.next/
-          cp -r .next/static deploy_ftp/.next/static
-          cp -r public deploy_ftp/public
+          mkdir -p deploy_server/.next
+          cp .next/standalone/server.js deploy_server/server.js
+          cp -r .next/standalone/.next/. deploy_server/.next/
 
-      - name: Upload via FTP
+      - name: Preparar arquivos estáticos (public_html)
+        run: |
+          mkdir -p deploy_static/_next
+          cp -r .next/static deploy_static/_next/static
+          cp -r public/. deploy_static/
+
+      - name: Upload arquivos do servidor via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
           server: ${{ secrets.FTP_HOST }}
           username: ${{ secrets.FTP_USER }}
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./deploy_ftp/
+          local-dir: ./deploy_server/
           server-dir: domains/razepag.com/nodejs/
           dangerous-clean-slate: true
+
+      - name: Upload arquivos estáticos para public_html via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./deploy_static/
+          server-dir: domains/razepag.com/public_html/
+          dangerous-clean-slate: false

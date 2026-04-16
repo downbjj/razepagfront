@@ -7,7 +7,7 @@ on:
       - master
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -35,42 +35,3 @@ jobs:
           git add -f .next/ server.js public/
           git diff --staged --quiet || git commit -m "build: atualizar [skip ci]"
           git push origin main
-
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          port: ${{ secrets.SSH_PORT }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          command_timeout: 10m
-          script: |
-            export PATH="/opt/alt/alt-nodejs22/root/usr/bin:$PATH"
-            APP_PATH="/home/u118244849/domains/razepag.com/nodejs"
-            REPO_PATH="/home/u118244849/razepagfront"
-
-            cd "$REPO_PATH"
-
-            # Fetch shallow para usar menos memória/threads
-            for attempt in 1 2 3; do
-              git -c pack.threads=1 fetch --depth=1 origin main && break
-              echo "Tentativa $attempt falhou, aguardando 10s..."
-              sleep 10
-            done
-
-            git reset --hard origin/main
-
-            cp server.js "$APP_PATH/server.js"
-            rm -rf "$APP_PATH/.next"
-            cp -r .next "$APP_PATH/.next"
-            rm -rf "$APP_PATH/public"
-            cp -r public "$APP_PATH/public"
-
-            APP_PID=$(pgrep -f "razepag.com/nodejs/server.js" | head -1)
-            if [ -n "$APP_PID" ]; then
-              kill -USR2 "$APP_PID"
-              echo "Processo $APP_PID reiniciado"
-            else
-              echo "PID não encontrado"
-            fi
-            echo "Deploy concluído!"

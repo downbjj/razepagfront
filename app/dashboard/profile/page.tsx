@@ -8,6 +8,7 @@ import {
   AlertTriangle, QrCode, Copy, Check, MapPin, Calendar, Building2, Hash, Key,
 } from 'lucide-react'
 import toast from 'react-hot-toast'
+import Cookies from 'js-cookie'
 import api, { getUser, setUser, setAuthTokens } from '@/lib/api'
 
 const inputCls = 'w-full pl-9 pr-4 py-2.5 rounded-xl text-sm text-white focus:outline-none transition-all'
@@ -55,7 +56,7 @@ export default function ProfilePage() {
       sessionStorage.removeItem('anon_charge')
       toast.success('Conta habilitada com sucesso!')
       // Renova o token para que o middleware reconheça a conta como ativada
-      const refreshToken = document.cookie.match(/refresh_token=([^;]+)/)?.[1]
+      const refreshToken = Cookies.get('refresh_token')
       if (refreshToken) {
         api.post('/auth/refresh', { refreshToken })
           .then(r => {

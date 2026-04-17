@@ -83,8 +83,8 @@ export default function LoginPage() {
             <Image
               src="/logo.png"
               alt="Razepag"
-              width={240}
-              height={72}
+              width={320}
+              height={96}
               className="object-contain"
               priority
             />

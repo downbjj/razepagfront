@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import {
   CheckCircle, ArrowRight, Shield, Zap,
   Clock, Code2, Webhook, ChevronRight, ExternalLink,
@@ -186,11 +187,8 @@ export default function LandingPage() {
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
             <div className="col-span-2 md:col-span-1">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{background:'linear-gradient(135deg,#A855F7,#5e18a0)'}}>
-                  <Zap className="w-4 h-4 text-white" />
-                </div>
-                <span className="text-lg font-bold" style={{color: textMain}}>Razepag</span>
+              <div className="mb-4">
+                <Image src="/logo.png" alt="Razepag" width={160} height={48} className="object-contain" />
               </div>
               <p className="text-sm leading-relaxed" style={{color: textDim}}>{t('footer.description')}</p>
             </div>

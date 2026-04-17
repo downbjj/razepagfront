@@ -7,9 +7,10 @@ export const metadata: Metadata = {
   description: 'Receba pagamentos instantâneos. API completa e segura para integrar pagamentos no seu sistema. Simples, rápido e sem complicação.',
   icons: {
     icon: [
-      { url: '/favicon-icon.png', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon-icon.png', sizes: '512x512', type: 'image/png' },
+      { url: '/favicon-icon.png', sizes: '192x192', type: 'image/png' },
       { url: '/favicon-icon.png', sizes: '64x64', type: 'image/png' },
-      { url: '/favicon-icon.png', sizes: '128x128', type: 'image/png' },
+      { url: '/favicon-icon.png', sizes: '32x32', type: 'image/png' },
     ],
     shortcut: '/favicon-icon.png',
     apple: { url: '/favicon-icon.png', sizes: '180x180' },

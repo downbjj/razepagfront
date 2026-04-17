@@ -188,7 +188,7 @@ export default function LandingPage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
             <div className="col-span-2 md:col-span-1">
               <div className="mb-4">
-                <Image src="/logo.png" alt="Razepag" width={160} height={48} className="object-contain" />
+                <Image src="/logo.png" alt="Razepag" width={220} height={66} className="object-contain" />
               </div>
               <p className="text-sm leading-relaxed" style={{color: textDim}}>{t('footer.description')}</p>
             </div>

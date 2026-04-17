@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "node -e \"process.env.SKIP_BUILD&&process.exit(0);require('child_process').execSync('next build',{stdio:'inherit'})\"",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },

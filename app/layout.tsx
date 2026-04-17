@@ -5,7 +5,15 @@ import { Providers } from './providers'
 export const metadata: Metadata = {
   title: 'RazePague - Gateway de Pagamentos PIX',
   description: 'Receba pagamentos instantâneos. API completa e segura para integrar pagamentos no seu sistema. Simples, rápido e sem complicação.',
-  icons: { icon: '/favicon-icon.png', shortcut: '/favicon-icon.png', apple: '/favicon-icon.png' },
+  icons: {
+    icon: [
+      { url: '/favicon-icon.png', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon-icon.png', sizes: '64x64', type: 'image/png' },
+      { url: '/favicon-icon.png', sizes: '128x128', type: 'image/png' },
+    ],
+    shortcut: '/favicon-icon.png',
+    apple: { url: '/favicon-icon.png', sizes: '180x180' },
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

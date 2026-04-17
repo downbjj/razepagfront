@@ -155,9 +155,24 @@ export default function ProfilePage() {
   const activateNormalMutation = useMutation({
     mutationFn: (data: any) => api.post('/users/activate/normal', data).then(r => r.data.data),
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ['profile'] })
-      qc.invalidateQueries({ queryKey: ['me'] })
       toast.success('Conta habilitada com sucesso!')
+      const refreshToken = Cookies.get('refresh_token')
+      if (refreshToken) {
+        api.post('/auth/refresh', { refreshToken })
+          .then(r => {
+            const { accessToken, refreshToken: newRefresh } = r.data.data
+            setAuthTokens(accessToken, newRefresh)
+            qc.clear()
+            setTimeout(() => { window.location.href = '/dashboard' }, 500)
+          })
+          .catch(() => {
+            qc.clear()
+            setTimeout(() => { window.location.href = '/dashboard' }, 500)
+          })
+      } else {
+        qc.clear()
+        setTimeout(() => { window.location.href = '/dashboard' }, 500)
+      }
     },
     onError: (err: any) => toast.error(err.response?.data?.message || 'Erro ao ativar conta'),
   })

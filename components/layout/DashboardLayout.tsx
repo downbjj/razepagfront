@@ -110,15 +110,15 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       )} style={{ background: '#0d0d14', borderRight: '1px solid rgba(168,85,247,0.15)' }}>
 
         {/* Logo */}
-        <div className="flex items-center justify-between px-4 py-4" style={{ borderBottom: '1px solid rgba(168,85,247,0.1)' }}>
-          <Link href="/dashboard" onClick={() => setSidebarOpen(false)}>
+        <div className="flex items-center justify-between px-3 py-3" style={{ borderBottom: '1px solid rgba(168,85,247,0.1)' }}>
+          <Link href="/dashboard" onClick={() => setSidebarOpen(false)} className="flex-1">
             <Image
               src="/logo.png"
               alt="Razepag"
-              width={200}
-              height={60}
-              className="object-contain"
-              style={{ maxHeight: 60 }}
+              width={210}
+              height={64}
+              className="object-contain w-full"
+              style={{ maxHeight: 64 }}
             />
           </Link>
           <button onClick={() => setSidebarOpen(false)} className="lg:hidden text-gray-500 hover:text-white">

@@ -1,4 +1,4 @@
-// File: C:\Users\Download\Documents\razepag\frontend\app\admin\audit-logs\page.tsx
+// File: /home/runner/work/razepagfront/razepagfront/app/admin/audit-logs/page.tsx
 import * as entry from '../../../../../app/admin/audit-logs/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

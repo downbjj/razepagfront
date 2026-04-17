@@ -1,4 +1,4 @@
-// File: C:\Users\Download\Documents\razepag\frontend\app\admin\withdrawals\page.tsx
+// File: /home/runner/work/razepagfront/razepagfront/app/admin/withdrawals/page.tsx
 import * as entry from '../../../../../app/admin/withdrawals/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

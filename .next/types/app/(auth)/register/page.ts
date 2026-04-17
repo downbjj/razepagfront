@@ -1,4 +1,4 @@
-// File: C:\Users\Download\Documents\razepag\frontend\app\(auth)\register\page.tsx
+// File: /home/runner/work/razepagfront/razepagfront/app/(auth)/register/page.tsx
 import * as entry from '../../../../../app/(auth)/register/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

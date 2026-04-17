@@ -1,4 +1,4 @@
-// File: C:\Users\Download\Documents\razepag\frontend\app\dashboard\pix\page.tsx
+// File: /home/runner/work/razepagfront/razepagfront/app/dashboard/pix/page.tsx
 import * as entry from '../../../../../app/dashboard/pix/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

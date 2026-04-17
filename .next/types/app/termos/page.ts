@@ -1,4 +1,4 @@
-// File: C:\Users\Download\Documents\razepag\frontend\app\termos\page.tsx
+// File: /home/runner/work/razepagfront/razepagfront/app/termos/page.tsx
 import * as entry from '../../../../app/termos/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

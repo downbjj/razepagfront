@@ -8,7 +8,7 @@ import {
   AlertTriangle, QrCode, Copy, Check, MapPin, Calendar, Building2, Hash, Key,
 } from 'lucide-react'
 import toast from 'react-hot-toast'
-import api, { getUser, setUser } from '@/lib/api'
+import api, { getUser, setUser, setAuthTokens } from '@/lib/api'
 
 const inputCls = 'w-full pl-9 pr-4 py-2.5 rounded-xl text-sm text-white focus:outline-none transition-all'
 const inputStyle = { background: '#0d0d14', border: '1px solid rgba(138,43,226,0.2)' }
@@ -54,8 +54,24 @@ export default function ProfilePage() {
       setActivationPolling(false)
       sessionStorage.removeItem('anon_charge')
       toast.success('Conta habilitada com sucesso!')
-      qc.invalidateQueries()
-      setTimeout(() => router.push('/dashboard'), 1500)
+      // Renova o token para que o middleware reconheça a conta como ativada
+      const refreshToken = document.cookie.match(/refresh_token=([^;]+)/)?.[1]
+      if (refreshToken) {
+        api.post('/auth/refresh', { refreshToken })
+          .then(r => {
+            const { accessToken, refreshToken: newRefresh } = r.data.data
+            setAuthTokens(accessToken, newRefresh)
+            qc.invalidateQueries()
+            setTimeout(() => router.push('/dashboard'), 500)
+          })
+          .catch(() => {
+            qc.invalidateQueries()
+            setTimeout(() => router.push('/dashboard'), 500)
+          })
+      } else {
+        qc.invalidateQueries()
+        setTimeout(() => router.push('/dashboard'), 1500)
+      }
     }
   }, [profile?.accountActivated, activationPolling, qc, router])
 

@@ -32,13 +32,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const { data: dashboardData } = useQuery({
     queryKey: ['dashboard'],
     queryFn: () => api.get('/users/dashboard').then(r => r.data.data),
-    refetchInterval: 30000,
-    enabled: !!user,
-  })
-
-  const { data: meData } = useQuery({
-    queryKey: ['me'],
-    queryFn: () => api.get('/users/me').then(r => r.data.data),
+    refetchInterval: 60000,
     enabled: !!user,
   })
 

@@ -467,7 +467,6 @@ export default function DashboardPage() {
   const { data: dashboardData, isLoading, refetch } = useQuery({
     queryKey: ['dashboard'],
     queryFn: () => api.get('/users/dashboard').then(r => r.data.data),
-    refetchInterval: 15000,
   })
 
   const user         = dashboardData?.user

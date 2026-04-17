@@ -39,27 +39,34 @@ export default function ProfilePage() {
   const [showConfirm, setShowConfirm] = useState(false)
 
   // ── Queries ──────────────────────────────────────────────────────────────
+  // Única query para /users/me — reutilizada para perfil e polling de ativação
   const { data: profile, isLoading } = useQuery({
     queryKey: ['profile'],
     queryFn: () => api.get('/users/me').then(r => r.data.data),
+    refetchInterval: activationPolling ? 5000 : false,
   })
 
-  // Query separada só para verificar ativação — não causa re-render da página inteira
-  useQuery({
-    queryKey: ['activation-check'],
-    queryFn: () => api.get('/users/me').then(r => {
-      const activated = r.data.data?.accountActivated
-      if (activated) {
-        setActivationPolling(false)
-        toast.success('Conta habilitada com sucesso!')
-        qc.invalidateQueries({ queryKey: ['profile'] })
-        qc.invalidateQueries({ queryKey: ['me'] })
-      }
-      return activated
-    }),
-    refetchInterval: activationPolling ? 5000 : false,
-    enabled: activationPolling,
-  })
+  // Detecta ativação via efeito na query unificada
+  useEffect(() => {
+    if (activationPolling && profile?.accountActivated) {
+      setActivationPolling(false)
+      sessionStorage.removeItem('anon_charge')
+      toast.success('Conta habilitada com sucesso!')
+      qc.invalidateQueries({ queryKey: ['dashboard'] })
+    }
+  }, [profile?.accountActivated, activationPolling, qc])
+
+  // Restaura charge pendente do sessionStorage ao montar
+  useEffect(() => {
+    const saved = sessionStorage.getItem('anon_charge')
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved)
+        setAnonymousCharge(parsed)
+        setActivationPolling(true)
+      } catch { sessionStorage.removeItem('anon_charge') }
+    }
+  }, [])
 
   // Inicializa formulário somente na primeira carga
   useEffect(() => {
@@ -114,7 +121,11 @@ export default function ProfilePage() {
 
   const anonymousActivationMutation = useMutation({
     mutationFn: () => api.post('/users/activate/anonymous').then(r => r.data.data),
-    onSuccess: (data) => { setAnonymousCharge(data); setActivationPolling(true) },
+    onSuccess: (data) => {
+      setAnonymousCharge(data)
+      setActivationPolling(true)
+      sessionStorage.setItem('anon_charge', JSON.stringify(data))
+    },
     onError: (err: any) => toast.error(err.response?.data?.message || 'Erro ao gerar QR Code'),
   })
 

@@ -21,7 +21,7 @@ export default function LandingPage() {
   const textDim = isLight ? '#9ca3af' : '#6b7280'
   const cardBg = isLight ? '#ffffff' : '#0d0d0d'
   const cardBorder = isLight ? '#e0e0e8' : '#1f1f1f'
-  const statsBorder = isLight ? 'rgba(138,43,226,0.15)' : 'rgba(138,43,226,0.1)'
+  const statsBorder = isLight ? 'rgba(168,85,247,0.15)' : 'rgba(168,85,247,0.1)'
 
   return (
     <div className="min-h-screen overflow-x-hidden" style={{background: pageBg, color: textMain}}>
@@ -31,13 +31,13 @@ export default function LandingPage() {
       {/* HERO */}
       <section className="relative pt-32 pb-24 px-4">
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-20 left-1/2 -translate-x-1/2 w-[600px] h-[400px] rounded-full blur-[120px]" style={{background:'rgba(138,43,226,0.10)'}} />
-          <div className="absolute inset-0 opacity-30" style={{backgroundImage:'linear-gradient(rgba(138,43,226,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(138,43,226,0.05) 1px, transparent 1px)',backgroundSize:'50px 50px'}} />
+          <div className="absolute top-20 left-1/2 -translate-x-1/2 w-[600px] h-[400px] rounded-full blur-[120px]" style={{background:'rgba(168,85,247,0.10)'}} />
+          <div className="absolute inset-0 opacity-30" style={{backgroundImage:'linear-gradient(rgba(168,85,247,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(168,85,247,0.05) 1px, transparent 1px)',backgroundSize:'50px 50px'}} />
         </div>
 
         <div className="relative max-w-4xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 border rounded-full px-4 py-1.5 mb-8" style={{background:'rgba(138,43,226,0.1)',borderColor:'rgba(138,43,226,0.3)'}}>
-            <div className="w-1.5 h-1.5 bg-[#8A2BE2] rounded-full animate-pulse" />
+          <div className="inline-flex items-center gap-2 border rounded-full px-4 py-1.5 mb-8" style={{background:'rgba(168,85,247,0.1)',borderColor:'rgba(168,85,247,0.3)'}}>
+            <div className="w-1.5 h-1.5 bg-[#A855F7] rounded-full animate-pulse" />
             <span className="text-xs text-purple-400 font-medium">{t('hero.badge')}</span>
           </div>
 
@@ -50,11 +50,11 @@ export default function LandingPage() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/register" className="inline-flex items-center justify-center gap-2 text-white px-8 py-4 rounded-xl font-semibold text-base transition-all group" style={{background:'#8A2BE2'}}>
+            <Link href="/register" className="inline-flex items-center justify-center gap-2 text-white px-8 py-4 rounded-xl font-semibold text-base transition-all group" style={{background:'#A855F7'}}>
               {t('hero.cta_primary')}
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
-            <Link href="/documentacao" className="inline-flex items-center justify-center gap-2 border border-[#8A2BE2]/40 hover:border-[#8A2BE2] px-8 py-4 rounded-xl font-semibold text-base transition-all" style={{color: textMuted}}>
+            <Link href="/documentacao" className="inline-flex items-center justify-center gap-2 border border-[#A855F7]/40 hover:border-[#A855F7] px-8 py-4 rounded-xl font-semibold text-base transition-all" style={{color: textMuted}}>
               {t('hero.cta_secondary')}
               <ExternalLink className="w-4 h-4" />
             </Link>
@@ -63,7 +63,7 @@ export default function LandingPage() {
           <div className="mt-12 flex flex-wrap items-center justify-center gap-6 text-sm" style={{color: textDim}}>
             {['Sem taxa de manutenção', 'Integração em minutos', 'PIX 24/7'].map(item => (
               <div key={item} className="flex items-center gap-2">
-                <CheckCircle className="w-4 h-4 text-[#8A2BE2]" />
+                <CheckCircle className="w-4 h-4 text-[#A855F7]" />
                 <span>{item}</span>
               </div>
             ))}
@@ -77,7 +77,7 @@ export default function LandingPage() {
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4" style={{color: textMain}}>
               {t('features.title')}{' '}
-              <span style={{color:'#8A2BE2'}}>{t('features.title_highlight')}</span>
+              <span style={{color:'#A855F7'}}>{t('features.title_highlight')}</span>
             </h2>
             <p style={{color: textMuted}} className="max-w-xl mx-auto">Plataforma completa com API, painel administrativo e webhooks.</p>
           </div>
@@ -91,11 +91,11 @@ export default function LandingPage() {
             ].map(f => (
               <div key={f.num} className="group relative rounded-2xl p-8 transition-all" style={{background: cardBg, border:`1px solid ${cardBorder}`}}>
                 <div className="flex items-start gap-5">
-                  <span className="text-4xl font-black font-mono flex-shrink-0" style={{color:'rgba(138,43,226,0.2)'}}>{f.num}</span>
+                  <span className="text-4xl font-black font-mono flex-shrink-0" style={{color:'rgba(168,85,247,0.2)'}}>{f.num}</span>
                   <div>
                     <div className="flex items-center gap-3 mb-3">
-                      <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{background:'rgba(138,43,226,0.1)'}}>
-                        <f.icon className="w-5 h-5" style={{color:'#8A2BE2'}} />
+                      <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{background:'rgba(168,85,247,0.1)'}}>
+                        <f.icon className="w-5 h-5" style={{color:'#A855F7'}} />
                       </div>
                       <h3 className="text-lg font-semibold" style={{color: textMain}}>{f.title}</h3>
                     </div>
@@ -118,7 +118,7 @@ export default function LandingPage() {
             { value:'3%+R$1',  label: t('hero.stat_fee') },
           ].map(s => (
             <div key={s.label} className="text-center">
-              <p className="text-3xl font-black mb-1" style={{color:'#8A2BE2'}}>{s.value}</p>
+              <p className="text-3xl font-black mb-1" style={{color:'#A855F7'}}>{s.value}</p>
               <p className="text-sm" style={{color: textMuted}}>{s.label}</p>
             </div>
           ))}
@@ -139,10 +139,10 @@ export default function LandingPage() {
               { step:'3', icon: Lock,       title: t('how_it_works.step3_title'), desc: t('how_it_works.step3_desc') },
             ].map(s => (
               <div key={s.step} className="text-center">
-                <div className="w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-4" style={{background:'rgba(138,43,226,0.1)',border:'1px solid rgba(138,43,226,0.3)'}}>
-                  <s.icon className="w-9 h-9" style={{color:'#8A2BE2'}} />
+                <div className="w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-4" style={{background:'rgba(168,85,247,0.1)',border:'1px solid rgba(168,85,247,0.3)'}}>
+                  <s.icon className="w-9 h-9" style={{color:'#A855F7'}} />
                 </div>
-                <div className="inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold text-white mb-3" style={{background:'#8A2BE2'}}>
+                <div className="inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold text-white mb-3" style={{background:'#A855F7'}}>
                   {s.step}
                 </div>
                 <h3 className="text-lg font-semibold mb-2" style={{color: textMain}}>{s.title}</h3>
@@ -156,23 +156,23 @@ export default function LandingPage() {
       {/* MID CTA */}
       <section className="py-20 px-4">
         <div className="max-w-3xl mx-auto">
-          <div className="relative rounded-3xl p-12 text-center overflow-hidden" style={{background:'linear-gradient(135deg, rgba(138,43,226,0.15), rgba(94,24,160,0.08))',border:'1px solid rgba(138,43,226,0.3)'}}>
+          <div className="relative rounded-3xl p-12 text-center overflow-hidden" style={{background:'linear-gradient(135deg, rgba(168,85,247,0.15), rgba(94,24,160,0.08))',border:'1px solid rgba(168,85,247,0.3)'}}>
             <div className="absolute inset-0 pointer-events-none">
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full blur-3xl" style={{background:'rgba(138,43,226,0.08)'}} />
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full blur-3xl" style={{background:'rgba(168,85,247,0.08)'}} />
             </div>
             <div className="relative">
               <h2 className="text-3xl sm:text-4xl font-bold mb-4" style={{color: textMain}}>
-                {t('cta.title')} <span style={{color:'#8A2BE2'}}>{t('cta.subtitle')}</span>
+                {t('cta.title')} <span style={{color:'#A855F7'}}>{t('cta.subtitle')}</span>
               </h2>
               <p className="mb-8 max-w-lg mx-auto" style={{color: textMuted}}>
                 {t('cta.description')}
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link href="/register" className="inline-flex items-center justify-center gap-2 text-white px-8 py-4 rounded-xl font-semibold transition-all group" style={{background:'#8A2BE2'}}>
+                <Link href="/register" className="inline-flex items-center justify-center gap-2 text-white px-8 py-4 rounded-xl font-semibold transition-all group" style={{background:'#A855F7'}}>
                   {t('cta.button')}
                   <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </Link>
-                <Link href="/login" className="inline-flex items-center justify-center gap-2 border px-8 py-4 rounded-xl font-semibold transition-all" style={{borderColor:'rgba(138,43,226,0.4)',color: textMuted}}>
+                <Link href="/login" className="inline-flex items-center justify-center gap-2 border px-8 py-4 rounded-xl font-semibold transition-all" style={{borderColor:'rgba(168,85,247,0.4)',color: textMuted}}>
                   {t('nav.login')}
                 </Link>
               </div>
@@ -187,7 +187,7 @@ export default function LandingPage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
             <div className="col-span-2 md:col-span-1">
               <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{background:'linear-gradient(135deg,#8A2BE2,#5e18a0)'}}>
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{background:'linear-gradient(135deg,#A855F7,#5e18a0)'}}>
                   <Zap className="w-4 h-4 text-white" />
                 </div>
                 <span className="text-lg font-bold" style={{color: textMain}}>RazePague</span>
@@ -198,7 +198,7 @@ export default function LandingPage() {
               <h4 className="text-sm font-semibold mb-4" style={{color: textMain}}>{t('footer.product')}</h4>
               <ul className="space-y-3">
                 {[[t('nav.features'),'/recursos'],[t('nav.docs'),'/documentacao'],[t('nav.register'),'/register'],[t('nav.login'),'/login']].map(([l,h]) => (
-                  <li key={h}><Link href={h} className="text-sm transition-colors hover:text-[#8A2BE2]" style={{color: textDim}}>{l}</Link></li>
+                  <li key={h}><Link href={h} className="text-sm transition-colors hover:text-[#A855F7]" style={{color: textDim}}>{l}</Link></li>
                 ))}
               </ul>
             </div>
@@ -206,14 +206,14 @@ export default function LandingPage() {
               <h4 className="text-sm font-semibold mb-4" style={{color: textMain}}>{t('footer.company')}</h4>
               <ul className="space-y-3">
                 {[[t('nav.terms'),'/termos'],[t('nav.support'),'/suporte']].map(([l,h]) => (
-                  <li key={h}><Link href={h} className="text-sm transition-colors hover:text-[#8A2BE2]" style={{color: textDim}}>{l}</Link></li>
+                  <li key={h}><Link href={h} className="text-sm transition-colors hover:text-[#A855F7]" style={{color: textDim}}>{l}</Link></li>
                 ))}
               </ul>
             </div>
             <div>
               <h4 className="text-sm font-semibold mb-4" style={{color: textMain}}>Contato</h4>
               <ul className="space-y-3">
-                <li><a href="mailto:suporte@razepague.com" className="text-sm transition-colors hover:text-[#8A2BE2]" style={{color: textDim}}>suporte@razepague.com</a></li>
+                <li><a href="mailto:suporte@razepague.com" className="text-sm transition-colors hover:text-[#A855F7]" style={{color: textDim}}>suporte@razepague.com</a></li>
               </ul>
             </div>
           </div>

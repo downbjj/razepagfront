@@ -60,7 +60,7 @@ export default function NotificationsPage() {
         </div>
         <button onClick={() => setShowForm(v => !v)}
           className="flex items-center gap-2 text-sm text-white px-4 py-2 rounded-xl font-medium"
-          style={{ background: '#8A2BE2' }}>
+          style={{ background: '#A855F7' }}>
           <Send className="w-4 h-4" /> Enviar nova
         </button>
       </div>
@@ -117,7 +117,7 @@ export default function NotificationsPage() {
           <div className="flex gap-3">
             <button onClick={handleSend} disabled={!form.title || !form.message || send.isPending}
               className="flex items-center gap-2 text-sm text-white px-6 py-2.5 rounded-xl font-medium disabled:opacity-50"
-              style={{ background: '#8A2BE2' }}>
+              style={{ background: '#A855F7' }}>
               <Send className="w-4 h-4" />
               {send.isPending ? 'Enviando...' : form.broadcast ? 'Enviar para todos' : 'Enviar para selecionados'}
             </button>

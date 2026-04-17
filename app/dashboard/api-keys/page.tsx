@@ -58,7 +58,7 @@ function SecretBanner({ data, onDismiss }: { data: any; onDismiss: () => void })
         <div>
           <p className="text-xs text-gray-500 mb-1 font-medium">client_id</p>
           <div className="flex items-center gap-2 rounded-xl px-3 py-2"
-            style={{ background: '#0d0d14', border: '1px solid rgba(138,43,226,0.2)' }}>
+            style={{ background: '#0d0d14', border: '1px solid rgba(168,85,247,0.2)' }}>
             <code className="flex-1 text-xs text-purple-300 font-mono break-all">{data.clientId}</code>
             <button onClick={() => copy(data.clientId, 'id')}
               className="flex-shrink-0 flex items-center gap-1 text-xs text-gray-400 hover:text-white transition-colors px-2 py-1 rounded-lg hover:bg-white/5">
@@ -118,7 +118,7 @@ function ClientRow({
 
   return (
     <div className="rounded-2xl overflow-hidden"
-      style={{ background: '#111118', border: `1px solid ${client.isActive ? 'rgba(138,43,226,0.2)' : 'rgba(255,255,255,0.05)'}` }}>
+      style={{ background: '#111118', border: `1px solid ${client.isActive ? 'rgba(168,85,247,0.2)' : 'rgba(255,255,255,0.05)'}` }}>
 
       {/* Main row */}
       <div className="flex items-center gap-4 px-5 py-4">
@@ -249,13 +249,13 @@ function ClientRow({
                   onChange={e => setIpsText(e.target.value)}
                   rows={4}
                   className="w-full rounded-xl px-3 py-2 text-xs font-mono text-gray-200 resize-none"
-                  style={{ background: '#0d0d14', border: '1px solid rgba(138,43,226,0.3)', outline: 'none' }}
+                  style={{ background: '#0d0d14', border: '1px solid rgba(168,85,247,0.3)', outline: 'none' }}
                   placeholder={"192.168.1.1\n10.0.0.0\n203.0.113.5"}
                 />
                 <div className="flex gap-2">
                   <button onClick={saveIps}
                     className="text-xs px-3 py-1.5 rounded-lg text-white font-medium transition-all"
-                    style={{ background: 'rgba(138,43,226,0.25)', border: '1px solid rgba(138,43,226,0.4)' }}>
+                    style={{ background: 'rgba(168,85,247,0.25)', border: '1px solid rgba(168,85,247,0.4)' }}>
                     Salvar IPs
                   </button>
                   <button onClick={() => { setEditIps(false); setIpsText(client.allowedIps.join('\n')) }}
@@ -274,7 +274,7 @@ function ClientRow({
                   <div className="flex flex-wrap gap-1.5">
                     {client.allowedIps.map(ip => (
                       <span key={ip} className="text-xs font-mono px-2 py-0.5 rounded-full"
-                        style={{ background: 'rgba(138,43,226,0.1)', border: '1px solid rgba(138,43,226,0.2)', color: '#c084fc' }}>
+                        style={{ background: 'rgba(168,85,247,0.1)', border: '1px solid rgba(168,85,247,0.2)', color: '#c084fc' }}>
                         {ip}
                       </span>
                     ))}
@@ -362,7 +362,7 @@ export default function ApiKeysPage() {
         <button
           onClick={() => setShowCreate(s => !s)}
           className="flex items-center gap-2 text-sm px-4 py-2 rounded-xl font-medium text-white transition-all"
-          style={{ background: 'linear-gradient(135deg, #8A2BE2, #6a0dad)', boxShadow: '0 0 14px rgba(138,43,226,0.3)' }}
+          style={{ background: 'linear-gradient(135deg, #A855F7, #6a0dad)', boxShadow: '0 0 14px rgba(168,85,247,0.3)' }}
         >
           <Plus className="w-4 h-4" />
           Nova Credencial
@@ -374,7 +374,7 @@ export default function ApiKeysPage() {
 
       {/* Create form */}
       {showCreate && (
-        <div className="rounded-2xl p-5 space-y-4" style={{ background: '#111118', border: '1px solid rgba(138,43,226,0.2)' }}>
+        <div className="rounded-2xl p-5 space-y-4" style={{ background: '#111118', border: '1px solid rgba(168,85,247,0.2)' }}>
           <h2 className="text-sm font-semibold text-white">Nova Credencial</h2>
           <Field label="Nome *">
             <input
@@ -398,7 +398,7 @@ export default function ApiKeysPage() {
               onClick={handleCreate}
               disabled={createMutation.isPending || !form.name.trim()}
               className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold text-white disabled:opacity-50 transition-all"
-              style={{ background: 'linear-gradient(135deg, #8A2BE2, #6a0dad)' }}
+              style={{ background: 'linear-gradient(135deg, #A855F7, #6a0dad)' }}
             >
               {createMutation.isPending
                 ? <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -417,7 +417,7 @@ export default function ApiKeysPage() {
       )}
 
       {/* How to use */}
-      <div className="rounded-2xl p-4" style={{ background: 'rgba(138,43,226,0.05)', border: '1px solid rgba(138,43,226,0.15)' }}>
+      <div className="rounded-2xl p-4" style={{ background: 'rgba(168,85,247,0.05)', border: '1px solid rgba(168,85,247,0.15)' }}>
         <p className="text-xs font-semibold text-purple-400 mb-2">Como usar</p>
         <pre className="text-xs text-gray-400 overflow-x-auto whitespace-pre-wrap break-all leading-relaxed">{`# Criar cobrança PIX
 curl -X POST https://api.razepag.com/api/gateway/pix/create \\

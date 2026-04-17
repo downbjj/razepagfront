@@ -12,7 +12,7 @@ import Cookies from 'js-cookie'
 import api, { getUser, setUser, setAuthTokens } from '@/lib/api'
 
 const inputCls = 'w-full pl-9 pr-4 py-2.5 rounded-xl text-sm text-white focus:outline-none transition-all'
-const inputStyle = { background: '#0d0d14', border: '1px solid rgba(138,43,226,0.2)' }
+const inputStyle = { background: '#0d0d14', border: '1px solid rgba(168,85,247,0.2)' }
 const readonlyStyle = { background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }
 
 export default function ProfilePage() {
@@ -272,9 +272,9 @@ export default function ProfilePage() {
 
       {/* Avatar */}
       <div className="rounded-2xl p-5 flex items-center gap-5"
-        style={{ background: '#111118', border: '1px solid rgba(138,43,226,0.15)' }}>
+        style={{ background: '#111118', border: '1px solid rgba(168,85,247,0.15)' }}>
         <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-2xl font-bold text-white flex-shrink-0"
-          style={{ background: 'linear-gradient(135deg, #8A2BE2, #5e18a0)', boxShadow: '0 0 24px rgba(138,43,226,0.3)' }}>
+          style={{ background: 'linear-gradient(135deg, #A855F7, #5e18a0)', boxShadow: '0 0 24px rgba(168,85,247,0.3)' }}>
           {profile?.name?.[0]?.toUpperCase() || 'U'}
         </div>
         <div className="flex-1 min-w-0">
@@ -283,7 +283,7 @@ export default function ProfilePage() {
           <p className="text-sm text-gray-500">{profile?.email}</p>
           <div className="flex flex-wrap gap-1.5 mt-1.5">
             <span className="inline-flex items-center text-xs px-2 py-0.5 rounded-full"
-              style={{ background: 'rgba(138,43,226,0.12)', border: '1px solid rgba(138,43,226,0.25)', color: '#c084fc' }}>
+              style={{ background: 'rgba(168,85,247,0.12)', border: '1px solid rgba(168,85,247,0.25)', color: '#c084fc' }}>
               {profile?.role === 'ADMIN' ? 'Administrador' : 'Usuário'}
             </span>
             {(isActivated || isAdmin)
@@ -326,7 +326,7 @@ export default function ProfilePage() {
                 className={`flex-1 py-3 text-sm font-medium transition-all ${
                   activationTab === tab ? 'text-purple-300 border-b-2 border-purple-500' : 'text-gray-500 hover:text-gray-300'
                 }`}
-                style={{ background: activationTab === tab ? 'rgba(138,43,226,0.06)' : '#111118' }}>
+                style={{ background: activationTab === tab ? 'rgba(168,85,247,0.06)' : '#111118' }}>
                 {tab === 'normal' ? 'Conta Normal — Grátis' : 'Conta Anônima — R$49,90'}
               </button>
             ))}
@@ -434,7 +434,7 @@ export default function ProfilePage() {
                 </div>
                 <button type="submit" disabled={activateNormalMutation.isPending}
                   className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold text-white disabled:opacity-50 transition-all"
-                  style={{ background: 'linear-gradient(135deg, #8A2BE2, #6a0dad)', boxShadow: '0 0 14px rgba(138,43,226,0.25)' }}>
+                  style={{ background: 'linear-gradient(135deg, #A855F7, #6a0dad)', boxShadow: '0 0 14px rgba(168,85,247,0.25)' }}>
                   {activateNormalMutation.isPending
                     ? <><RefreshCw className="w-4 h-4 animate-spin" />Ativando...</>
                     : <><CheckCircle className="w-4 h-4" />Ativar Conta Normal</>}
@@ -446,7 +446,7 @@ export default function ProfilePage() {
             {activationTab === 'anonymous' && (
               <div className="space-y-4">
                 <div className="rounded-xl p-4 text-sm"
-                  style={{ background: 'rgba(138,43,226,0.06)', border: '1px solid rgba(138,43,226,0.15)' }}>
+                  style={{ background: 'rgba(168,85,247,0.06)', border: '1px solid rgba(168,85,247,0.15)' }}>
                   <p className="text-gray-300 font-medium mb-2">Conta Anônima — R$49,90</p>
                   <ul className="space-y-1 text-xs text-gray-500">
                     <li>• Nenhum dado pessoal adicional necessário</li>
@@ -460,7 +460,7 @@ export default function ProfilePage() {
                   <button onClick={() => anonymousActivationMutation.mutate()}
                     disabled={anonymousActivationMutation.isPending}
                     className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold text-white disabled:opacity-50 transition-all"
-                    style={{ background: 'linear-gradient(135deg, #8A2BE2, #6a0dad)', boxShadow: '0 0 14px rgba(138,43,226,0.25)' }}>
+                    style={{ background: 'linear-gradient(135deg, #A855F7, #6a0dad)', boxShadow: '0 0 14px rgba(168,85,247,0.25)' }}>
                     {anonymousActivationMutation.isPending
                       ? <><RefreshCw className="w-4 h-4 animate-spin" />Gerando QR Code...</>
                       : <><QrCode className="w-4 h-4" />Gerar QR Code — R$49,90</>}
@@ -484,7 +484,7 @@ export default function ProfilePage() {
                     </div>
                     {anonymousCharge.pix?.copyPaste && (
                       <div className="rounded-xl p-3 flex items-center gap-2"
-                        style={{ background: '#0d0d14', border: '1px solid rgba(138,43,226,0.2)' }}>
+                        style={{ background: '#0d0d14', border: '1px solid rgba(168,85,247,0.2)' }}>
                         <p className="flex-1 text-xs text-gray-400 font-mono truncate">
                           {anonymousCharge.pix.copyPaste}
                         </p>
@@ -518,7 +518,7 @@ export default function ProfilePage() {
               { label: 'API',      active: profile?.apiEnabled     },
             ].map(s => (
               <div key={s.label} className="flex flex-col items-center gap-1.5 py-3 rounded-xl"
-                style={{ background: '#111118', border: '1px solid rgba(138,43,226,0.1)' }}>
+                style={{ background: '#111118', border: '1px solid rgba(168,85,247,0.1)' }}>
                 <div className={`w-2 h-2 rounded-full ${s.active ? 'bg-green-400' : 'bg-gray-600'}`} />
                 <span className="text-xs text-gray-400">{s.label}</span>
                 <span className={`text-xs font-medium ${s.active ? 'text-green-400' : 'text-gray-600'}`}>
@@ -530,7 +530,7 @@ export default function ProfilePage() {
 
           {/* Dados Cadastrais */}
           <div className="rounded-2xl p-5 space-y-4"
-            style={{ background: '#111118', border: '1px solid rgba(138,43,226,0.15)' }}>
+            style={{ background: '#111118', border: '1px solid rgba(168,85,247,0.15)' }}>
             <div className="flex items-center gap-2">
               <User className="w-4 h-4 text-purple-400" />
               <h2 className="text-sm font-semibold text-white">Dados Cadastrais</h2>
@@ -671,7 +671,7 @@ export default function ProfilePage() {
 
               <button type="submit" disabled={updateProfileMutation.isPending}
                 className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white disabled:opacity-50 transition-all"
-                style={{ background: 'linear-gradient(135deg, #8A2BE2, #6a0dad)', boxShadow: '0 0 14px rgba(138,43,226,0.25)' }}>
+                style={{ background: 'linear-gradient(135deg, #A855F7, #6a0dad)', boxShadow: '0 0 14px rgba(168,85,247,0.25)' }}>
                 {updateProfileMutation.isPending ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
                 Salvar Alterações
               </button>
@@ -680,7 +680,7 @@ export default function ProfilePage() {
 
           {/* Alterar Senha */}
           <div className="rounded-2xl p-5 space-y-4"
-            style={{ background: '#111118', border: '1px solid rgba(138,43,226,0.15)' }}>
+            style={{ background: '#111118', border: '1px solid rgba(168,85,247,0.15)' }}>
             <div className="flex items-center gap-2">
               <Lock className="w-4 h-4 text-purple-400" />
               <h2 className="text-sm font-semibold text-white">Alterar Senha</h2>
@@ -716,7 +716,7 @@ export default function ProfilePage() {
               <button type="submit"
                 disabled={changePasswordMutation.isPending || !pwForm.currentPassword || !pwForm.newPassword || !pwForm.confirmPassword}
                 className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white disabled:opacity-50 transition-all"
-                style={{ background: 'rgba(138,43,226,0.2)', border: '1px solid rgba(138,43,226,0.35)' }}>
+                style={{ background: 'rgba(168,85,247,0.2)', border: '1px solid rgba(168,85,247,0.35)' }}>
                 {changePasswordMutation.isPending ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Lock className="w-4 h-4" />}
                 Alterar Senha
               </button>
@@ -728,7 +728,7 @@ export default function ProfilePage() {
       {/* Alterar senha disponível também para não ativados */}
       {!isActivated && !isAdmin && (
         <div className="rounded-2xl p-5 space-y-4"
-          style={{ background: '#111118', border: '1px solid rgba(138,43,226,0.15)' }}>
+          style={{ background: '#111118', border: '1px solid rgba(168,85,247,0.15)' }}>
           <div className="flex items-center gap-2">
             <Lock className="w-4 h-4 text-purple-400" />
             <h2 className="text-sm font-semibold text-white">Alterar Senha</h2>
@@ -764,7 +764,7 @@ export default function ProfilePage() {
             <button type="submit"
               disabled={changePasswordMutation.isPending || !pwForm.currentPassword || !pwForm.newPassword || !pwForm.confirmPassword}
               className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white disabled:opacity-50 transition-all"
-              style={{ background: 'rgba(138,43,226,0.2)', border: '1px solid rgba(138,43,226,0.35)' }}>
+              style={{ background: 'rgba(168,85,247,0.2)', border: '1px solid rgba(168,85,247,0.35)' }}>
               {changePasswordMutation.isPending ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Lock className="w-4 h-4" />}
               Alterar Senha
             </button>

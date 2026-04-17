@@ -95,16 +95,16 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         {/* Logo */}
         <div className="flex items-center gap-3 p-5 flex-shrink-0" style={{ borderBottom: `1px solid ${borderColor}` }}>
           <div className="w-8 h-8 rounded-lg flex items-center justify-center"
-            style={{ background: 'rgba(138,43,226,0.2)', border: '1px solid rgba(138,43,226,0.4)' }}>
-            <Shield className="w-5 h-5" style={{ color: '#8A2BE2' }} />
+            style={{ background: 'rgba(168,85,247,0.2)', border: '1px solid rgba(168,85,247,0.4)' }}>
+            <Shield className="w-5 h-5" style={{ color: '#A855F7' }} />
           </div>
           <div>
             <span className="text-sm font-bold" style={{ color: textColor }}>Admin Panel</span>
-            <p className="text-xs" style={{ color: '#8A2BE2' }}>RazePague</p>
+            <p className="text-xs" style={{ color: '#A855F7' }}>RazePague</p>
           </div>
           {user?.role === 'OWNER' && (
             <span className="ml-auto text-[10px] border rounded-full px-1.5 py-0.5"
-              style={{ borderColor: 'rgba(138,43,226,0.4)', color: '#c084fc', background: 'rgba(138,43,226,0.08)' }}>
+              style={{ borderColor: 'rgba(168,85,247,0.4)', color: '#c084fc', background: 'rgba(168,85,247,0.08)' }}>
               OWNER
             </span>
           )}
@@ -142,14 +142,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                               : 'text-gray-500 hover:text-white hover:bg-white/5',
                         )}
                         style={isActive ? {
-                          background: 'rgba(138,43,226,0.12)',
-                          border: '1px solid rgba(138,43,226,0.25)',
+                          background: 'rgba(168,85,247,0.12)',
+                          border: '1px solid rgba(168,85,247,0.25)',
                         } : {}}
                       >
                         <item.icon className="w-4 h-4 flex-shrink-0"
-                          style={isActive ? { color: '#8A2BE2' } : {}} />
+                          style={isActive ? { color: '#A855F7' } : {}} />
                         <span className="truncate">{item.label}</span>
-                        {isActive && <ChevronRight className="w-3 h-3 ml-auto flex-shrink-0" style={{ color: '#8A2BE2' }} />}
+                        {isActive && <ChevronRight className="w-3 h-3 ml-auto flex-shrink-0" style={{ color: '#A855F7' }} />}
                       </Link>
                     )
                   })}
@@ -195,7 +195,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <button
               onClick={() => setLanguage(language === 'pt-BR' ? 'en' : 'pt-BR')}
               className="text-xs border rounded-full px-2.5 py-1 transition-all hover:border-purple-500/50"
-              style={{ background: 'rgba(138,43,226,0.05)', borderColor: 'rgba(138,43,226,0.2)', color: '#a855f7' }}
+              style={{ background: 'rgba(168,85,247,0.05)', borderColor: 'rgba(168,85,247,0.2)', color: '#a855f7' }}
             >
               {language === 'pt-BR' ? 'PT-Br' : 'EN-Us'}
             </button>
@@ -212,7 +212,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             {/* User badge */}
             <span
               className="text-xs border rounded-full px-3 py-1 hidden sm:inline-flex items-center gap-1.5"
-              style={{ background: 'rgba(138,43,226,0.1)', borderColor: 'rgba(138,43,226,0.3)', color: '#a855f7' }}
+              style={{ background: 'rgba(168,85,247,0.1)', borderColor: 'rgba(168,85,247,0.3)', color: '#a855f7' }}
             >
               <Shield className="w-3 h-3" />
               {user?.email}

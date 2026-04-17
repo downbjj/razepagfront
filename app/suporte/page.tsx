@@ -20,9 +20,9 @@ export default function SuportePage() {
             { icon: MessageCircle, title:'Chat ao Vivo',      desc:'Disponível no painel', sub:'Seg-Sex 9h-18h', href:'/login' },
             { icon: FileText,      title:'Documentação',      desc:'Guias e referência API', sub:'Sempre disponível', href:'/documentacao' },
           ].map(c => (
-            <a key={c.title} href={c.href} className="block rounded-2xl p-6 text-center transition-all hover:border-[#8A2BE2]/40" style={{background:'#0d0d0d',border:'1px solid #1f1f1f'}}>
-              <div className="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-4" style={{background:'rgba(138,43,226,0.12)'}}>
-                <c.icon className="w-6 h-6" style={{color:'#8A2BE2'}} />
+            <a key={c.title} href={c.href} className="block rounded-2xl p-6 text-center transition-all hover:border-[#A855F7]/40" style={{background:'#0d0d0d',border:'1px solid #1f1f1f'}}>
+              <div className="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-4" style={{background:'rgba(168,85,247,0.12)'}}>
+                <c.icon className="w-6 h-6" style={{color:'#A855F7'}} />
               </div>
               <h3 className="font-semibold text-white mb-1">{c.title}</h3>
               <p className="text-sm text-gray-400">{c.desc}</p>
@@ -55,7 +55,7 @@ export default function SuportePage() {
 
         <div className="mt-8 text-center">
           <p className="text-gray-600 text-sm">Não encontrou o que procurava?</p>
-          <a href="mailto:suporte@razepague.com" className="text-sm mt-2 inline-block" style={{color:'#8A2BE2'}}>
+          <a href="mailto:suporte@razepague.com" className="text-sm mt-2 inline-block" style={{color:'#A855F7'}}>
             Envie um e-mail para suporte@razepague.com
           </a>
         </div>

@@ -107,18 +107,18 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <aside className={cn(
         'fixed left-0 top-0 z-50 h-full w-64 flex flex-col transition-transform duration-300 lg:translate-x-0 lg:static lg:z-auto',
         sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-      )} style={{ background: '#0d0d14', borderRight: '1px solid rgba(138,43,226,0.15)' }}>
+      )} style={{ background: '#0d0d14', borderRight: '1px solid rgba(168,85,247,0.15)' }}>
 
         {/* Logo */}
-        <div className="flex items-center justify-between px-4 py-4" style={{ borderBottom: '1px solid rgba(138,43,226,0.1)' }}>
+        <div className="flex items-center justify-between px-4 py-4" style={{ borderBottom: '1px solid rgba(168,85,247,0.1)' }}>
           <Link href="/dashboard" onClick={() => setSidebarOpen(false)}>
             <Image
               src="/logo.png"
               alt="RazePague"
-              width={140}
-              height={40}
+              width={160}
+              height={52}
               className="object-contain"
-              style={{ maxHeight: 40 }}
+              style={{ maxHeight: 52 }}
             />
           </Link>
           <button onClick={() => setSidebarOpen(false)} className="lg:hidden text-gray-500 hover:text-white">
@@ -157,7 +157,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                   ? 'text-purple-300'
                   : 'text-gray-400 hover:text-white hover:bg-white/5'
               )}
-              style={isTransferActive ? { background: 'rgba(138,43,226,0.1)', border: '1px solid rgba(138,43,226,0.2)' } : {}}
+              style={isTransferActive ? { background: 'rgba(168,85,247,0.1)', border: '1px solid rgba(168,85,247,0.2)' } : {}}
             >
               <ArrowUpDown className={cn('w-4 h-4 flex-shrink-0', isTransferActive ? 'text-purple-500' : 'text-gray-600')} />
               <span className="flex-1 text-left">Transferências</span>
@@ -168,7 +168,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             </button>
 
             {transferOpen && (
-              <div className="ml-3 mt-0.5 space-y-0.5 pl-3" style={{ borderLeft: '1px solid rgba(138,43,226,0.2)' }}>
+              <div className="ml-3 mt-0.5 space-y-0.5 pl-3" style={{ borderLeft: '1px solid rgba(168,85,247,0.2)' }}>
                 {transferItems.map(item => (
                   <NavItem
                     key={item.href}
@@ -222,10 +222,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         </nav>
 
         {/* User section */}
-        <div className="p-3" style={{ borderTop: '1px solid rgba(138,43,226,0.1)' }}>
-          <div className="flex items-center gap-3 px-3 py-2 rounded-xl mb-1" style={{ background: 'rgba(138,43,226,0.06)' }}>
+        <div className="p-3" style={{ borderTop: '1px solid rgba(168,85,247,0.1)' }}>
+          <div className="flex items-center gap-3 px-3 py-2 rounded-xl mb-1" style={{ background: 'rgba(168,85,247,0.06)' }}>
             <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white flex-shrink-0"
-              style={{ background: 'linear-gradient(135deg, #8A2BE2, #5e18a0)' }}>
+              style={{ background: 'linear-gradient(135deg, #A855F7, #5e18a0)' }}>
               {user?.name?.[0]?.toUpperCase() || 'U'}
             </div>
             <div className="flex-1 min-w-0">
@@ -248,7 +248,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
         {/* Top bar */}
         <header className="sticky top-0 z-30 flex items-center gap-4 px-5 py-3"
-          style={{ background: 'rgba(10,10,15,0.95)', backdropFilter: 'blur(12px)', borderBottom: '1px solid rgba(138,43,226,0.12)' }}>
+          style={{ background: 'rgba(10,10,15,0.95)', backdropFilter: 'blur(12px)', borderBottom: '1px solid rgba(168,85,247,0.12)' }}>
 
           {/* Mobile hamburger */}
           <button onClick={() => setSidebarOpen(true)} className="lg:hidden text-gray-400 hover:text-white">
@@ -263,8 +263,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 className="h-full rounded-full transition-all duration-700"
                 style={{
                   width: `${metaPct}%`,
-                  background: 'linear-gradient(90deg, #8A2BE2, #c084fc)',
-                  boxShadow: '0 0 8px rgba(138,43,226,0.6)'
+                  background: 'linear-gradient(90deg, #A855F7, #c084fc)',
+                  boxShadow: '0 0 8px rgba(168,85,247,0.6)'
                 }}
               />
             </div>
@@ -279,7 +279,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <button
                 onClick={() => setNotifOpen(o => !o)}
                 className="relative w-9 h-9 flex items-center justify-center rounded-xl transition-all hover:bg-white/5"
-                style={{ border: '1px solid rgba(138,43,226,0.2)' }}
+                style={{ border: '1px solid rgba(168,85,247,0.2)' }}
               >
                 <Bell className="w-4 h-4 text-gray-400" />
                 {unreadCount > 0 && (
@@ -291,7 +291,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
               {notifOpen && (
                 <div className="absolute right-0 top-11 w-80 rounded-2xl overflow-hidden z-50 shadow-2xl"
-                  style={{ background: '#13131f', border: '1px solid rgba(138,43,226,0.2)' }}>
+                  style={{ background: '#13131f', border: '1px solid rgba(168,85,247,0.2)' }}>
                   <div className="flex items-center justify-between px-4 py-3"
                     style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
                     <p className="text-sm font-semibold text-white">Notificações</p>
@@ -316,7 +316,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                           key={n.id}
                           onClick={() => !n.readAt && markReadMutation.mutate(n.id)}
                           className={cn('px-4 py-3 cursor-pointer transition-colors', !n.readAt ? 'hover:bg-white/5' : 'opacity-60')}
-                          style={!n.readAt ? { borderBottom: '1px solid rgba(255,255,255,0.04)', background: 'rgba(138,43,226,0.04)' } : { borderBottom: '1px solid rgba(255,255,255,0.04)' }}
+                          style={!n.readAt ? { borderBottom: '1px solid rgba(255,255,255,0.04)', background: 'rgba(168,85,247,0.04)' } : { borderBottom: '1px solid rgba(255,255,255,0.04)' }}
                         >
                           <div className="flex items-start gap-3">
                             <div className="mt-0.5 flex-shrink-0">
@@ -343,7 +343,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <Link
               href="/dashboard/profile"
               className="w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold text-white transition-all hover:scale-105"
-              style={{ background: 'linear-gradient(135deg, #8A2BE2, #5e18a0)', border: '1px solid rgba(138,43,226,0.4)' }}
+              style={{ background: 'linear-gradient(135deg, #A855F7, #5e18a0)', border: '1px solid rgba(168,85,247,0.4)' }}
             >
               {user?.name?.[0]?.toUpperCase() || 'U'}
             </Link>
@@ -372,7 +372,7 @@ function NavItem({
         small ? 'px-2.5 py-2' : 'px-3 py-2.5',
         active ? 'text-purple-300' : 'text-gray-400 hover:text-white hover:bg-white/5'
       )}
-      style={active ? { background: 'rgba(138,43,226,0.12)', border: '1px solid rgba(138,43,226,0.25)' } : {}}
+      style={active ? { background: 'rgba(168,85,247,0.12)', border: '1px solid rgba(168,85,247,0.25)' } : {}}
     >
       <Icon className={cn(
         'flex-shrink-0',

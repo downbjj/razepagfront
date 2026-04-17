@@ -11,7 +11,7 @@ export default function DocumentacaoPage() {
 
       <div className="max-w-4xl mx-auto px-4 pt-36 pb-20">
         <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 border rounded-full px-4 py-1.5 mb-6" style={{background:'rgba(138,43,226,0.1)',borderColor:'rgba(138,43,226,0.3)'}}>
+          <div className="inline-flex items-center gap-2 border rounded-full px-4 py-1.5 mb-6" style={{background:'rgba(168,85,247,0.1)',borderColor:'rgba(168,85,247,0.3)'}}>
             <Code2 className="w-3 h-3 text-purple-400" />
             <span className="text-xs text-purple-400 font-medium">API Reference</span>
           </div>
@@ -25,7 +25,7 @@ export default function DocumentacaoPage() {
           {/* Authentication */}
           <section className="rounded-2xl p-8" style={{background:'#0d0d0d',border:'1px solid #1f1f1f'}}>
             <h2 className="text-xl font-bold text-white mb-2 flex items-center gap-2">
-              <Terminal className="w-5 h-5" style={{color:'#8A2BE2'}} /> Autenticação
+              <Terminal className="w-5 h-5" style={{color:'#A855F7'}} /> Autenticação
             </h2>
             <p className="text-gray-500 text-sm mb-4">Todas as requisições autenticadas requerem o header <code className="text-purple-400 bg-black/40 px-1.5 py-0.5 rounded text-xs">Authorization: Bearer {'{token}'}</code></p>
             <div className="rounded-xl p-4 font-mono text-sm overflow-x-auto" style={{background:'#050505',border:'1px solid #2a2a2a'}}>
@@ -106,7 +106,7 @@ export default function DocumentacaoPage() {
           <section className="rounded-2xl p-8" style={{background:'#0d0d0d',border:'1px solid #1f1f1f'}}>
             <div className="flex items-center gap-3 mb-2">
               <h2 className="text-xl font-bold text-white">API Gateway (v1/v2)</h2>
-              <span className="text-xs px-2 py-0.5 rounded-full" style={{background:'rgba(138,43,226,0.15)',color:'#c084fc',border:'1px solid rgba(138,43,226,0.3)'}}>client_id + client_secret</span>
+              <span className="text-xs px-2 py-0.5 rounded-full" style={{background:'rgba(168,85,247,0.15)',color:'#c084fc',border:'1px solid rgba(168,85,247,0.3)'}}>client_id + client_secret</span>
             </div>
             <p className="text-gray-500 text-sm mb-4">
               Endpoints para integração direta — use <code className="text-purple-400 bg-black/40 px-1 rounded text-xs">client_id</code> e <code className="text-purple-400 bg-black/40 px-1 rounded text-xs">client_secret</code> como parâmetros (query ou body).
@@ -205,10 +205,10 @@ export default function DocumentacaoPage() {
         <div className="mt-12 text-center">
           <p className="text-gray-500 mb-4">Dúvidas? Fale com nosso suporte.</p>
           <div className="flex justify-center gap-4">
-            <Link href="/suporte" className="inline-flex items-center gap-2 border border-[#8A2BE2]/40 text-gray-300 px-6 py-3 rounded-xl font-medium hover:text-white transition-colors">
+            <Link href="/suporte" className="inline-flex items-center gap-2 border border-[#A855F7]/40 text-gray-300 px-6 py-3 rounded-xl font-medium hover:text-white transition-colors">
               Abrir suporte
             </Link>
-            <Link href="/register" className="inline-flex items-center gap-2 text-white px-6 py-3 rounded-xl font-medium" style={{background:'#8A2BE2'}}>
+            <Link href="/register" className="inline-flex items-center gap-2 text-white px-6 py-3 rounded-xl font-medium" style={{background:'#A855F7'}}>
               Criar conta grátis <ArrowRight className="w-4 h-4" />
             </Link>
           </div>

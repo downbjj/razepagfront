@@ -62,9 +62,9 @@ export default function TermosPage() {
           ))}
         </div>
 
-        <div className="mt-12 p-6 rounded-2xl text-center" style={{background:'rgba(138,43,226,0.08)',border:'1px solid rgba(138,43,226,0.2)'}}>
+        <div className="mt-12 p-6 rounded-2xl text-center" style={{background:'rgba(168,85,247,0.08)',border:'1px solid rgba(168,85,247,0.2)'}}>
           <p className="text-gray-400 text-sm mb-4">Dúvidas sobre os termos?</p>
-          <Link href="/suporte" className="text-sm font-medium" style={{color:'#8A2BE2'}}>
+          <Link href="/suporte" className="text-sm font-medium" style={{color:'#A855F7'}}>
             Fale com nosso suporte →
           </Link>
         </div>

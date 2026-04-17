@@ -62,8 +62,8 @@ export default function CategoriesPage() {
           <p className="text-gray-500 text-sm mt-1">{categories.length} categorias cadastradas</p>
         </div>
         <button onClick={openCreate}
-          className="flex items-center gap-2 text-sm text-white px-4 py-2 rounded-xl font-medium transition-all hover:shadow-[0_0_15px_rgba(138,43,226,0.4)]"
-          style={{ background: '#8A2BE2' }}>
+          className="flex items-center gap-2 text-sm text-white px-4 py-2 rounded-xl font-medium transition-all hover:shadow-[0_0_15px_rgba(168,85,247,0.4)]"
+          style={{ background: '#A855F7' }}>
           <Plus className="w-4 h-4" /> Nova categoria
         </button>
       </div>
@@ -159,7 +159,7 @@ export default function CategoriesPage() {
             <div className="flex gap-3 pt-2">
               <button onClick={handleSubmit} disabled={!form.name || !form.slug || isPending}
                 className="flex-1 text-white py-2.5 rounded-xl text-sm font-medium disabled:opacity-50 transition-all"
-                style={{ background: '#8A2BE2' }}>
+                style={{ background: '#A855F7' }}>
                 {isPending ? 'Salvando...' : modal === 'create' ? 'Criar' : 'Salvar'}
               </button>
               <button onClick={() => setModal(null)}

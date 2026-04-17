@@ -72,7 +72,7 @@ export default function PopupsPage() {
         </div>
         <button onClick={openCreate}
           className="flex items-center gap-2 text-sm text-white px-4 py-2 rounded-xl font-medium"
-          style={{ background: '#8A2BE2' }}>
+          style={{ background: '#A855F7' }}>
           <Plus className="w-4 h-4" /> Novo popup
         </button>
       </div>
@@ -195,7 +195,7 @@ export default function PopupsPage() {
             <div className="flex gap-3 pt-2">
               <button onClick={handleSubmit} disabled={!form.title || !form.content || isPending}
                 className="flex-1 text-white py-2.5 rounded-xl text-sm font-medium disabled:opacity-50"
-                style={{ background: '#8A2BE2' }}>
+                style={{ background: '#A855F7' }}>
                 {isPending ? 'Salvando...' : modal === 'create' ? 'Criar popup' : 'Salvar'}
               </button>
               <button onClick={() => setModal(null)}

@@ -49,7 +49,7 @@ function MetricCard({ title, value, color, sparkColor, change }: {
 }) {
   return (
     <div className="rounded-2xl p-5 flex flex-col gap-3"
-      style={{ background: '#111118', border: '1px solid rgba(138,43,226,0.15)' }}>
+      style={{ background: '#111118', border: '1px solid rgba(168,85,247,0.15)' }}>
       <div className="flex items-start justify-between">
         <div>
           <p className="text-xs text-gray-500 font-medium uppercase tracking-wider mb-1">{title}</p>
@@ -102,7 +102,7 @@ function PixModal({ onClose }: { onClose: () => void }) {
             />
           </Field>
           {amt > 0 && (
-            <div className="text-xs rounded-xl px-4 py-3 space-y-1.5" style={{ background: 'rgba(138,43,226,0.06)', border: '1px solid rgba(138,43,226,0.15)' }}>
+            <div className="text-xs rounded-xl px-4 py-3 space-y-1.5" style={{ background: 'rgba(168,85,247,0.06)', border: '1px solid rgba(168,85,247,0.15)' }}>
               <Row label="Valor" val={formatCurrency(amt)} />
               <Row label="Taxa (3% + R$1,00)" val={`- ${formatCurrency(fee)}`} valClass="text-red-400" />
               <div className="border-t pt-1.5" style={{ borderColor: 'rgba(255,255,255,0.07)' }}>
@@ -139,7 +139,7 @@ function PixModal({ onClose }: { onClose: () => void }) {
           )}
           {charge.pix?.copyPaste && (
             <button onClick={copy} className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-medium transition-all"
-              style={{ background: 'rgba(138,43,226,0.12)', border: '1px solid rgba(138,43,226,0.3)', color: '#c084fc' }}>
+              style={{ background: 'rgba(168,85,247,0.12)', border: '1px solid rgba(168,85,247,0.3)', color: '#c084fc' }}>
               {copied ? <><Check className="w-4 h-4" />Copiado!</> : <><Copy className="w-4 h-4" />Copiar código Pix Copia e Cola</>}
             </button>
           )}
@@ -353,7 +353,7 @@ function CheckoutModal({ onClose }: { onClose: () => void }) {
             />
           </Field>
           {amt > 0 && (
-            <div className="text-xs rounded-xl px-4 py-3" style={{ background: 'rgba(138,43,226,0.06)', border: '1px solid rgba(138,43,226,0.15)' }}>
+            <div className="text-xs rounded-xl px-4 py-3" style={{ background: 'rgba(168,85,247,0.06)', border: '1px solid rgba(168,85,247,0.15)' }}>
               <Row label="Valor a cobrar" val={formatCurrency(amt)} />
               <p className="text-gray-600 mt-1.5">O cliente paga pelo checkout do Mercado Pago (cartão, PIX, boleto)</p>
             </div>
@@ -382,7 +382,7 @@ function CheckoutModal({ onClose }: { onClose: () => void }) {
               toast.success('Link copiado!')
             }}
             className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-medium transition-all"
-            style={{ background: 'rgba(138,43,226,0.08)', border: '1px solid rgba(138,43,226,0.2)', color: '#c084fc' }}
+            style={{ background: 'rgba(168,85,247,0.08)', border: '1px solid rgba(168,85,247,0.2)', color: '#c084fc' }}
           >
             <Copy className="w-3.5 h-3.5" /> Copiar link
           </button>
@@ -400,7 +400,7 @@ function CheckoutModal({ onClose }: { onClose: () => void }) {
 function ModalWrap({ title, children, onClose }: { title: string; children: React.ReactNode; onClose: () => void }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(4px)' }}>
-      <div className="w-full max-w-md rounded-2xl p-6 shadow-2xl" style={{ background: '#111118', border: '1px solid rgba(138,43,226,0.25)' }}>
+      <div className="w-full max-w-md rounded-2xl p-6 shadow-2xl" style={{ background: '#111118', border: '1px solid rgba(168,85,247,0.25)' }}>
         <div className="flex items-center justify-between mb-5">
           <h3 className="text-base font-semibold text-white">{title}</h3>
           <button onClick={onClose} className="text-gray-500 hover:text-white transition-colors">
@@ -435,7 +435,7 @@ function PurpleBtn({ children, disabled, loading }: { children: React.ReactNode;
   return (
     <button type="submit" disabled={disabled}
       className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold text-white transition-all disabled:opacity-50"
-      style={{ background: 'linear-gradient(135deg, #8A2BE2, #6a0dad)', boxShadow: '0 0 18px rgba(138,43,226,0.35)' }}>
+      style={{ background: 'linear-gradient(135deg, #A855F7, #6a0dad)', boxShadow: '0 0 18px rgba(168,85,247,0.35)' }}>
       {loading ? <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : children}
     </button>
   )
@@ -445,7 +445,7 @@ function PurpleBtn({ children, disabled, loading }: { children: React.ReactNode;
 function ChartTooltip({ active, payload, label }: any) {
   if (!active || !payload?.length) return null
   return (
-    <div className="rounded-xl px-3 py-2 text-xs shadow-lg" style={{ background: '#1a1a24', border: '1px solid rgba(138,43,226,0.2)' }}>
+    <div className="rounded-xl px-3 py-2 text-xs shadow-lg" style={{ background: '#1a1a24', border: '1px solid rgba(168,85,247,0.2)' }}>
       <p className="text-gray-400 mb-1 font-medium">{label}</p>
       {payload.map((p: any) => (
         <p key={p.dataKey} style={{ color: p.color }}>
@@ -515,7 +515,7 @@ export default function DashboardPage() {
           title="Faturamento"
           value={formatCurrency(summary.monthlyReceived || 0)}
           color="#c084fc"
-          sparkColor="#8A2BE2"
+          sparkColor="#A855F7"
           change="Este mês"
         />
         <MetricCard
@@ -552,20 +552,20 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
 
         {/* 7-day area chart */}
-        <div className="lg:col-span-2 rounded-2xl p-5" style={{ background: '#111118', border: '1px solid rgba(138,43,226,0.15)' }}>
+        <div className="lg:col-span-2 rounded-2xl p-5" style={{ background: '#111118', border: '1px solid rgba(168,85,247,0.15)' }}>
           <div className="flex items-center justify-between mb-4">
             <div>
               <h2 className="text-sm font-semibold text-white">Movimentação Dos Últimos 7 Dias</h2>
               <p className="text-xs text-gray-500 mt-0.5">Visão diária consolidada</p>
             </div>
-            <div className="flex rounded-xl overflow-hidden" style={{ border: '1px solid rgba(138,43,226,0.2)' }}>
+            <div className="flex rounded-xl overflow-hidden" style={{ border: '1px solid rgba(168,85,247,0.2)' }}>
               {(['deposits', 'withdrawals'] as const).map(tab => (
                 <button
                   key={tab}
                   onClick={() => setChartTab(tab)}
                   className="text-xs px-3 py-1.5 transition-all font-medium"
                   style={chartTab === tab
-                    ? { background: 'rgba(138,43,226,0.25)', color: '#c084fc' }
+                    ? { background: 'rgba(168,85,247,0.25)', color: '#c084fc' }
                     : { color: '#6b7280' }}
                 >
                   {tab === 'deposits' ? 'Depósitos' : 'Saques'}
@@ -604,7 +604,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Monthly report */}
-        <div className="rounded-2xl p-5 flex flex-col gap-4" style={{ background: '#111118', border: '1px solid rgba(138,43,226,0.15)' }}>
+        <div className="rounded-2xl p-5 flex flex-col gap-4" style={{ background: '#111118', border: '1px solid rgba(168,85,247,0.15)' }}>
           <h2 className="text-sm font-semibold text-white">Relatório Do Mês Atual</h2>
 
           <div className="flex-1 space-y-3">
@@ -616,7 +616,7 @@ export default function DashboardPage() {
               <p className="text-xs text-gray-500 mb-1">Total Saídas</p>
               <p className="text-lg font-bold text-red-400">{formatCurrency(summary.monthlySent || 0)}</p>
             </div>
-            <div className="rounded-xl p-4" style={{ background: 'rgba(138,43,226,0.07)', border: '1px solid rgba(138,43,226,0.15)' }}>
+            <div className="rounded-xl p-4" style={{ background: 'rgba(168,85,247,0.07)', border: '1px solid rgba(168,85,247,0.15)' }}>
               <p className="text-xs text-gray-500 mb-1">Saldo Líquido</p>
               <p className="text-lg font-bold text-purple-300">
                 {formatCurrency(Math.max(0, (summary.monthlyReceived || 0) - (summary.monthlySent || 0)))}
@@ -629,14 +629,14 @@ export default function DashboardPage() {
             <button
               onClick={() => setShowPix(true)}
               className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-semibold text-white transition-all"
-              style={{ background: 'linear-gradient(135deg, #8A2BE2, #6a0dad)', boxShadow: '0 0 12px rgba(138,43,226,0.3)' }}
+              style={{ background: 'linear-gradient(135deg, #A855F7, #6a0dad)', boxShadow: '0 0 12px rgba(168,85,247,0.3)' }}
             >
               <QrCode className="w-3.5 h-3.5" /> Receber
             </button>
             <button
               onClick={() => setShowWithdraw(true)}
               className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-semibold text-gray-300 transition-all hover:bg-white/5"
-              style={{ border: '1px solid rgba(138,43,226,0.25)' }}
+              style={{ border: '1px solid rgba(168,85,247,0.25)' }}
             >
               <Send className="w-3.5 h-3.5" /> Sacar
             </button>
@@ -659,8 +659,8 @@ export default function DashboardPage() {
       </div>
 
       {/* ── Recent transactions ── */}
-      <div className="rounded-2xl overflow-hidden" style={{ background: '#111118', border: '1px solid rgba(138,43,226,0.15)' }}>
-        <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: '1px solid rgba(138,43,226,0.1)' }}>
+      <div className="rounded-2xl overflow-hidden" style={{ background: '#111118', border: '1px solid rgba(168,85,247,0.15)' }}>
+        <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: '1px solid rgba(168,85,247,0.1)' }}>
           <h2 className="text-sm font-semibold text-white">Resumo Últimas Transações</h2>
           <a href="/dashboard/transactions" className="text-xs text-purple-400 hover:text-purple-300 transition-colors">
             Ver todas →

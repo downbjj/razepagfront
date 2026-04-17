@@ -81,7 +81,7 @@ export default function InternalTransferPage() {
           <button
             onClick={() => { setResult(null); setForm({ username: '', amount: '', description: '', pin: '' }) }}
             className="w-full py-3 text-sm text-purple-400 rounded-xl transition-all"
-            style={{ border: '1px solid rgba(138,43,226,0.3)' }}
+            style={{ border: '1px solid rgba(168,85,247,0.3)' }}
           >
             Nova Transferência
           </button>
@@ -108,13 +108,13 @@ export default function InternalTransferPage() {
 
       {/* Balance */}
       <div className="flex items-center justify-between px-4 py-3 rounded-xl"
-        style={{ background: 'rgba(138,43,226,0.08)', border: '1px solid rgba(138,43,226,0.2)' }}>
+        style={{ background: 'rgba(168,85,247,0.08)', border: '1px solid rgba(168,85,247,0.2)' }}>
         <span className="text-gray-400 text-sm">Saldo disponível</span>
         <span className="text-white font-bold">{formatCurrency(balance)}</span>
       </div>
 
       <div className="rounded-2xl p-5 space-y-4"
-        style={{ background: '#111118', border: '1px solid rgba(138,43,226,0.15)' }}>
+        style={{ background: '#111118', border: '1px solid rgba(168,85,247,0.15)' }}>
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Username */}
           <div>
@@ -128,7 +128,7 @@ export default function InternalTransferPage() {
                 value={form.username}
                 onChange={e => setForm(f => ({ ...f, username: e.target.value.replace(/^@/, '') }))}
                 className="w-full pl-9 pr-4 py-2.5 rounded-xl text-sm text-white focus:outline-none transition-all"
-                style={{ background: '#0d0d14', border: '1px solid rgba(138,43,226,0.2)' }}
+                style={{ background: '#0d0d14', border: '1px solid rgba(168,85,247,0.2)' }}
                 placeholder="usuario"
               />
             </div>
@@ -150,7 +150,7 @@ export default function InternalTransferPage() {
                 value={form.amount}
                 onChange={e => setForm(f => ({ ...f, amount: e.target.value }))}
                 className="w-full pl-9 pr-4 py-2.5 rounded-xl text-sm text-white focus:outline-none transition-all"
-                style={{ background: '#0d0d14', border: '1px solid rgba(138,43,226,0.2)' }}
+                style={{ background: '#0d0d14', border: '1px solid rgba(168,85,247,0.2)' }}
                 placeholder="0.00"
               />
             </div>
@@ -166,7 +166,7 @@ export default function InternalTransferPage() {
                 value={form.description}
                 onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
                 className="w-full pl-9 pr-4 py-2.5 rounded-xl text-sm text-white focus:outline-none transition-all"
-                style={{ background: '#0d0d14', border: '1px solid rgba(138,43,226,0.2)' }}
+                style={{ background: '#0d0d14', border: '1px solid rgba(168,85,247,0.2)' }}
                 placeholder="Opcional"
               />
             </div>
@@ -187,7 +187,7 @@ export default function InternalTransferPage() {
                   value={form.pin}
                   onChange={e => setForm(f => ({ ...f, pin: e.target.value.replace(/\D/g, '') }))}
                   className="w-full pl-9 pr-4 py-2.5 rounded-xl text-sm text-white focus:outline-none transition-all tracking-widest"
-                  style={{ background: '#0d0d14', border: '1px solid rgba(138,43,226,0.2)' }}
+                  style={{ background: '#0d0d14', border: '1px solid rgba(168,85,247,0.2)' }}
                   placeholder="••••"
                 />
               </div>
@@ -198,7 +198,7 @@ export default function InternalTransferPage() {
             type="submit"
             disabled={transfer.isPending || !form.username || !form.amount}
             className="w-full py-2.5 rounded-xl text-sm font-semibold text-white disabled:opacity-50 flex items-center justify-center gap-2 transition-all"
-            style={{ background: 'linear-gradient(135deg, #8A2BE2, #6a0dad)', boxShadow: '0 0 14px rgba(138,43,226,0.25)' }}
+            style={{ background: 'linear-gradient(135deg, #A855F7, #6a0dad)', boxShadow: '0 0 14px rgba(168,85,247,0.25)' }}
           >
             {transfer.isPending ? (
               <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />Enviando...</>

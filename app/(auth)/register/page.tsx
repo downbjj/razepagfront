@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 import toast from 'react-hot-toast'
 import { Eye, EyeOff, Lock, Mail, User, Phone, Zap, Moon, Sun, AtSign } from 'lucide-react'
 import api, { setAuthTokens, setUser } from '@/lib/api'
@@ -60,14 +61,14 @@ export default function RegisterPage() {
         <button
           onClick={() => setLanguage(language === 'pt-BR' ? 'en' : 'pt-BR')}
           className="text-sm border rounded-full px-2.5 py-1 transition-all"
-          style={{background:'rgba(138,43,226,0.05)', borderColor:'rgba(138,43,226,0.2)', color:'#a855f7'}}
+          style={{background:'rgba(168,85,247,0.05)', borderColor:'rgba(168,85,247,0.2)', color:'#a855f7'}}
         >
           {language === 'pt-BR' ? '🇧🇷 PT' : '🇺🇸 EN'}
         </button>
         <button
           onClick={toggleTheme}
           className="w-8 h-8 flex items-center justify-center rounded-full border transition-all"
-          style={{borderColor:'rgba(138,43,226,0.2)', color:'#a855f7', background:'rgba(138,43,226,0.05)'}}
+          style={{borderColor:'rgba(168,85,247,0.2)', color:'#a855f7', background:'rgba(168,85,247,0.05)'}}
         >
           {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
         </button>
@@ -76,11 +77,15 @@ export default function RegisterPage() {
       <div className="w-full max-w-md animate-fade-in">
         {/* Logo */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center gap-2 mb-4">
-            <div className="w-10 h-10 bg-gradient-purple rounded-lg flex items-center justify-center shadow-neon-purple">
-              <Zap className="w-6 h-6 text-white" />
-            </div>
-            <span className="text-2xl font-bold" style={{color: textColor}}>RazePague</span>
+          <div className="flex justify-center mb-4">
+            <Image
+              src="/logo.png"
+              alt="RazePague"
+              width={240}
+              height={72}
+              className="object-contain"
+              priority
+            />
           </div>
           <p className="text-sm" style={{color: mutedColor}}>{t('auth.register_title')}</p>
         </div>

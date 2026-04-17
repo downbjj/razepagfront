@@ -67,7 +67,7 @@ export default function EnvConfigPage() {
         </div>
         <button onClick={() => setNewModal(true)}
           className="flex items-center gap-2 text-sm text-white px-4 py-2 rounded-xl font-medium"
-          style={{ background: '#8A2BE2' }}>
+          style={{ background: '#A855F7' }}>
           <Plus className="w-4 h-4" /> Nova configuração
         </button>
       </div>
@@ -192,7 +192,7 @@ export default function EnvConfigPage() {
               <button onClick={() => createConfig.mutate({ key: newForm.key, value: newForm.value })}
                 disabled={!newForm.key || !newForm.value || createConfig.isPending}
                 className="flex-1 text-white py-2.5 rounded-xl text-sm font-medium disabled:opacity-50"
-                style={{ background: '#8A2BE2' }}>
+                style={{ background: '#A855F7' }}>
                 {createConfig.isPending ? 'Salvando...' : 'Criar configuração'}
               </button>
               <button onClick={() => setNewModal(false)}

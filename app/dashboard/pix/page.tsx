@@ -138,7 +138,7 @@ export default function PixChargePage() {
           <button
             onClick={() => router.push('/dashboard')}
             className="flex-1 py-3 rounded-xl text-sm font-semibold text-white transition-all"
-            style={{ background: 'linear-gradient(135deg, #8A2BE2, #6a0dad)', boxShadow: '0 0 18px rgba(138,43,226,0.35)' }}
+            style={{ background: 'linear-gradient(135deg, #A855F7, #6a0dad)', boxShadow: '0 0 18px rgba(168,85,247,0.35)' }}
           >
             Ir ao Painel
           </button>
@@ -171,7 +171,7 @@ export default function PixChargePage() {
                 />
               </div>
               {amt > 0 && (
-                <div className="mt-2 text-xs rounded-lg px-3 py-2.5 space-y-1" style={{ background: 'rgba(138,43,226,0.06)', border: '1px solid rgba(138,43,226,0.15)' }}>
+                <div className="mt-2 text-xs rounded-lg px-3 py-2.5 space-y-1" style={{ background: 'rgba(168,85,247,0.06)', border: '1px solid rgba(168,85,247,0.15)' }}>
                   <div className="flex justify-between">
                     <span className="text-gray-500">Valor da cobrança</span>
                     <span className="text-white">{formatCurrency(amt)}</span>

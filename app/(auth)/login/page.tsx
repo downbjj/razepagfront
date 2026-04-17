@@ -63,14 +63,14 @@ export default function LoginPage() {
         <button
           onClick={() => setLanguage(language === 'pt-BR' ? 'en' : 'pt-BR')}
           className="text-sm border rounded-full px-2.5 py-1 transition-all"
-          style={{background:'rgba(138,43,226,0.05)', borderColor:'rgba(138,43,226,0.2)', color:'#a855f7'}}
+          style={{background:'rgba(168,85,247,0.05)', borderColor:'rgba(168,85,247,0.2)', color:'#a855f7'}}
         >
           {language === 'pt-BR' ? '🇧🇷 PT' : '🇺🇸 EN'}
         </button>
         <button
           onClick={toggleTheme}
           className="w-8 h-8 flex items-center justify-center rounded-full border transition-all"
-          style={{borderColor:'rgba(138,43,226,0.2)', color:'#a855f7', background:'rgba(138,43,226,0.05)'}}
+          style={{borderColor:'rgba(168,85,247,0.2)', color:'#a855f7', background:'rgba(168,85,247,0.05)'}}
         >
           {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
         </button>
@@ -83,8 +83,8 @@ export default function LoginPage() {
             <Image
               src="/logo.png"
               alt="RazePague"
-              width={200}
-              height={56}
+              width={240}
+              height={72}
               className="object-contain"
               priority
             />

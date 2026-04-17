@@ -36,11 +36,11 @@ export default function ForgotPasswordPage() {
         {/* Logo */}
         <div className="text-center mb-8">
           <div className="flex justify-center mb-3">
-            <Image src="/logo.png" alt="RazePague" width={180} height={50} className="object-contain" priority />
+            <Image src="/logo.png" alt="RazePague" width={220} height={66} className="object-contain" priority />
           </div>
         </div>
 
-        <div className="rounded-2xl p-8 shadow-2xl" style={{ background: '#0d0d14', border: '1px solid rgba(138,43,226,0.2)' }}>
+        <div className="rounded-2xl p-8 shadow-2xl" style={{ background: '#0d0d14', border: '1px solid rgba(168,85,247,0.2)' }}>
           {sent ? (
             /* Success state */
             <div className="text-center space-y-4">
@@ -88,7 +88,7 @@ export default function ForgotPasswordPage() {
                       value={email}
                       onChange={e => setEmail(e.target.value)}
                       className="w-full pl-10 pr-4 py-3 rounded-xl text-sm text-white focus:outline-none transition-all"
-                      style={{ background: '#141414', border: '1px solid rgba(138,43,226,0.25)' }}
+                      style={{ background: '#141414', border: '1px solid rgba(168,85,247,0.25)' }}
                       placeholder="seu@email.com"
                       autoComplete="email"
                     />
@@ -99,7 +99,7 @@ export default function ForgotPasswordPage() {
                   type="submit"
                   disabled={loading || !email.trim()}
                   className="w-full py-3 rounded-xl font-semibold text-white disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition-all"
-                  style={{ background: 'linear-gradient(135deg, #8A2BE2, #6a0dad)', boxShadow: '0 0 20px rgba(138,43,226,0.25)' }}
+                  style={{ background: 'linear-gradient(135deg, #A855F7, #6a0dad)', boxShadow: '0 0 20px rgba(168,85,247,0.25)' }}
                 >
                   {loading
                     ? <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />

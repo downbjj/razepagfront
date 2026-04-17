@@ -60,7 +60,7 @@ export default function SecurityPage() {
           { label: 'Conta Ativada',          value: profile?.accountActivated, },
         ].map(item => (
           <div key={item.label} className="flex items-center gap-3 px-4 py-3 rounded-xl"
-            style={{ background: '#111118', border: '1px solid rgba(138,43,226,0.12)' }}>
+            style={{ background: '#111118', border: '1px solid rgba(168,85,247,0.12)' }}>
             <div className={`w-2 h-2 rounded-full flex-shrink-0 ${item.value ? 'bg-green-400' : 'bg-gray-600'}`} />
             <span className="text-xs text-gray-400">{item.label}</span>
             <span className={`ml-auto text-xs font-medium ${item.value ? 'text-green-400' : 'text-gray-600'}`}>
@@ -72,7 +72,7 @@ export default function SecurityPage() {
 
       {/* PIN section */}
       <div className="rounded-2xl p-5 space-y-4"
-        style={{ background: '#111118', border: '1px solid rgba(138,43,226,0.15)' }}>
+        style={{ background: '#111118', border: '1px solid rgba(168,85,247,0.15)' }}>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Lock className="w-4 h-4 text-purple-400" />
@@ -111,7 +111,7 @@ export default function SecurityPage() {
                   value={pinForm.currentPin}
                   onChange={e => setPinForm(f => ({ ...f, currentPin: e.target.value.replace(/\D/g, '') }))}
                   className="w-full pl-9 pr-4 py-2.5 rounded-xl text-sm text-white focus:outline-none tracking-widest"
-                  style={{ background: '#0d0d14', border: '1px solid rgba(138,43,226,0.2)' }}
+                  style={{ background: '#0d0d14', border: '1px solid rgba(168,85,247,0.2)' }}
                   placeholder="••••"
                 />
               </div>
@@ -132,7 +132,7 @@ export default function SecurityPage() {
                 value={pinForm.newPin}
                 onChange={e => setPinForm(f => ({ ...f, newPin: e.target.value.replace(/\D/g, '') }))}
                 className="w-full pl-9 pr-10 py-2.5 rounded-xl text-sm text-white focus:outline-none tracking-widest"
-                style={{ background: '#0d0d14', border: '1px solid rgba(138,43,226,0.2)' }}
+                style={{ background: '#0d0d14', border: '1px solid rgba(168,85,247,0.2)' }}
                 placeholder="••••"
               />
               <button type="button" onClick={() => setShowPin(v => !v)}
@@ -154,7 +154,7 @@ export default function SecurityPage() {
                 value={pinForm.confirmPin}
                 onChange={e => setPinForm(f => ({ ...f, confirmPin: e.target.value.replace(/\D/g, '') }))}
                 className="w-full pl-9 pr-4 py-2.5 rounded-xl text-sm text-white focus:outline-none tracking-widest"
-                style={{ background: '#0d0d14', border: '1px solid rgba(138,43,226,0.2)' }}
+                style={{ background: '#0d0d14', border: '1px solid rgba(168,85,247,0.2)' }}
                 placeholder="••••"
               />
             </div>
@@ -167,7 +167,7 @@ export default function SecurityPage() {
             type="submit"
             disabled={setupPinMutation.isPending || !pinForm.newPin || !pinForm.confirmPin}
             className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white disabled:opacity-50 transition-all"
-            style={{ background: 'linear-gradient(135deg, #8A2BE2, #6a0dad)', boxShadow: '0 0 14px rgba(138,43,226,0.25)' }}
+            style={{ background: 'linear-gradient(135deg, #A855F7, #6a0dad)', boxShadow: '0 0 14px rgba(168,85,247,0.25)' }}
           >
             {setupPinMutation.isPending
               ? <RefreshCw className="w-4 h-4 animate-spin" />
@@ -180,7 +180,7 @@ export default function SecurityPage() {
 
       {/* 2FA (coming soon) */}
       <div className="rounded-2xl p-5 opacity-60"
-        style={{ background: '#111118', border: '1px solid rgba(138,43,226,0.1)' }}>
+        style={{ background: '#111118', border: '1px solid rgba(168,85,247,0.1)' }}>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Shield className="w-4 h-4 text-purple-400" />

@@ -66,7 +66,7 @@ export default function UserFeesPage() {
             placeholder="Buscar usuário por nome ou e-mail..." />
           <button onClick={searchUsers} disabled={searching}
             className="text-sm text-white px-4 py-2.5 rounded-xl font-medium disabled:opacity-50"
-            style={{ background: '#8A2BE2' }}>
+            style={{ background: '#A855F7' }}>
             {searching ? 'Buscando...' : 'Buscar'}
           </button>
         </div>
@@ -85,7 +85,7 @@ export default function UserFeesPage() {
                     setSearchResults([])
                     setSearch('')
                   }}
-                  className="text-xs px-3 py-1.5 text-white rounded-lg font-medium" style={{ background: '#8A2BE2' }}>
+                  className="text-xs px-3 py-1.5 text-white rounded-lg font-medium" style={{ background: '#A855F7' }}>
                   Configurar taxa
                 </button>
               </div>
@@ -215,7 +215,7 @@ export default function UserFeesPage() {
                 onClick={() => updateFee.mutate({ userId: modal.userId, feePercent: parseFloat(form.feePercent), feeFixed: parseFloat(form.feeFixed), notes: form.notes || undefined })}
                 disabled={!form.feePercent || !form.feeFixed || updateFee.isPending}
                 className="flex-1 text-white py-2.5 rounded-xl text-sm font-medium disabled:opacity-50"
-                style={{ background: '#8A2BE2' }}>
+                style={{ background: '#A855F7' }}>
                 {updateFee.isPending ? 'Salvando...' : 'Salvar taxa'}
               </button>
               <button onClick={() => setModal(null)}

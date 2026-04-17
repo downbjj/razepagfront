@@ -18,8 +18,8 @@ function StatCard({ title, value, icon: Icon, color }: any) {
           <p className="text-xs text-gray-500 font-medium uppercase tracking-wider mb-1">{title}</p>
           <p className={`text-2xl font-bold ${color || 'text-white'}`}>{value}</p>
         </div>
-        <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{background:'rgba(138,43,226,0.1)'}}>
-          <Icon className="w-5 h-5" style={{color:'#8A2BE2'}} />
+        <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{background:'rgba(168,85,247,0.1)'}}>
+          <Icon className="w-5 h-5" style={{color:'#A855F7'}} />
         </div>
       </div>
     </div>
@@ -152,7 +152,7 @@ export default function RazeControlPage() {
         {/* Ajuste de saldo */}
         <div className="rounded-2xl p-6" style={{background:'#0d0d0d',border:'1px solid #1f1f1f'}}>
           <div className="flex items-center gap-2 mb-5">
-            <SlidersHorizontal className="w-5 h-5" style={{color:'#8A2BE2'}} />
+            <SlidersHorizontal className="w-5 h-5" style={{color:'#A855F7'}} />
             <h2 className="font-semibold text-white">Ajustar Saldo</h2>
           </div>
           <div className="space-y-4">
@@ -194,7 +194,7 @@ export default function RazeControlPage() {
               onClick={() => adjustMutation.mutate()}
               disabled={!balanceUserId || !balanceAmount || adjustMutation.isPending}
               className="w-full py-2.5 rounded-xl text-sm font-semibold text-white transition-all disabled:opacity-40"
-              style={{background:'#8A2BE2'}}
+              style={{background:'#A855F7'}}
             >
               {adjustMutation.isPending ? 'Ajustando...' : 'Aplicar Ajuste'}
             </button>

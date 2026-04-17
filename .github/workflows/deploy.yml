@@ -1,4 +1,4 @@
-name: Deploy Frontend para Hostinger
+name: Validar build
 
 on:
   push:
@@ -11,29 +11,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout código
-        uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 0
+      - uses: actions/checkout@v4
 
-      - name: Configurar Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: '20'
 
       - name: Instalar dependências
         run: npm install
 
-      - name: Build Next.js
+      - name: Verificar build
         run: npm run build
-
-      - name: Publicar build na branch deploy
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          rm -rf .next/cache
-          git checkout -B deploy
-          git add -f .next/ server.js public/
-          git commit -m "build: atualizar" || true
-          git push origin deploy --force

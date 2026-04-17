@@ -87,7 +87,7 @@ export default function RegisterPage() {
               priority
             />
           </div>
-          <p className="text-sm" style={{color: mutedColor}}>{t('auth.register_title')}</p>
+          <p className="text-xl font-bold tracking-wide" style={{background: 'linear-gradient(90deg, #A855F7, #d8b4fe)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'}}>{t('auth.register_title')}</p>
         </div>
 
         <div className="rounded-2xl p-8 shadow-card border" style={{background: cardBg, borderColor}}>

@@ -89,7 +89,7 @@ export default function LoginPage() {
               priority
             />
           </div>
-          <p className="text-sm" style={{color: mutedColor}}>{t('auth.login_title')}</p>
+          <p className="text-xl font-bold tracking-wide" style={{background: 'linear-gradient(90deg, #A855F7, #d8b4fe)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'}}>{t('auth.login_title')}</p>
         </div>
 
         {/* Card */}

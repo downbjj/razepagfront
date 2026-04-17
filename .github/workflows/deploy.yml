@@ -1,13 +1,14 @@
-name: Validar build
+name: Build e Deploy Frontend
 
 on:
   push:
     branches:
       - main
       - master
+      - principal
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -20,5 +21,23 @@ jobs:
       - name: Instalar dependências
         run: npm install
 
-      - name: Verificar build
+      - name: Build
         run: npm run build
+
+      - name: Deploy via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          port: 21
+          local-dir: ./
+          server-dir: /nodejs/
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            **/.env
+            **/.env.local
+            **/.env.production
+            **/.env.development

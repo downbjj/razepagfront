@@ -7,11 +7,13 @@ import toast from 'react-hot-toast'
 import Image from 'next/image'
 import { Eye, EyeOff, Lock, Mail, Moon, Sun } from 'lucide-react'
 import api, { setAuthTokens, setUser } from '@/lib/api'
+import { useQueryClient } from '@tanstack/react-query'
 import { useLanguage } from '@/lib/i18n'
 import { useTheme } from '@/lib/theme'
 
 export default function LoginPage() {
   const router = useRouter()
+  const qc = useQueryClient()
   const { t, language, setLanguage } = useLanguage()
   const { theme, toggleTheme } = useTheme()
   const [loading, setLoading] = useState(false)
@@ -28,6 +30,7 @@ export default function LoginPage() {
 
       setAuthTokens(accessToken, refreshToken)
       setUser(user)
+      qc.clear()
 
       toast.success(`${t('auth.welcome')}, ${user.name}!`)
 

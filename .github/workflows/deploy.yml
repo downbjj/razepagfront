@@ -1,4 +1,4 @@
-name: Deploy Frontend via SSH
+name: Deploy Frontend
 
 on:
   push:
@@ -13,6 +13,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: actions/setup-node@v4
         with:
@@ -24,26 +27,12 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Copiar .next/ para o servidor
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          password: ${{ secrets.SSH_PASSWORD }}
-          port: ${{ secrets.SSH_PORT }}
-          source: ".next/"
-          target: "~/nodejs/"
-          strip_components: 0
-
-      - name: Reiniciar app
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          password: ${{ secrets.SSH_PASSWORD }}
-          port: ${{ secrets.SSH_PORT }}
-          request_pty: true
-          script: |
-            cd ~/nodejs
-            pm2 restart all || true
-            echo "Deploy concluído!"
+      - name: Publicar .next/ na branch implantar
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git fetch origin implantar || true
+          git checkout -B implantar origin/implantar 2>/dev/null || git checkout -b implantar
+          git add .next -f
+          git commit -m "ci: deploy $(date +%Y%m%d-%H%M%S)" || echo "Nada para commitar"
+          git push origin implantar --force

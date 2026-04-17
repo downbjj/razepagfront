@@ -6,11 +6,15 @@ import { Send, DollarSign, Hash, FileText, CheckCircle, Users, Gift } from 'luci
 import Link from 'next/link'
 import toast from 'react-hot-toast'
 import api from '@/lib/api'
-import { formatCurrency } from '@/lib/utils'
+import { formatCurrency, calculateFee, calculateNet } from '@/lib/utils'
 
 export default function TransferPage() {
   const [form, setForm] = useState({ pixKey: '', amount: '', description: '' })
   const [result, setResult] = useState<any>(null)
+
+  const amt = parseFloat(form.amount) || 0
+  const fee = amt > 0 ? calculateFee(amt) : 0
+  const total = amt > 0 ? amt + fee : 0
 
   const { data: walletData } = useQuery({
     queryKey: ['wallet'],
@@ -31,8 +35,8 @@ export default function TransferPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (parseFloat(form.amount) > balance) {
-      toast.error('Saldo insuficiente')
+    if (total > balance) {
+      toast.error('Saldo insuficiente (valor + taxa)')
       return
     }
     transfer.mutate({
@@ -137,6 +141,24 @@ export default function TransferPage() {
               />
             </div>
           </div>
+
+          {amt > 0 && (
+            <div className="rounded-xl px-4 py-3 space-y-1.5 text-sm"
+              style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}>
+              <div className="flex justify-between">
+                <span className="text-gray-500">Valor da transferência</span>
+                <span className="text-white">{formatCurrency(amt)}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-500">Taxa (3% + R$1,00)</span>
+                <span className="text-red-400">+ {formatCurrency(fee)}</span>
+              </div>
+              <div className="flex justify-between border-t border-white/10 pt-1.5 font-semibold">
+                <span className="text-gray-400">Total debitado</span>
+                <span className={total > balance ? 'text-red-400' : 'text-white'}>{formatCurrency(total)}</span>
+              </div>
+            </div>
+          )}
 
           <div>
             <label className="block text-xs font-medium text-gray-400 mb-1.5">Descrição</label>

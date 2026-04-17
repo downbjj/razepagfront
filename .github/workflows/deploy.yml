@@ -15,6 +15,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
 
       - name: Configurar Node.js
         uses: actions/setup-node@v4
@@ -27,11 +28,12 @@ jobs:
       - name: Build Next.js
         run: npm run build
 
-      - name: Commitar build no repositório
+      - name: Publicar build na branch deploy
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           rm -rf .next/cache
+          git checkout -B deploy
           git add -f .next/ server.js public/
-          git diff --staged --quiet || git commit -m "build: atualizar [skip ci]"
-          git push origin main
+          git commit -m "build: atualizar" || true
+          git push origin deploy --force

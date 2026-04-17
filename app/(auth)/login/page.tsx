@@ -78,13 +78,13 @@ export default function LoginPage() {
 
       <div className="w-full max-w-md animate-fade-in">
         {/* Logo */}
-        <div className="text-center mb-8">
-          <div className="flex justify-center mb-3">
+        <div className="text-center mb-5">
+          <div className="flex justify-center mb-2">
             <Image
               src="/logo.png"
               alt="Razepag"
-              width={320}
-              height={96}
+              width={260}
+              height={78}
               className="object-contain"
               priority
             />

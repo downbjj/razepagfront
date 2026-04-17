@@ -1,4 +1,4 @@
-// File: /home/runner/work/razepagfront/razepagfront/app/admin/kyc/page.tsx
+// File: C:\Users\Download\Documents\razepag\frontend\app\admin\kyc\page.tsx
 import * as entry from '../../../../../app/admin/kyc/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

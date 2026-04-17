@@ -26,7 +26,23 @@ export default function ProfilePage() {
   const { data: profile, isLoading } = useQuery({
     queryKey: ['profile'],
     queryFn: () => api.get('/users/me').then(r => r.data.data),
-    refetchInterval: activationPolling ? 4000 : false,
+  })
+
+  // Query separada só para verificar ativação — não causa re-render da página inteira
+  useQuery({
+    queryKey: ['activation-check'],
+    queryFn: () => api.get('/users/me').then(r => {
+      const activated = r.data.data?.accountActivated
+      if (activated) {
+        setActivationPolling(false)
+        toast.success('Conta habilitada com sucesso!')
+        qc.invalidateQueries({ queryKey: ['profile'] })
+        qc.invalidateQueries({ queryKey: ['me'] })
+      }
+      return activated
+    }),
+    refetchInterval: activationPolling ? 5000 : false,
+    enabled: activationPolling,
   })
 
   const [profileForm, setProfileForm] = useState({ name: '', phone: '', username: '', cpf: '' })
@@ -47,15 +63,6 @@ export default function ProfilePage() {
       if (profile.cpf) setNormalForm(f => ({ ...f, cpf: profile.cpf }))
     }
   }, [profile])
-
-  // Detect activation completion while polling
-  useEffect(() => {
-    if (activationPolling && profile?.accountActivated) {
-      setActivationPolling(false)
-      toast.success('Conta habilitada com sucesso!')
-      qc.invalidateQueries({ queryKey: ['me'] })
-    }
-  }, [profile?.accountActivated, activationPolling])
 
   const updateProfileMutation = useMutation({
     mutationFn: (data: any) => api.patch('/users/me', data).then(r => r.data.data),

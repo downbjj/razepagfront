@@ -1,4 +1,4 @@
-// File: /home/runner/work/razepagfront/razepagfront/app/(auth)/reset-password/page.tsx
+// File: C:\Users\Download\Documents\razepag\frontend\app\(auth)\reset-password\page.tsx
 import * as entry from '../../../../../app/(auth)/reset-password/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
+import { useRouter } from 'next/navigation'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import {
   User, Mail, Phone, Lock, Eye, EyeOff, Save, RefreshCw, AtSign, CreditCard, CheckCircle, XCircle,
@@ -15,6 +16,7 @@ const readonlyStyle = { background: 'rgba(255,255,255,0.03)', border: '1px solid
 
 export default function ProfilePage() {
   const qc = useQueryClient()
+  const router = useRouter()
 
   // ── State ────────────────────────────────────────────────────────────────
   const [activationPolling, setActivationPolling] = useState(false)
@@ -52,9 +54,10 @@ export default function ProfilePage() {
       setActivationPolling(false)
       sessionStorage.removeItem('anon_charge')
       toast.success('Conta habilitada com sucesso!')
-      qc.invalidateQueries({ queryKey: ['dashboard'] })
+      qc.invalidateQueries()
+      setTimeout(() => router.push('/dashboard'), 1500)
     }
-  }, [profile?.accountActivated, activationPolling, qc])
+  }, [profile?.accountActivated, activationPolling, qc, router])
 
   // Restaura charge pendente do sessionStorage ao montar
   useEffect(() => {

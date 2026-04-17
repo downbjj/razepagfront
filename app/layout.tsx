@@ -15,6 +15,20 @@ export const metadata: Metadata = {
     shortcut: '/favicon-icon.png',
     apple: { url: '/favicon-icon.png', sizes: '180x180' },
   },
+  openGraph: {
+    title: 'Razepag - Gateway de Pagamentos PIX',
+    description: 'Receba pagamentos instantâneos. API completa e segura para integrar pagamentos no seu sistema.',
+    url: 'https://razepag.com',
+    siteName: 'Razepag',
+    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'Razepag' }],
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Razepag - Gateway de Pagamentos PIX',
+    description: 'Receba pagamentos instantâneos. API completa e segura para integrar pagamentos no seu sistema.',
+    images: ['/og-image.png'],
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

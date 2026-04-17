@@ -27,9 +27,10 @@ export default function ProfilePage() {
   const profileInitialized                        = useRef(false)
 
   const [normalForm, setNormalForm] = useState({
-    cpf: '', dateOfBirth: '', addressStreet: '', addressNumber: '',
-    addressCity: '', addressState: '', addressZipCode: '',
+    cpf: '', dateOfBirth: '', addressZipCode: '', addressStreet: '',
+    addressNumber: '', addressComplement: '', addressCity: '', addressState: '',
   })
+  const [cepLoading, setCepLoading] = useState(false)
 
   const [profileForm, setProfileForm] = useState({
     name: '', phone: '', username: '', cpf: '',
@@ -40,6 +41,28 @@ export default function ProfilePage() {
   const [showCurrent, setShowCurrent] = useState(false)
   const [showNew, setShowNew]         = useState(false)
   const [showConfirm, setShowConfirm] = useState(false)
+
+  // ── CEP auto-fill ────────────────────────────────────────────────────────
+  const handleCepChange = async (value: string) => {
+    const cep = value.replace(/\D/g, '')
+    setNormalForm(f => ({ ...f, addressZipCode: value }))
+    if (cep.length === 8) {
+      setCepLoading(true)
+      try {
+        const res = await fetch(`https://viacep.com.br/ws/${cep}/json/`)
+        const data = await res.json()
+        if (!data.erro) {
+          setNormalForm(f => ({
+            ...f,
+            addressStreet: data.logradouro || '',
+            addressCity:   data.localidade  || '',
+            addressState:  data.uf          || '',
+          }))
+        }
+      } catch { /* ignora falha de rede */ }
+      finally { setCepLoading(false) }
+    }
+  }
 
   // ── Queries ──────────────────────────────────────────────────────────────
   // Única query para /users/me — reutilizada para perfil e polling de ativação
@@ -184,7 +207,9 @@ export default function ProfilePage() {
     const { cpf, dateOfBirth, addressStreet, addressNumber, addressCity, addressState, addressZipCode } = normalForm
     if (!cpf || !dateOfBirth || !addressStreet || !addressNumber || !addressCity || !addressState || !addressZipCode)
       return toast.error('Preencha todos os campos obrigatórios')
-    activateNormalMutation.mutate(normalForm)
+    const payload: any = { cpf, dateOfBirth, addressStreet, addressNumber, addressCity, addressState, addressZipCode }
+    if (normalForm.addressComplement) payload.addressComplement = normalForm.addressComplement
+    activateNormalMutation.mutate(payload)
   }
 
   const handleCopyPaste = () => {
@@ -300,6 +325,7 @@ export default function ProfilePage() {
                 <p className="text-xs text-gray-500">Preencha seus dados pessoais para ativar a conta gratuitamente.</p>
                 <div className="grid grid-cols-2 gap-3">
 
+                  {/* CPF */}
                   <div className="col-span-2">
                     <label className="block text-xs font-medium text-gray-400 mb-1.5">CPF *</label>
                     <div className="relative">
@@ -310,6 +336,7 @@ export default function ProfilePage() {
                     </div>
                   </div>
 
+                  {/* Data de nascimento */}
                   <div className="col-span-2">
                     <label className="block text-xs font-medium text-gray-400 mb-1.5">Data de Nascimento *</label>
                     <div className="relative">
@@ -320,6 +347,22 @@ export default function ProfilePage() {
                     </div>
                   </div>
 
+                  {/* CEP — busca automática */}
+                  <div className="col-span-2">
+                    <label className="block text-xs font-medium text-gray-400 mb-1.5">CEP *</label>
+                    <div className="relative">
+                      <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600" />
+                      <input type="text" required value={normalForm.addressZipCode} placeholder="00000-000" maxLength={9}
+                        onChange={e => handleCepChange(e.target.value)}
+                        className={inputCls} style={inputStyle} />
+                      {cepLoading && (
+                        <div className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 border-2 border-purple-500/30 border-t-purple-500 rounded-full animate-spin" />
+                      )}
+                    </div>
+                    <p className="text-xs text-gray-600 mt-1">Digite o CEP para preencher o endereço automaticamente</p>
+                  </div>
+
+                  {/* Rua — preenchida pelo CEP */}
                   <div className="col-span-2">
                     <label className="block text-xs font-medium text-gray-400 mb-1.5">Rua / Logradouro *</label>
                     <div className="relative">
@@ -330,6 +373,7 @@ export default function ProfilePage() {
                     </div>
                   </div>
 
+                  {/* Número */}
                   <div>
                     <label className="block text-xs font-medium text-gray-400 mb-1.5">Número *</label>
                     <input type="text" required value={normalForm.addressNumber} placeholder="123"
@@ -338,14 +382,16 @@ export default function ProfilePage() {
                       style={inputStyle} />
                   </div>
 
+                  {/* Complemento */}
                   <div>
-                    <label className="block text-xs font-medium text-gray-400 mb-1.5">CEP *</label>
-                    <input type="text" required value={normalForm.addressZipCode} placeholder="00000-000" maxLength={9}
-                      onChange={e => setNormalForm(f => ({ ...f, addressZipCode: e.target.value }))}
+                    <label className="block text-xs font-medium text-gray-400 mb-1.5">Complemento</label>
+                    <input type="text" value={normalForm.addressComplement} placeholder="Apto 42, Casa 2..."
+                      onChange={e => setNormalForm(f => ({ ...f, addressComplement: e.target.value }))}
                       className="w-full px-4 py-2.5 rounded-xl text-sm text-white focus:outline-none transition-all"
                       style={inputStyle} />
                   </div>
 
+                  {/* Cidade — preenchida pelo CEP */}
                   <div>
                     <label className="block text-xs font-medium text-gray-400 mb-1.5">Cidade *</label>
                     <div className="relative">
@@ -356,6 +402,7 @@ export default function ProfilePage() {
                     </div>
                   </div>
 
+                  {/* Estado — preenchido pelo CEP */}
                   <div>
                     <label className="block text-xs font-medium text-gray-400 mb-1.5">Estado *</label>
                     <select required value={normalForm.addressState}

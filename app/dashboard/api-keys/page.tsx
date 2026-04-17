@@ -419,11 +419,17 @@ export default function ApiKeysPage() {
       {/* How to use */}
       <div className="rounded-2xl p-4" style={{ background: 'rgba(138,43,226,0.05)', border: '1px solid rgba(138,43,226,0.15)' }}>
         <p className="text-xs font-semibold text-purple-400 mb-2">Como usar</p>
-        <pre className="text-xs text-gray-400 overflow-x-auto whitespace-pre-wrap break-all leading-relaxed">{`curl -X POST https://razepague.com/api/gateway/pix/create \\
+        <pre className="text-xs text-gray-400 overflow-x-auto whitespace-pre-wrap break-all leading-relaxed">{`# Criar cobrança PIX
+curl -X POST https://api.razepag.com/api/gateway/pix/create \\
   -H "client_id: client_xxxxxxxxxxxx" \\
   -H "client_secret: secret_xxxxxxxxxxxx" \\
   -H "Content-Type: application/json" \\
-  -d '{"amount":100,"description":"Pedido 001","payerEmail":"c@email.com","payerName":"João"}'`}</pre>
+  -d '{"amount":100,"description":"Pedido 001","payerEmail":"c@email.com","payerName":"João"}'
+
+# Consultar status
+curl https://api.razepag.com/api/gateway/payment/ID_RETORNADO \\
+  -H "client_id: client_xxxxxxxxxxxx" \\
+  -H "client_secret: secret_xxxxxxxxxxxx"`}</pre>
       </div>
 
       {/* List */}

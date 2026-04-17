@@ -2,7 +2,8 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { Zap, Menu, X, Moon, Sun } from 'lucide-react'
+import Image from 'next/image'
+import { Menu, X, Moon, Sun } from 'lucide-react'
 import { useLanguage } from '@/lib/i18n'
 import { useTheme } from '@/lib/theme'
 
@@ -19,11 +20,8 @@ export default function LandingNav() {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md border-b border-[#A855F7]/20" style={{background: navBg}}>
       <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center shadow-[0_0_15px_rgba(168,85,247,0.5)] group-hover:shadow-[0_0_25px_rgba(168,85,247,0.8)] transition-all" style={{background:'linear-gradient(135deg,#A855F7,#5e18a0)'}}>
-            <Zap className="w-4 h-4 text-white" />
-          </div>
-          <span className="text-xl font-bold" style={{color: textMain}}>Razepag</span>
+        <Link href="/">
+          <Image src="/logo.png" alt="Razepag" width={160} height={48} className="object-contain" priority />
         </Link>
 
         <div className="hidden md:flex items-center gap-8">

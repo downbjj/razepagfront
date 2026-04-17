@@ -80,7 +80,7 @@ export default function RegisterPage() {
           <div className="flex justify-center mb-4">
             <Image
               src="/logo.png"
-              alt="RazePague"
+              alt="Razepag"
               width={240}
               height={72}
               className="object-contain"

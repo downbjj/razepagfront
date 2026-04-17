@@ -190,7 +190,7 @@ export default function LandingPage() {
                 <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{background:'linear-gradient(135deg,#A855F7,#5e18a0)'}}>
                   <Zap className="w-4 h-4 text-white" />
                 </div>
-                <span className="text-lg font-bold" style={{color: textMain}}>RazePague</span>
+                <span className="text-lg font-bold" style={{color: textMain}}>Razepag</span>
               </div>
               <p className="text-sm leading-relaxed" style={{color: textDim}}>{t('footer.description')}</p>
             </div>
@@ -213,12 +213,12 @@ export default function LandingPage() {
             <div>
               <h4 className="text-sm font-semibold mb-4" style={{color: textMain}}>Contato</h4>
               <ul className="space-y-3">
-                <li><a href="mailto:suporte@razepague.com" className="text-sm transition-colors hover:text-[#A855F7]" style={{color: textDim}}>suporte@razepague.com</a></li>
+                <li><a href="mailto:suporte@razepag.com" className="text-sm transition-colors hover:text-[#A855F7]" style={{color: textDim}}>suporte@razepag.com</a></li>
               </ul>
             </div>
           </div>
           <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4" style={{borderTop:`1px solid ${cardBorder}`}}>
-            <p className="text-sm" style={{color: textDim}}>© 2020 RazePague. {t('footer.rights')}</p>
+            <p className="text-sm" style={{color: textDim}}>© 2026 Razepag. {t('footer.rights')}</p>
           </div>
         </div>
       </footer>

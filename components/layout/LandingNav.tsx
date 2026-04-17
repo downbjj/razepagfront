@@ -23,7 +23,7 @@ export default function LandingNav() {
           <div className="w-8 h-8 rounded-lg flex items-center justify-center shadow-[0_0_15px_rgba(168,85,247,0.5)] group-hover:shadow-[0_0_25px_rgba(168,85,247,0.8)] transition-all" style={{background:'linear-gradient(135deg,#A855F7,#5e18a0)'}}>
             <Zap className="w-4 h-4 text-white" />
           </div>
-          <span className="text-xl font-bold" style={{color: textMain}}>RazePague</span>
+          <span className="text-xl font-bold" style={{color: textMain}}>Razepag</span>
         </Link>
 
         <div className="hidden md:flex items-center gap-8">

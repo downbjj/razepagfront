@@ -16,11 +16,11 @@ export default function TermosPage() {
           {[
             {
               title: '1. Aceitação dos Termos',
-              text: 'Ao criar uma conta na RazePague, você concorda com estes Termos de Uso e com nossa Política de Privacidade. Se você não concordar com qualquer parte destes termos, não poderá utilizar nossos serviços.',
+              text: 'Ao criar uma conta na Razepag, você concorda com estes Termos de Uso e com nossa Política de Privacidade. Se você não concordar com qualquer parte destes termos, não poderá utilizar nossos serviços.',
             },
             {
               title: '2. Descrição do Serviço',
-              text: 'A RazePague é uma plataforma de gateway de pagamentos que permite a criação e recebimento de cobranças via PIX, transferências entre usuários e gestão financeira através de nossa API e painel web.',
+              text: 'A Razepag é uma plataforma de gateway de pagamentos que permite a criação e recebimento de cobranças via PIX, transferências entre usuários e gestão financeira através de nossa API e painel web.',
             },
             {
               title: '3. Cadastro e Conta',
@@ -32,19 +32,19 @@ export default function TermosPage() {
             },
             {
               title: '5. Uso Aceitável',
-              text: 'Você concorda em usar a RazePague apenas para fins legais. É proibido utilizar a plataforma para atividades ilegais, fraudes, lavagem de dinheiro ou qualquer atividade que viole leis brasileiras ou regulamentações do Banco Central.',
+              text: 'Você concorda em usar a Razepag apenas para fins legais. É proibido utilizar a plataforma para atividades ilegais, fraudes, lavagem de dinheiro ou qualquer atividade que viole leis brasileiras ou regulamentações do Banco Central.',
             },
             {
               title: '6. Segurança',
-              text: 'A RazePague emprega medidas de segurança de nível bancário, incluindo criptografia SSL/TLS, autenticação JWT e conformidade com as normas do Banco Central do Brasil. No entanto, você é responsável por manter a segurança de suas credenciais.',
+              text: 'A Razepag emprega medidas de segurança de nível bancário, incluindo criptografia SSL/TLS, autenticação JWT e conformidade com as normas do Banco Central do Brasil. No entanto, você é responsável por manter a segurança de suas credenciais.',
             },
             {
               title: '7. Limitação de Responsabilidade',
-              text: 'A RazePague não se responsabiliza por perdas indiretas, lucros cessantes ou danos consequentes. Nossa responsabilidade máxima fica limitada ao valor das taxas pagas nos últimos 12 meses.',
+              text: 'A Razepag não se responsabiliza por perdas indiretas, lucros cessantes ou danos consequentes. Nossa responsabilidade máxima fica limitada ao valor das taxas pagas nos últimos 12 meses.',
             },
             {
               title: '8. Rescisão',
-              text: 'A RazePague reserva-se o direito de suspender ou encerrar contas que violem estes termos, com ou sem aviso prévio. Você pode encerrar sua conta a qualquer momento, mediante saque do saldo disponível.',
+              text: 'A Razepag reserva-se o direito de suspender ou encerrar contas que violem estes termos, com ou sem aviso prévio. Você pode encerrar sua conta a qualquer momento, mediante saque do saldo disponível.',
             },
             {
               title: '9. Privacidade',
@@ -52,7 +52,7 @@ export default function TermosPage() {
             },
             {
               title: '10. Contato',
-              text: 'Para dúvidas sobre estes termos, entre em contato através do e-mail juridico@razepague.com ou acesse nossa Central de Suporte.',
+              text: 'Para dúvidas sobre estes termos, entre em contato através do e-mail juridico@razepag.com ou acesse nossa Central de Suporte.',
             },
           ].map(s => (
             <div key={s.title} className="pb-6" style={{borderBottom:'1px solid #1f1f1f'}}>

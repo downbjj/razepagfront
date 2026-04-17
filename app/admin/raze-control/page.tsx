@@ -82,7 +82,7 @@ export default function RazeControlPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-white">Raze Control</h1>
-          <p className="text-gray-500 text-sm mt-1">Painel central de controle — RazePague</p>
+          <p className="text-gray-500 text-sm mt-1">Painel central de controle — Razepag</p>
         </div>
         <button onClick={() => refetch()} className="flex items-center gap-2 text-sm text-gray-400 hover:text-white transition-colors">
           <RefreshCw className="w-4 h-4" />

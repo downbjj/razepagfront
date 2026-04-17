@@ -114,11 +114,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           <Link href="/dashboard" onClick={() => setSidebarOpen(false)}>
             <Image
               src="/logo.png"
-              alt="RazePague"
-              width={160}
-              height={52}
+              alt="Razepag"
+              width={200}
+              height={60}
               className="object-contain"
-              style={{ maxHeight: 52 }}
+              style={{ maxHeight: 60 }}
             />
           </Link>
           <button onClick={() => setSidebarOpen(false)} className="lg:hidden text-gray-500 hover:text-white">

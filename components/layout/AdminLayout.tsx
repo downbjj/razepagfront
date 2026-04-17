@@ -100,7 +100,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </div>
           <div>
             <span className="text-sm font-bold" style={{ color: textColor }}>Admin Panel</span>
-            <p className="text-xs" style={{ color: '#A855F7' }}>RazePague</p>
+            <p className="text-xs" style={{ color: '#A855F7' }}>Razepag</p>
           </div>
           {user?.role === 'OWNER' && (
             <span className="ml-auto text-[10px] border rounded-full px-1.5 py-0.5"

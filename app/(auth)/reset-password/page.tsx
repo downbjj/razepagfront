@@ -49,7 +49,7 @@ function ResetPasswordForm() {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <div className="flex justify-center mb-3">
-            <Image src="/logo.png" alt="RazePague" width={220} height={66} className="object-contain" priority />
+            <Image src="/logo.png" alt="Razepag" width={220} height={66} className="object-contain" priority />
           </div>
         </div>
 

@@ -3,7 +3,7 @@ import './globals.css'
 import { Providers } from './providers'
 
 export const metadata: Metadata = {
-  title: 'RazePague - Gateway de Pagamentos PIX',
+  title: 'Razepag - Gateway de Pagamentos PIX',
   description: 'Receba pagamentos instantâneos. API completa e segura para integrar pagamentos no seu sistema. Simples, rápido e sem complicação.',
   icons: {
     icon: [

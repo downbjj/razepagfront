@@ -16,7 +16,7 @@ export default function RecursosPage() {
             <span className="text-xs text-purple-400 font-medium">Funcionalidades</span>
           </div>
           <h1 className="text-4xl sm:text-5xl font-bold text-white mb-4">
-            Recursos do <span className="text-transparent bg-clip-text" style={{backgroundImage:'linear-gradient(135deg,#A855F7,#c084fc)'}}>RazePague</span>
+            Recursos do <span className="text-transparent bg-clip-text" style={{backgroundImage:'linear-gradient(135deg,#A855F7,#c084fc)'}}>Razepag</span>
           </h1>
           <p className="text-gray-400 max-w-xl mx-auto text-lg">
             Tudo que você precisa para aceitar e gerenciar pagamentos PIX na sua plataforma.

@@ -16,7 +16,7 @@ export default function SuportePage() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
           {[
-            { icon: Mail,          title:'E-mail',           desc:'suporte@razepague.com', sub:'Resposta em até 24h', href:'mailto:suporte@razepague.com' },
+            { icon: Mail,          title:'E-mail',           desc:'suporte@razepag.com', sub:'Resposta em até 24h', href:'mailto:suporte@razepag.com' },
             { icon: MessageCircle, title:'Chat ao Vivo',      desc:'Disponível no painel', sub:'Seg-Sex 9h-18h', href:'/login' },
             { icon: FileText,      title:'Documentação',      desc:'Guias e referência API', sub:'Sempre disponível', href:'/documentacao' },
           ].map(c => (
@@ -55,8 +55,8 @@ export default function SuportePage() {
 
         <div className="mt-8 text-center">
           <p className="text-gray-600 text-sm">Não encontrou o que procurava?</p>
-          <a href="mailto:suporte@razepague.com" className="text-sm mt-2 inline-block" style={{color:'#A855F7'}}>
-            Envie um e-mail para suporte@razepague.com
+          <a href="mailto:suporte@razepag.com" className="text-sm mt-2 inline-block" style={{color:'#A855F7'}}>
+            Envie um e-mail para suporte@razepag.com
           </a>
         </div>
       </div>

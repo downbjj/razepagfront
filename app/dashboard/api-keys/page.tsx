@@ -424,7 +424,7 @@ curl -X POST https://api.razepag.com/api/gateway/pix/create \\
   -H "client_id: client_xxxxxxxxxxxx" \\
   -H "client_secret: secret_xxxxxxxxxxxx" \\
   -H "Content-Type: application/json" \\
-  -d '{"amount":100,"description":"Pedido 001","payerEmail":"c@email.com","payerName":"João"}'
+  -d '{"amount":100,"description":"Pedido 001","payerEmail":"c@email.com","payerName":"João","payerCpf":"12345678909"}'
 
 # Consultar status
 curl https://api.razepag.com/api/gateway/payment/ID_RETORNADO \\

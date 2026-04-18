@@ -5,6 +5,7 @@ import { Toaster } from 'react-hot-toast'
 import { useState } from 'react'
 import { LanguageProvider } from '@/lib/i18n'
 import { ThemeProvider } from '@/lib/theme'
+import PwaInstallPrompt from '@/components/PwaInstallPrompt'
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(
@@ -29,6 +30,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
       <LanguageProvider>
         <QueryClientProvider client={queryClient}>
           {children}
+          <PwaInstallPrompt />
           <Toaster
             position="top-right"
             toastOptions={{

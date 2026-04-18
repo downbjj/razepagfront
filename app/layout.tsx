@@ -36,6 +36,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="pt-BR" className="dark" translate="no">
       <head>
         <meta name="google" content="notranslate" />
+        <meta name="application-name" content="Razepag" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-title" content="Razepag" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="theme-color" content="#A855F7" />
+        <link rel="manifest" href="/manifest.json" />
+        <link rel="apple-touch-icon" href="/favicon-icon.png" />
         {/* Prevent theme flash on load */}
         <script dangerouslySetInnerHTML={{ __html: `
           try {
@@ -43,6 +51,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             document.documentElement.classList.remove('dark','light');
             document.documentElement.classList.add(t);
           } catch(e){}
+        `}} />
+        <script dangerouslySetInnerHTML={{ __html: `
+          if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+              navigator.serviceWorker.register('/sw.js').catch(function(err) {
+                console.log('SW registration failed:', err);
+              });
+            });
+          }
         `}} />
       </head>
       <body className="antialiased" style={{background:'var(--background)',color:'var(--foreground)'}}>

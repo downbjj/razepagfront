@@ -69,7 +69,12 @@ export default function PwaInstallPrompt() {
           </button>
         </div>
 
-        {!isIos && (
+        {isIos ? (
+          <div className="mt-3 rounded-xl p-3 text-xs text-gray-300 leading-relaxed" style={{background:'rgba(168,85,247,0.08)', border:'1px solid rgba(168,85,247,0.15)'}}>
+            <p className="mb-1">1. Toque no ícone <strong className="text-white">⬆️ Compartilhar</strong> na barra inferior do Safari</p>
+            <p>2. Role para baixo e toque em <strong className="text-white">Adicionar à Tela de Início</strong></p>
+          </div>
+        ) : (
           <button
             onClick={handleInstall}
             className="w-full mt-3 py-2.5 rounded-xl text-white text-sm font-semibold flex items-center justify-center gap-2 transition-all"

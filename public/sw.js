@@ -1,4 +1,4 @@
-const CACHE_NAME = 'razepag-v1';
+const CACHE_NAME = 'razepag-v2';
 const STATIC_ASSETS = ['/', '/login', '/dashboard', '/logo.png', '/favicon-icon.png'];
 
 self.addEventListener('install', e => {

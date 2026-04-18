@@ -142,7 +142,7 @@ export default function EmailsPage() {
             <table className="w-full">
               <thead>
                 <tr className="border-b border-border">
-                  {['Para', 'Assunto', 'Status', 'Enviado por', 'Data'].map(h => (
+                  {['Para', 'Assunto', 'Status', 'Erro', 'Data'].map(h => (
                     <th key={h} className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">{h}</th>
                   ))}
                 </tr>
@@ -166,8 +166,8 @@ export default function EmailsPage() {
                         {l.status}
                       </span>
                     </td>
-                    <td className="px-5 py-3.5">
-                      <span className="text-xs text-gray-500 font-mono">{l.sentBy?.slice(0, 8) || '—'}</span>
+                    <td className="px-5 py-3.5 max-w-xs">
+                      <span className="text-xs text-red-400 break-words">{l.errorMsg || '—'}</span>
                     </td>
                     <td className="px-5 py-3.5">
                       <span className="text-xs text-gray-500">{formatDate(l.createdAt)}</span>

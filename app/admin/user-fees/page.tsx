@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { Percent, Plus, Edit2, Trash2, X, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Percent, Edit2, Trash2, X, ChevronLeft, ChevronRight, Globe, Save } from 'lucide-react'
 import toast from 'react-hot-toast'
 import api from '@/lib/api'
 import { formatDate } from '@/lib/utils'
@@ -10,17 +10,33 @@ import { formatDate } from '@/lib/utils'
 export default function UserFeesPage() {
   const qc = useQueryClient()
   const [page, setPage]  = useState(1)
-  const [modal, setModal] = useState<any>(null)  // { userId, userName } | null
+  const [modal, setModal] = useState<any>(null)
   const [form, setForm]  = useState({ feePercent: '3', feeFixed: '1', notes: '' })
+  const [globalForm, setGlobalForm] = useState({ feePercent: '', feeFixed: '' })
 
   // Search user to assign fee
   const [search, setSearch] = useState('')
   const [searchResults, setSearchResults] = useState<any[]>([])
   const [searching, setSearching] = useState(false)
 
+  const { data: globalFeeData } = useQuery({
+    queryKey: ['admin-global-fee'],
+    queryFn: () => api.get('/admin/fees/global').then(r => {
+      const d = r.data.data
+      setGlobalForm({ feePercent: String(d.feePercent), feeFixed: String(d.feeFixed) })
+      return d
+    }),
+  })
+
   const { data, isLoading } = useQuery({
     queryKey: ['admin-user-fees', page],
     queryFn: () => api.get('/admin/user-fees', { params: { page, limit: 20 } }).then(r => r.data.data),
+  })
+
+  const setGlobalFee = useMutation({
+    mutationFn: (d: any) => api.patch('/admin/fees/global', d),
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ['admin-global-fee'] }); toast.success('Taxa global atualizada!') },
+    onError: (e: any) => toast.error(e.response?.data?.message || 'Erro'),
   })
 
   const updateFee = useMutation({
@@ -56,9 +72,47 @@ export default function UserFeesPage() {
         <p className="text-gray-500 text-sm mt-1">Configure taxas personalizadas por usuário. Padrão: 3% + R$1,00</p>
       </div>
 
+      {/* Global fee */}
+      <div className="bg-surface border border-purple-500/20 rounded-xl p-5 space-y-4">
+        <div className="flex items-center gap-2">
+          <Globe className="w-4 h-4 text-purple-400" />
+          <h2 className="text-sm font-semibold text-white">Taxa Padrão Global</h2>
+          <span className="text-xs text-gray-500 ml-1">— aplicada a todos os usuários sem taxa individual</span>
+        </div>
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="block text-xs text-gray-400 mb-1.5">Taxa % padrão</label>
+            <input type="number" step="0.01" min="0" max="100" value={globalForm.feePercent}
+              onChange={e => setGlobalForm(f => ({ ...f, feePercent: e.target.value }))}
+              className="w-full bg-surface-2 border border-border text-white px-4 py-2.5 rounded-xl text-sm focus:border-purple-500/50 transition-all"
+              placeholder="3" />
+          </div>
+          <div>
+            <label className="block text-xs text-gray-400 mb-1.5">Taxa fixa padrão (R$)</label>
+            <input type="number" step="0.01" min="0" value={globalForm.feeFixed}
+              onChange={e => setGlobalForm(f => ({ ...f, feeFixed: e.target.value }))}
+              className="w-full bg-surface-2 border border-border text-white px-4 py-2.5 rounded-xl text-sm focus:border-purple-500/50 transition-all"
+              placeholder="1.00" />
+          </div>
+        </div>
+        <div className="flex items-center justify-between">
+          <p className="text-xs text-purple-400">
+            Fórmula: taxa = valor × {globalForm.feePercent || 0}% + R${Number(globalForm.feeFixed || 0).toFixed(2)}
+          </p>
+          <button
+            onClick={() => setGlobalFee.mutate({ feePercent: parseFloat(globalForm.feePercent), feeFixed: parseFloat(globalForm.feeFixed) })}
+            disabled={setGlobalFee.isPending || !globalForm.feePercent || !globalForm.feeFixed}
+            className="flex items-center gap-2 text-sm text-white px-4 py-2 rounded-xl font-medium disabled:opacity-50"
+            style={{ background: '#A855F7' }}>
+            <Save className="w-3.5 h-3.5" />
+            {setGlobalFee.isPending ? 'Salvando...' : 'Salvar taxa global'}
+          </button>
+        </div>
+      </div>
+
       {/* Search & assign */}
       <div className="bg-surface border border-border rounded-xl p-5 space-y-4">
-        <h2 className="text-sm font-semibold text-white">Atribuir taxa personalizada</h2>
+        <h2 className="text-sm font-semibold text-white">Atribuir taxa personalizada por usuário</h2>
         <div className="flex gap-3">
           <input type="text" value={search} onChange={e => setSearch(e.target.value)}
             onKeyDown={e => e.key === 'Enter' && searchUsers()}

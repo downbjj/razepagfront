@@ -75,7 +75,9 @@ export default function PwaInstallPrompt() {
           <div className="mt-3 rounded-xl p-3 text-xs text-gray-300 leading-relaxed" style={{background:'rgba(168,85,247,0.08)', border:'1px solid rgba(168,85,247,0.15)'}}>
             {isIos === 'chrome' ? (
               <>
-                <p className="mb-1">1. Toque nos <strong className="text-white">3 pontos ⋯</strong> no canto inferior direito</p>
+                <p className="mb-2 text-yellow-400 font-medium">⚠️ Chrome no iPhone não suporta instalação.</p>
+                <p className="mb-1">Abra <strong className="text-white">Safari</strong> e acesse razepag.com, depois:</p>
+                <p className="mb-1">1. Toque no ícone <strong className="text-white">⬆️ Compartilhar</strong></p>
                 <p>2. Toque em <strong className="text-white">Adicionar à Tela de Início</strong></p>
               </>
             ) : (

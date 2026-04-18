@@ -6,17 +6,19 @@ import { X, Download } from 'lucide-react'
 export default function PwaInstallPrompt() {
   const [prompt, setPrompt] = useState<any>(null)
   const [show, setShow] = useState(false)
-  const [isIos, setIsIos] = useState(false)
+  const [isIos, setIsIos] = useState<false | 'safari' | 'chrome'>(false)
 
   useEffect(() => {
-    const isIosDevice = /iphone|ipad|ipod/i.test(navigator.userAgent)
+    const ua = navigator.userAgent
+    const isIosDevice = /iphone|ipad|ipod/i.test(ua)
     const isInStandalone = (window.navigator as any).standalone === true
+    const isChromeIos = isIosDevice && /CriOS/i.test(ua)
     const dismissed = localStorage.getItem('pwa-dismissed')
 
     if (dismissed) return
 
     if (isIosDevice && !isInStandalone) {
-      setIsIos(true)
+      setIsIos(isChromeIos ? 'chrome' : 'safari' as any)
       setShow(true)
       return
     }
@@ -71,8 +73,17 @@ export default function PwaInstallPrompt() {
 
         {isIos ? (
           <div className="mt-3 rounded-xl p-3 text-xs text-gray-300 leading-relaxed" style={{background:'rgba(168,85,247,0.08)', border:'1px solid rgba(168,85,247,0.15)'}}>
-            <p className="mb-1">1. Toque no ícone <strong className="text-white">⬆️ Compartilhar</strong> na barra inferior do Safari</p>
-            <p>2. Role para baixo e toque em <strong className="text-white">Adicionar à Tela de Início</strong></p>
+            {isIos === 'chrome' ? (
+              <>
+                <p className="mb-1">1. Toque nos <strong className="text-white">3 pontos ⋯</strong> no canto inferior direito</p>
+                <p>2. Toque em <strong className="text-white">Adicionar à Tela de Início</strong></p>
+              </>
+            ) : (
+              <>
+                <p className="mb-1">1. Toque no ícone <strong className="text-white">⬆️ Compartilhar</strong> na barra do Safari</p>
+                <p>2. Toque em <strong className="text-white">Adicionar à Tela de Início</strong></p>
+              </>
+            )}
           </div>
         ) : (
           <button

@@ -46,6 +46,12 @@ export default function AdminUsersPage() {
     onError: (e: any) => toast.error(e.response?.data?.message),
   })
 
+  const enableFeatures = useMutation({
+    mutationFn: (id: string) => api.patch(`/admin/users/${id}/enable-features`),
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ['admin-users'] }); toast.success('Features habilitadas!') },
+    onError: (e: any) => toast.error(e.response?.data?.message),
+  })
+
   const adjustBalance = useMutation({
     mutationFn: ({ id, ...data }: any) => api.post(`/admin/users/${id}/adjust-balance`, data),
     onSuccess: () => { qc.invalidateQueries({ queryKey: ['admin-users'] }); setAdjustModal(null); toast.success('Balance adjusted') },
@@ -157,6 +163,10 @@ export default function AdminUsersPage() {
                             Unfreeze
                           </button>
                         )}
+                        <button onClick={() => enableFeatures.mutate(u.id)}
+                          className="text-xs px-2 py-1 bg-green-500/10 border border-green-500/20 text-green-400 rounded-lg hover:bg-green-500/20 transition-all">
+                          +Features
+                        </button>
                         <button onClick={() => { setAdjustModal({ userId: u.id, name: u.name }); setAdjustForm({ amount: '', description: '' }) }}
                           className="text-xs px-2 py-1 bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 rounded-lg hover:bg-yellow-500/20 transition-all">
                           Adjust

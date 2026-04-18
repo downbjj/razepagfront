@@ -38,6 +38,7 @@ export default function NotificationsPage() {
   })
 
   const handleSend = () => {
+    if (form.broadcast && !window.confirm('Enviar notificação para TODOS os usuários ativos?')) return
     const payload: any = {
       title: form.title, message: form.message, type: form.type,
       broadcast: form.broadcast,

@@ -30,6 +30,7 @@ export default function EmailsPage() {
   })
 
   const handleSend = () => {
+    if (form.broadcast && !window.confirm('Enviar e-mail para TODOS os usuários ativos?')) return
     const payload: any = { subject: form.subject, body: form.body }
     if (form.broadcast) {
       payload.broadcast = true

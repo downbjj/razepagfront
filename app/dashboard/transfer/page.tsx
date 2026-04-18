@@ -2,14 +2,14 @@
 
 import { useState } from 'react'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { Send, DollarSign, Hash, FileText, CheckCircle, Users, Gift } from 'lucide-react'
+import { Send, DollarSign, Hash, FileText, CheckCircle, Users, Gift, Lock } from 'lucide-react'
 import Link from 'next/link'
 import toast from 'react-hot-toast'
 import api from '@/lib/api'
 import { formatCurrency, calculateFee, calculateNet } from '@/lib/utils'
 
 export default function TransferPage() {
-  const [form, setForm] = useState({ pixKey: '', amount: '', description: '' })
+  const [form, setForm] = useState({ pixKey: '', amount: '', description: '', pin: '' })
   const [result, setResult] = useState<any>(null)
 
   const amt = parseFloat(form.amount) || 0
@@ -43,6 +43,7 @@ export default function TransferPage() {
       pixKey: form.pixKey,
       amount: parseFloat(form.amount),
       description: form.description || undefined,
+      pin: form.pin,
     })
   }
 
@@ -74,7 +75,7 @@ export default function TransferPage() {
               <span className="text-white text-sm">{result.recipient?.name}</span>
             </div>
           </div>
-          <button onClick={() => { setResult(null); setForm({ pixKey: '', amount: '', description: '' }) }}
+          <button onClick={() => { setResult(null); setForm({ pixKey: '', amount: '', description: '', pin: '' }) }}
             className="w-full py-3 text-sm text-purple-400 rounded-xl transition-all"
             style={{ border: '1px solid rgba(168,85,247,0.3)' }}>
             Nova Transferência
@@ -91,7 +92,6 @@ export default function TransferPage() {
         <p className="text-xs text-gray-500 mt-0.5">Enviar para chave PIX externa (taxa aplicada)</p>
       </div>
 
-      {/* Internal transfer tip */}
       <Link href="/dashboard/internal"
         className="flex items-center gap-3 px-4 py-3 rounded-xl transition-all hover:opacity-90"
         style={{ background: 'rgba(34,197,94,0.06)', border: '1px solid rgba(34,197,94,0.15)' }}>
@@ -103,7 +103,6 @@ export default function TransferPage() {
         <Users className="w-4 h-4 text-green-400 ml-auto flex-shrink-0" />
       </Link>
 
-      {/* Balance */}
       <div className="flex items-center justify-between px-4 py-3 rounded-xl"
         style={{ background: 'rgba(168,85,247,0.08)', border: '1px solid rgba(168,85,247,0.2)' }}>
         <span className="text-gray-400 text-sm">Saldo disponível</span>
@@ -175,8 +174,23 @@ export default function TransferPage() {
             </div>
           </div>
 
+          <div>
+            <label className="block text-xs font-medium text-gray-400 mb-1.5">PIN de transação *</label>
+            <div className="relative">
+              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600" />
+              <input
+                type="password" required inputMode="numeric" maxLength={6}
+                value={form.pin}
+                onChange={e => setForm(f => ({ ...f, pin: e.target.value.replace(/\D/g, '') }))}
+                className="w-full pl-9 pr-4 py-2.5 rounded-xl text-sm text-white focus:outline-none transition-all tracking-widest"
+                style={{ background: '#0d0d14', border: '1px solid rgba(168,85,247,0.2)' }}
+                placeholder="••••"
+              />
+            </div>
+          </div>
+
           <button
-            type="submit" disabled={transfer.isPending || !form.pixKey || !form.amount}
+            type="submit" disabled={transfer.isPending || !form.pixKey || !form.amount || !form.pin}
             className="w-full py-2.5 rounded-xl text-sm font-semibold text-white disabled:opacity-50 flex items-center justify-center gap-2 transition-all"
             style={{ background: 'linear-gradient(135deg, #A855F7, #6a0dad)', boxShadow: '0 0 14px rgba(168,85,247,0.25)' }}
           >

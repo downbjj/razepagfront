@@ -10,19 +10,13 @@ import { formatCurrency } from '@/lib/utils'
 export default function InternalTransferPage() {
   const [form, setForm] = useState({ username: '', amount: '', description: '', pin: '' })
   const [result, setResult] = useState<any>(null)
-  const [showPin, setShowPin] = useState(false)
 
   const { data: meData } = useQuery({
     queryKey: ['me'],
     queryFn: () => api.get('/users/me').then(r => r.data.data),
   })
-  const { data: pinStatus } = useQuery({
-    queryKey: ['pinStatus'],
-    queryFn: () => api.get('/users/me/pin/status').then(r => r.data.data),
-  })
 
   const balance = parseFloat(meData?.wallet?.balance || '0')
-  const hasPin  = pinStatus?.hasPin ?? false
 
   const transfer = useMutation({
     mutationFn: (data: any) =>
@@ -46,7 +40,7 @@ export default function InternalTransferPage() {
       username:    form.username.replace(/^@/, ''),
       amount,
       description: form.description || undefined,
-      pin:         form.pin || undefined,
+      pin:         form.pin,
     })
   }
 
@@ -173,30 +167,29 @@ export default function InternalTransferPage() {
           </div>
 
           {/* PIN */}
-          {hasPin && (
-            <div>
-              <label className="block text-xs font-medium text-gray-400 mb-1.5">
-                PIN de transação <span className="text-red-400">*</span>
-              </label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600" />
-                <input
-                  type={showPin ? 'text' : 'password'}
-                  inputMode="numeric"
-                  maxLength={6}
-                  value={form.pin}
-                  onChange={e => setForm(f => ({ ...f, pin: e.target.value.replace(/\D/g, '') }))}
-                  className="w-full pl-9 pr-4 py-2.5 rounded-xl text-sm text-white focus:outline-none transition-all tracking-widest"
-                  style={{ background: '#0d0d14', border: '1px solid rgba(168,85,247,0.2)' }}
-                  placeholder="••••"
-                />
-              </div>
+          <div>
+            <label className="block text-xs font-medium text-gray-400 mb-1.5">
+              PIN de transação <span className="text-red-400">*</span>
+            </label>
+            <div className="relative">
+              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600" />
+              <input
+                type="password"
+                required
+                inputMode="numeric"
+                maxLength={6}
+                value={form.pin}
+                onChange={e => setForm(f => ({ ...f, pin: e.target.value.replace(/\D/g, '') }))}
+                className="w-full pl-9 pr-4 py-2.5 rounded-xl text-sm text-white focus:outline-none transition-all tracking-widest"
+                style={{ background: '#0d0d14', border: '1px solid rgba(168,85,247,0.2)' }}
+                placeholder="••••"
+              />
             </div>
-          )}
+          </div>
 
           <button
             type="submit"
-            disabled={transfer.isPending || !form.username || !form.amount}
+            disabled={transfer.isPending || !form.username || !form.amount || !form.pin}
             className="w-full py-2.5 rounded-xl text-sm font-semibold text-white disabled:opacity-50 flex items-center justify-center gap-2 transition-all"
             style={{ background: 'linear-gradient(135deg, #A855F7, #6a0dad)', boxShadow: '0 0 14px rgba(168,85,247,0.25)' }}
           >
